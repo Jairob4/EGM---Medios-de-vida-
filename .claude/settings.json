@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "deny": [
+      "Edit(./data/raw/**)",
+      "Write(./data/raw/**)",
+      "Edit(./docs/fuentes/**)",
+      "Write(./docs/fuentes/**)"
+    ]
+  }
+}

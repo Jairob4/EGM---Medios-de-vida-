@@ -34,6 +34,10 @@ de las categorías y de la metodología.
    interna. No mencionarla en ningún texto o interfaz para el equipo sin autorización explícita de Jairo.
 10. El módulo de aprendizaje no supervisado y la vista de red están **fuera del alcance actual**
     (escala futura). No implementarlos; sí dejar el núcleo extensible para ellos.
+11. Ninguna corrección de specs, arquitectura, interfaz o planes se aplica directamente. Flujo
+    obligatorio: `analista-impacto` → aprobación de Jairo → `corrector`, por cada corrección, y
+    `verificador` una sola vez al cerrar todo el plan de corrección, nunca por corrección. La sesión
+    principal no edita esos archivos para corregirlos.
 
 ## Flujo de trabajo (con compuertas)
 
@@ -55,6 +59,7 @@ de las categorías y de la metodología.
 | `docs/interfaz/` | Flujos y bocetos |
 | `docs/planes/` | `_plantilla-plan.md`, `<modulo>/plan.md` |
 | `docs/informes/` | Informes de fase y de conformidad (los escribe el `verificador`) |
+| `docs/correcciones/` | Propuestas de corrección `COR-NNN` |
 | `data/raw/` | Matriz vigente (solo lectura) |
 | `data/fixtures/` | Matrices sintéticas para pruebas |
 | `src/egm/` | Núcleo Python (lectura, validación, modelo, análisis), sin dependencias de la web |
@@ -67,6 +72,8 @@ de las categorías y de la metodología.
 - `implementador` — código y pruebas de un módulo según su `plan.md`.
 - `disenador-front` — flujos, bocetos, sistema de diseño, plantillas y CSS.
 - `verificador` — auditoría de conformidad contra los specs; solo lectura; nunca corrige lo que audita.
+- `analista-impacto` — solo lectura; explica, propone y evalúa correcciones.
+- `corrector` — aplica solo propuestas aprobadas.
 
 ## Convenciones
 

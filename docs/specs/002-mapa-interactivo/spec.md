@@ -99,7 +99,7 @@ los estudios.
 
 1. **Scenario**: US-002-4.1 Filtro por tipo de fuente
    - **Given** una matriz sintética con 3 estudios, 2 de fuente Territorial y 1 Académica
-   - **When** la persona deja activa solo Territorial
+   - **When** la persona deja seleccionada solo Territorial y pulsa «Actualizar vista»
    - **Then** el mapa recuenta con 2 estudios, el filtro queda visible y se muestra «2 de 3»
 
 2. **Scenario**: US-002-4.2 Celda vacía por el filtro
@@ -109,12 +109,12 @@ los estudios.
 
 3. **Scenario**: US-002-4.3 Filtros combinados
    - **Given** una matriz sintética con estudios de varias fuentes y metodologías
-   - **When** la persona activa un valor en cada filtro
+   - **When** la persona selecciona un valor en cada filtro y pulsa «Actualizar vista»
    - **Then** el mapa cuenta solo los estudios que cumplen ambos
 
 4. **Scenario**: US-002-4.4 Rango de años
    - **Given** una matriz sintética con estudios de 2010, 2015 y 2020
-   - **When** la persona elige desde 2012 hasta 2020
+   - **When** la persona elige desde 2012 hasta 2020 y pulsa «Actualizar vista»
    - **Then** cuenta los estudios de 2015 y 2020, ambos extremos incluidos
 
 5. **Scenario**: US-002-4.5 Ocultar un nivel desde la leyenda
@@ -134,13 +134,28 @@ los estudios.
 
 8. **Scenario**: US-002-4.8 Varios valores en un filtro
    - **Given** una matriz sintética con estudios de fuente Académica, Institucional y Territorial, y de tres metodologías
-   - **When** la persona deja activas Académica y Territorial, y luego dos metodologías
+   - **When** la persona deja seleccionadas Académica y Territorial y pulsa «Actualizar vista», y luego selecciona dos metodologías y vuelve a pulsarlo
    - **Then** el mapa cuenta primero los estudios con cualquiera de las dos fuentes, y luego solo los que además tienen una de las dos metodologías
 
 9. **Scenario**: US-002-4.9 Filtro sin lista en el archivo
    - **Given** una matriz sintética sin lista de validación en tipo de fuente
    - **When** la persona abre ese filtro
    - **Then** ve los valores presentes en esa columna
+
+10. **Scenario**: US-002-4.10 Mover un control no filtra
+    - **Given** el mapa sin filtros aplicados
+    - **When** la persona deja seleccionada solo una fuente y no pulsa «Actualizar vista»
+    - **Then** el mapa conserva sus conteos sin filtrar
+
+11. **Scenario**: US-002-4.11 «Sin nivel» en la leyenda
+    - **Given** una matriz sintética con estudios del mapa de dos niveles y uno sin nivel de evidencia
+    - **When** la persona oculta uno de los dos niveles en la leyenda y el cambio queda aplicado
+    - **Then** la leyenda muestra la entrada «Sin nivel», el estudio sin nivel sigue contado y solo sale cuando se oculta esa entrada
+
+12. **Scenario**: US-002-4.12 Nivel «No aplica»
+    - **Given** una matriz sintética con un estudio del mapa cuyo nivel empieza por «No aplica»
+    - **When** la persona abre el mapa
+    - **Then** la leyenda muestra la entrada «Sin nivel» y ese estudio se cuenta en ella
 
 ---
 
@@ -188,11 +203,11 @@ La persona descarga el mapa para llevarlo a un documento o presentación.
 
 ### Edge Cases
 
-- ¿Qué pasa si un estudio tiene vacío el campo que se filtra? No cumple ningún valor de ese filtro y queda fuera mientras el filtro esté activo; «n de N» lo refleja.
+- ¿Qué pasa si un estudio tiene vacío el campo que se filtra? No cumple ningún valor de ese filtro y no aparece mientras el filtro esté activo; «n de N» lo refleja. En el nivel de evidencia rige la excepción de «Sin nivel» (FR-002-12).
 - ¿Qué pasa si no hay ningún estudio en el mapa? Se muestran todas las filas y columnas con el rótulo de celda en 0 y una advertencia de que aún no hay estudios codificados.
 - ¿Qué pasa si los filtros dejan el mapa sin estudios? Se muestra «0 de N» y el rótulo con filtros activos en todas las celdas.
 - ¿Qué pasa si un nivel de evidencia nuevo se agrega a la lista? Aparece en la leyenda y en el filtro, con su propio color.
-- ¿Qué pasa si un estudio del mapa no tiene nivel de evidencia? Se cuenta y se muestra como «sin nivel», sin asignarle ningún nivel.
+- ¿Qué pasa si un estudio del mapa no tiene nivel de evidencia, o tiene un nivel que empieza por «No aplica»? Se cuenta y se muestra como «Sin nivel», sin asignarle ningún nivel. La leyenda agrega la entrada «Sin nivel», y el estudio solo sale al ocultarla (FR-002-12). Es provisional.
 - ¿Qué pasa con un estudio con año no reconocido? No cumple un filtro de año activo; sin ese filtro, se cuenta normalmente.
 - ¿Y con muchas filas y pantallas de 360 px? El mapa conserva sus nombres legibles y se puede recorrer dentro de su propio contenedor.
 - ¿Qué pasa con un estudio con dos intervenciones? Aparece en ambas filas, y el número de estudios no suma celdas.
@@ -201,7 +216,7 @@ La persona descarga el mapa para llevarlo a un documento o presentación.
 
 ### Functional Requirements
 
-- **FR-002-01**: El mapa MUST mostrar las intervenciones en filas y las dimensiones en columnas, en el orden del archivo que define el contrato. [Fuente: lámina 5; doc. general §2.2] [Propuesta sin fuente, pendiente de aprobación: la regla de orden del contrato, sección 4]
+- **FR-002-01**: El mapa MUST mostrar las intervenciones en filas y las dimensiones en columnas, en el orden del archivo que define el contrato. [Fuente: lámina 5; doc. general §2.2; decisión de Jairo, 3-nov-2026]
 - **FR-002-02**: Cada cruce MUST mostrar una burbuja cuyo tamaño crece con el número de estudios, con el número escrito. [Fuente: doc. general §3; doc. técnico §4.1]
 - **FR-002-03**: El color MUST representar el nivel de evidencia, y una celda con varios niveles MUST permitir distinguir el conteo de cada uno. [Fuente: lámina 5; doc. general §2.2]
 - **FR-002-04**: Una celda en 0 MUST rotularse «ningún estudio registrado», con la nota de que nadie ha estudiado ese cruce o no se ha encontrado. [Fuente: doc. general §7; lámina 5]
@@ -212,13 +227,14 @@ La persona descarga el mapa para llevarlo a un documento o presentación.
 - **FR-002-09**: El mapa MUST poder filtrarse por tipo de fuente, metodología, nivel de evidencia y año, tomando los valores de las listas del archivo o, sin lista, los valores presentes. [Fuente: doc. general §4.3; decisión de Jairo, 2-nov-2026]
 - **FR-002-10**: El filtro de año MUST ser por rango, desde y hasta, con ambos extremos incluidos. [Fuente: decisión de Jairo, 1-nov-2026]
 - **FR-002-11**: Varios filtros MUST combinarse por conjunción, y los filtros de tipo de fuente, metodología y nivel de evidencia MUST admitir más de un valor. [Fuente: doc. técnico §4.1 RF2; decisión de Jairo, 2-nov-2026]
-- **FR-002-12**: El filtro por nivel de evidencia y el mostrar u ocultar de la leyenda MUST ser un solo control; ocultar un nivel MUST recalcular cifras y notas. [Fuente: decisión de Jairo, 1-nov-2026] [NEEDS CLARIFICATION: ocultar cualquier nivel activa el filtro, y un filtro activo saca a los estudios sin nivel aunque nadie los haya ocultado. ¿Cómo actúa el estado «sin nivel» en este control? Propuesta: la leyenda agrega «Sin nivel» como una entrada más cuando existan esos estudios, y solo salen al ocultar esa entrada; es una excepción, solo para este filtro, a la regla de que una celda vacía no cumple un filtro activo. Pendiente de Jairo; no se aplica.]
+- **FR-002-12**: El filtro por nivel de evidencia y el mostrar u ocultar de la leyenda MUST ser un solo control; ocultar un nivel MUST recalcular cifras y notas. [Fuente: decisión de Jairo, 1-nov-2026] Cuando existan estudios del mapa sin nivel de evidencia, la leyenda MUST agregar «Sin nivel» como una entrada más, y esos estudios solo salen al ocultar esa entrada. Un estudio con un nivel que empieza por «No aplica» se trata como «Sin nivel». Es una excepción, solo para este control, a la regla de que una celda vacía no cumple un filtro activo. [Fuente: decisión de Jairo, 3-nov-2026. Decisión provisional, a discutir con el equipo.] [NEEDS CLARIFICATION: el filtro de nivel es también un control de los que se aplican con «Actualizar vista» (FR-002-19), pero US-002-4.5 recalcula al ocultar un nivel en la leyenda. No está decidido si ocultar o mostrar una entrada de la leyenda espera a «Actualizar vista» o se aplica de inmediato. Pendiente de Jairo; no se aplica.]
 - **FR-002-13**: Con un filtro activo, la herramienta MUST mantenerlo siempre visible y mostrar «n de N» estudios. [Fuente: decisión de Jairo, 1-nov-2026]
 - **FR-002-14**: Con un filtro activo, una celda en 0 MUST rotularse «ningún estudio registrado con los filtros activos», nunca «brecha». [Fuente: decisión de Jairo, 1-nov-2026]
 - **FR-002-15**: El estado de los filtros MUST compartirse entre el mapa y el tablero. [Fuente: decisión de Jairo, 1-nov-2026]
 - **FR-002-16**: La herramienta MUST permitir descargar el mapa como imagen y los conteos como tabla, indicando los filtros activos, el archivo y la fecha de lectura. [Fuente: doc. general §3; doc. técnico §4.1]
 - **FR-002-17**: La herramienta MUST mostrar las advertencias de lectura y verificación que afecten a la confianza en el mapa. [Fuente: doc. general §4.1]
 - **FR-002-18**: La herramienta MUST permitir quitar los filtros activos en una sola acción y volver a los conteos sin filtrar. [Propuesta sin fuente, pendiente de aprobación: complemento de FR-002-13]
+- **FR-002-19**: Un filtro MUST activarse solo cuando se aplica con el botón «Actualizar vista»; mover un control no lo activa. La herramienta MUST ofrecer un solo botón «Actualizar vista» y un solo botón «Restablecer», comunes al mapa y al tablero, y mientras haya selecciones sin aplicar, ambas vistas MUST mostrar lo último aplicado. [Fuente: decisión de Jairo, 2-nov-2026] [NEEDS CLARIFICATION: no está decidido si «Restablecer» aplica de inmediato la vista sin filtros o solo devuelve los controles a ese estado hasta pulsar «Actualizar vista». En el primer caso hace lo mismo que FR-002-18, que sigue como propuesta; en el segundo no lo cumple, porque quitar los filtros tomaría dos acciones. Pendiente de Jairo; no se aplica.]
 
 ### Key Entities
 

@@ -15,21 +15,21 @@ Fuente → requisito → componente → tarea → prueba. Cada fase llena su col
 | NFR-000-09 | doc. técnico §4.2 RNF2 |  |  |  | especificado |
 | NFR-000-10 | doc. técnico §4.2 RNF5 |  |  |  | especificado |
 | NFR-000-11 | decisión de Jairo, 31-oct-2026; decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
-| NFR-000-12 | decisión de Jairo, 31-oct-2026; decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
+| NFR-000-12 | decisión de Jairo, 31-oct-2026; decisión de Jairo, 2-nov-2026; decisión de Jairo, 3-nov-2026 |  |  |  | especificado |
 | NFR-000-13 | decisión de Jairo, 31-oct-2026 |  |  |  | especificado |
 | NFR-000-14 | decisión de Jairo, 31-oct-2026 |  |  |  | especificado |
 | NFR-000-15 | doc. general §4.2; decisión de Jairo, 31-oct-2026 |  |  |  | especificado |
 | NFR-000-16 | doc. general §3 |  |  |  | especificado |
-| NFR-000-17 | decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
+| NFR-000-17 | decisión de Jairo, 2-nov-2026; decisión de Jairo, 3-nov-2026 |  |  |  | especificado |
 | NFR-000-18 | decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
-| NFR-000-19 | decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
+| NFR-000-19 | decisión de Jairo, 2-nov-2026; decisión de Jairo, 3-nov-2026 |  |  |  | especificado |
 | FR-001-01 | doc. técnico §5.1 |  |  |  | especificado |
 | FR-001-02 | doc. técnico §5.1, §5.3 |  |  |  | especificado |
 | FR-001-03 | decisión de Jairo, 1-nov-2026 |  |  |  | especificado |
 | FR-001-04 | decisión de Jairo, 1-nov-2026 |  |  |  | especificado |
 | FR-001-05 | doc. técnico §12.2 |  |  |  | especificado |
 | FR-001-06 | doc. técnico §9.2 |  |  |  | especificado |
-| FR-001-07 | Matriz Instrucciones B20; lámina 6 |  |  |  | especificado |
+| FR-001-07 | Matriz Instrucciones B20; lámina 6; decisión de Jairo, 3-nov-2026 |  |  |  | especificado |
 | FR-001-08 | doc. general §7 |  |  |  | especificado |
 | FR-001-09 | doc. técnico §2.4 |  |  |  | especificado |
 | FR-001-10 | Matriz Instrucciones B14; doc. técnico §6.6; decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
@@ -42,15 +42,17 @@ Fuente → requisito → componente → tarea → prueba. Cada fase llena su col
 | FR-001-17 | doc. técnico §9.1 |  |  |  | especificado |
 | FR-001-18 | doc. general §4.1; doc. técnico §3.2 |  |  |  | especificado |
 | FR-001-19 | doc. técnico §4.2 RNF2 |  |  |  | especificado |
-| FR-001-20 | decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
+| FR-001-20 | decisión de Jairo, 2-nov-2026; decisión de Jairo, 3-nov-2026 |  |  |  | especificado |
 | FR-001-21 | decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
 | FR-001-22 | decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
 | FR-001-23 | decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
-| FR-001-24 | propuesta sin fuente, pendiente de aprobación |  |  |  | especificado |
+| FR-001-24 | decisión de Jairo, 3-nov-2026 |  |  |  | especificado |
 | FR-001-25 | decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
 | FR-001-26 | decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
 | FR-001-27 | decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
-| FR-002-01 | lámina 5; doc. general §2.2 |  |  |  | especificado |
+| FR-001-28 | decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
+| FR-001-29 | decisión de Jairo, 3-nov-2026 |  |  |  | especificado |
+| FR-002-01 | lámina 5; doc. general §2.2; decisión de Jairo, 3-nov-2026 |  |  |  | especificado |
 | FR-002-02 | doc. general §3; doc. técnico §4.1 |  |  |  | especificado |
 | FR-002-03 | lámina 5; doc. general §2.2 |  |  |  | especificado |
 | FR-002-04 | doc. general §7; lámina 5 |  |  |  | especificado |
@@ -61,13 +63,14 @@ Fuente → requisito → componente → tarea → prueba. Cada fase llena su col
 | FR-002-09 | doc. general §4.3; decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
 | FR-002-10 | decisión de Jairo, 1-nov-2026 |  |  |  | especificado |
 | FR-002-11 | doc. técnico §4.1 RF2; decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
-| FR-002-12 | decisión de Jairo, 1-nov-2026 |  |  |  | especificado |
+| FR-002-12 | decisión de Jairo, 1-nov-2026; decisión de Jairo, 3-nov-2026 |  |  |  | especificado |
 | FR-002-13 | decisión de Jairo, 1-nov-2026 |  |  |  | especificado |
 | FR-002-14 | decisión de Jairo, 1-nov-2026 |  |  |  | especificado |
 | FR-002-15 | decisión de Jairo, 1-nov-2026 |  |  |  | especificado |
 | FR-002-16 | doc. general §3; doc. técnico §4.1 |  |  |  | especificado |
 | FR-002-17 | doc. general §4.1 |  |  |  | especificado |
 | FR-002-18 | propuesta sin fuente, pendiente de aprobación |  |  |  | especificado |
+| FR-002-19 | decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
 | FR-003-01 | doc. general §9 |  |  |  | especificado |
 | FR-003-02 | decisión de Jairo, 1-nov-2026 |  |  |  | especificado |
 | FR-003-03 | doc. general §9 |  |  |  | especificado |
@@ -113,7 +116,7 @@ Escenario o criterio que verifica cada requisito.
 | NFR-000-14 | SC-000-14 |
 | NFR-000-15 | SC-000-15 |
 | NFR-000-16 | SC-000-16 |
-| NFR-000-17 | SC-000-17 |
+| NFR-000-17 | SC-000-17, US-001-5.1, US-001-5.2, US-001-5.3, US-001-5.4, US-001-5.5, US-001-5.6 |
 | NFR-000-18 | SC-000-18 |
 | NFR-000-19 | SC-000-19, US-001-4.3, US-001-4.4 |
 | FR-001-01 | US-001-1.8, US-001-3.5, SC-001-05 |
@@ -122,7 +125,7 @@ Escenario o criterio que verifica cada requisito.
 | FR-001-04 | US-001-2.6 |
 | FR-001-05 | US-001-1.3, US-001-2.12 |
 | FR-001-06 | US-001-1.5 |
-| FR-001-07 | US-001-1.1, SC-001-01 |
+| FR-001-07 | US-001-1.1, US-001-1.10, SC-001-01 |
 | FR-001-08 | US-001-1.2, US-001-2.2, SC-001-01, SC-001-03 |
 | FR-001-09 | US-001-1.2, SC-001-01, SC-001-03 |
 | FR-001-10 | US-001-1.6, US-001-2.14 |
@@ -143,6 +146,8 @@ Escenario o criterio que verifica cada requisito.
 | FR-001-25 | US-001-3.7 |
 | FR-001-26 | US-001-3.9, US-001-3.10, US-001-3.15, US-001-3.16 |
 | FR-001-27 | US-001-3.11, US-001-3.12, US-001-3.13, US-001-3.14 |
+| FR-001-28 | US-001-5.1 |
+| FR-001-29 | US-001-4.7, US-001-4.8 |
 | FR-002-01 | US-002-1.1, US-002-1.4, US-002-1.7 |
 | FR-002-02 | US-002-1.2, SC-002-01 |
 | FR-002-03 | US-002-1.3 |
@@ -154,13 +159,14 @@ Escenario o criterio que verifica cada requisito.
 | FR-002-09 | US-002-4.1, US-002-4.9 |
 | FR-002-10 | US-002-4.4 |
 | FR-002-11 | US-002-4.3, US-002-4.8 |
-| FR-002-12 | US-002-4.5 |
+| FR-002-12 | US-002-4.5, US-002-4.11, US-002-4.12 |
 | FR-002-13 | US-002-4.1, SC-002-03 |
 | FR-002-14 | US-002-4.2 |
 | FR-002-15 | US-002-4.7, US-003-3.4, US-003-5.1, US-003-5.2 |
 | FR-002-16 | US-002-5.1, US-002-5.2, SC-002-05 |
 | FR-002-17 | US-002-1.5, US-002-1.6 |
 | FR-002-18 | US-002-4.6 |
+| FR-002-19 | US-002-4.10, US-003-5.4, US-003-5.5 |
 | FR-003-01 | US-003-1.1, SC-003-02 |
 | FR-003-02 | US-003-1.3 |
 | FR-003-03 | US-003-1.4, US-003-5.3 |

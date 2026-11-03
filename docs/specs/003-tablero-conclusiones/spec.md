@@ -155,7 +155,7 @@ La persona aplica al tablero los mismos filtros del mapa para ser específica.
 
 1. **Scenario**: US-003-3.1 Recalcular con filtros
    - **Given** una matriz sintética con 4 estudios del mapa, 1 de fuente Territorial
-   - **When** la persona deja activa solo Territorial
+   - **When** la persona deja seleccionada solo Territorial y pulsa «Actualizar vista»
    - **Then** cifras, conclusiones y listas de N.º se recalculan, el filtro queda visible y se muestra «1 de 4»
 
 2. **Scenario**: US-003-3.2 Conclusión sin estudios
@@ -200,13 +200,23 @@ La persona pasa del mapa al tablero sin perder lo que estaba mirando. Esta histo
    - **When** la persona lo recorre
    - **Then** encuentra juntos las cifras clave, el mapa y las conclusiones
 
+4. **Scenario**: US-003-5.4 Selección sin aplicar
+   - **Given** un filtro aplicado en el mapa
+   - **When** la persona cambia la selección de un filtro sin pulsar «Actualizar vista» y pasa al tablero
+   - **Then** el mapa y el tablero muestran lo último aplicado
+
+5. **Scenario**: US-003-5.5 Botones comunes a ambas vistas
+   - **Given** filtros aplicados
+   - **When** la persona pulsa «Restablecer» o «Actualizar vista» desde el tablero
+   - **Then** el mapa y el tablero quedan con el mismo estado de filtros
+
 ### Edge Cases
 
 - ¿Qué pasa con una conclusión de la que no hay casos? Dice que no hay casos e indica cuántos estudios se revisaron; nunca desaparece en silencio.
 - ¿Qué pasa si ningún estudio está en el mapa? Las cifras muestran 0 y cada conclusión lo indica; no se presenta como hallazgo.
 - ¿Qué pasa con filas de enfoque sin clasificar? Se cuentan aparte, con su N.º y su texto, sin inferir categoría.
-- ¿Qué pasa con documentos sin el campo de un filtro? Quedan fuera mientras el filtro esté activo, y en la composición aparecen como «sin diligenciar».
-- ¿Qué valores de nivel se ofrecen en el filtro? Los de la lista, sin «No aplica». Los documentos no empíricos quedan fuera mientras ese filtro esté activo.
+- ¿Qué pasa con documentos sin el campo de un filtro? Quedan fuera mientras el filtro esté activo, y en la composición aparecen como «sin diligenciar». En el nivel de evidencia rige, para los estudios del mapa, la excepción de «Sin nivel» de FR-002-12.
+- ¿Qué valores de nivel se ofrecen en el filtro? Los de la lista, sin «No aplica», más la entrada «Sin nivel» cuando existan esos estudios (FR-002-12). Los documentos no empíricos quedan fuera mientras ese filtro esté activo. [NEEDS CLARIFICATION: FR-002-12 trata como «Sin nivel» a los estudios del mapa sin nivel o con un nivel que empieza por «No aplica», y solo salen al ocultar esa entrada. No está decidido si eso vale también para los documentos no empíricos en las cifras de documentos del tablero, que hoy quedan fuera con el filtro de nivel activo. Pendiente de Jairo; no se aplica.]
 - ¿Qué es «N» en «n de N»? Cuenta el mismo tipo de elemento que la cifra: documentos en las cifras de documentos, estudios en las de estudios.
 - ¿Qué pasa si falta el ancla de evaluación de impacto? La conclusión 2 queda «no disponible»; ver `contrato-datos.md` §4.1.
 - ¿Qué pasa con un documento con año no reconocido? En la composición por año aparece como «año no reconocido», separado de «sin diligenciar».

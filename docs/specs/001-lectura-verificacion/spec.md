@@ -62,6 +62,11 @@ los esperados de `contrato-datos.md`, sin ninguna interfaz.
    - **When** la herramienta la procesa
    - **Then** informa 1 documento en el mapa, 6 empíricos pendientes, 20 no empíricos y 0 sin tipo de documento válido
 
+10. **Scenario**: US-001-1.10 Solo intervención secundaria
+    - **Given** una matriz sintética con un estudio empírico con la intervención principal vacía, la secundaria diligenciada y una dimensión en 1
+    - **When** la herramienta la procesa
+    - **Then** el estudio entra al mapa en la fila de su intervención secundaria, sin advertencia por la principal vacía
+
 ---
 
 ### User Story 2 - Recibir advertencias legibles (Priority: P1)
@@ -169,12 +174,12 @@ leerlo y lo conserva solo mientras dure la sesión.
 **Acceptance Scenarios**:
 
 1. **Scenario**: US-001-4.1 Carga válida
-   - **Given** una sesión sin matriz cargada
+   - **Given** la herramienta abierta, sin matriz cargada
    - **When** la persona carga la instancia de ejemplo del apéndice A
    - **Then** ve el nombre del archivo y la fecha de lectura, y los resultados quedan disponibles
 
 2. **Scenario**: US-001-4.2 Sin matriz cargada
-   - **Given** una sesión nueva
+   - **Given** ninguna matriz cargada
    - **When** la persona abre la herramienta
    - **Then** ve la opción de cargar la matriz y ninguna cifra
 
@@ -197,6 +202,16 @@ leerlo y lo conserva solo mientras dure la sesión.
    - **Given** un archivo con una huella conocida
    - **When** la persona lo carga y usa todas las vistas
    - **Then** la huella del archivo original no cambia
+
+7. **Scenario**: US-001-4.7 Carga nueva con error de contrato
+   - **Given** una sesión con una matriz cargada
+   - **When** la persona carga otro archivo con un error de contrato
+   - **Then** ve un mensaje de error sin el nombre del archivo ni datos de la matriz, ya no ve los resultados de la matriz anterior y, para volver a verlos, debe cargarla otra vez
+
+8. **Scenario**: US-001-4.8 Carga nueva con advertencias
+   - **Given** una sesión con una matriz cargada
+   - **When** la persona carga otro archivo con un valor fuera de lista y sin errores de contrato
+   - **Then** el archivo nuevo se acepta con su advertencia, y los resultados corresponden solo a él
 
 ---
 
@@ -291,6 +306,51 @@ coinciden o si no se puede comprobar.
     - **When** la herramienta verifica
     - **Then** la tabla queda «no verificable» y la advertencia lo indica
 
+---
+
+### User Story 5 - Terminar la sesión (Priority: P2)
+
+La sesión empieza al cargar el archivo y termina al descartarlo, al cerrar la pestaña o tras 45 minutos sin
+interacción con la página. Al terminar, no queda copia del archivo ni de su contenido. Los escenarios de actividad
+dependen de la feature 002.
+
+**Why this priority**: protege el archivo del equipo, pero la lectura y el mapa funcionan sin ella.
+
+**Independent Test**: se comprueba cargando una matriz sintética y terminando la sesión de cada forma; los
+escenarios de actividad, con el mapa construido.
+
+**Acceptance Scenarios**:
+
+1. **Scenario**: US-001-5.1 Descartar el archivo
+   - **Given** una matriz cargada
+   - **When** la persona descarta el archivo
+   - **Then** la sesión termina y no queda a la vista ninguna cifra de esa matriz
+
+2. **Scenario**: US-001-5.2 Cerrar la pestaña
+   - **Given** una matriz cargada
+   - **When** la persona cierra la pestaña y vuelve a abrir la herramienta
+   - **Then** ve la opción de cargar la matriz y ninguna cifra
+
+3. **Scenario**: US-001-5.3 Inactividad
+   - **Given** una matriz cargada
+   - **When** pasan 45 minutos sin ninguna interacción con la página
+   - **Then** la sesión termina
+
+4. **Scenario**: US-001-5.4 Cursor sobre una burbuja
+   - **Given** una matriz cargada y 44 minutos sin interacción con la página
+   - **When** la persona pasa el cursor sobre una burbuja del mapa
+   - **Then** la sesión no termina al cumplirse los 45 minutos, que vuelven a contarse desde esa interacción
+
+5. **Scenario**: US-001-5.5 Pulsar un filtro
+   - **Given** una matriz cargada y 44 minutos sin interacción con la página
+   - **When** la persona pulsa un filtro
+   - **Then** la sesión no termina al cumplirse los 45 minutos, que vuelven a contarse desde esa interacción
+
+6. **Scenario**: US-001-5.6 Abrir el detalle de un estudio
+   - **Given** una matriz cargada y 44 minutos sin interacción con la página
+   - **When** la persona abre el detalle de un estudio
+   - **Then** la sesión no termina al cumplirse los 45 minutos, que vuelven a contarse desde esa interacción
+
 ### Edge Cases
 
 Los casos borde se tratan como indica la sección 9 de `contrato-datos.md`. En particular:
@@ -318,7 +378,7 @@ Los casos borde se tratan como indica la sección 9 de `contrato-datos.md`. En p
 - **FR-001-04**: La herramienta MUST emitir advertencia, nunca error, ante una columna del bloque sin lista `1,0` o una columna con lista `1,0` fuera del bloque. [Fuente: decisión de Jairo, 1-nov-2026]
 - **FR-001-05**: La herramienta MUST tomar intervenciones, niveles y demás listas de las validaciones de datos del archivo; sin lista, MUST seguir FR-001-22. [Fuente: doc. técnico §12.2]
 - **FR-001-06**: La herramienta MUST leer todas las filas no vacías, sin límite fijo. [Fuente: doc. técnico §9.2]
-- **FR-001-07**: La herramienta MUST incluir en el mapa solo los estudios empíricos con intervención diligenciada y al menos una dimensión en 1. [Fuente: Matriz Instrucciones B20; lámina 6]
+- **FR-001-07**: La herramienta MUST incluir en el mapa solo los estudios empíricos con intervención diligenciada y al menos una dimensión en 1. [Fuente: Matriz Instrucciones B20; lámina 6; decisión de Jairo, 3-nov-2026]
 - **FR-001-08**: La herramienta MUST calcular el conteo de cada celda como estudios distintos, conforme a $S(i,j)$ del contrato. [Fuente: doc. general §7]
 - **FR-001-09**: La herramienta MUST calcular el número de estudios del mapa sobre estudios distintos, nunca sumando celdas. [Fuente: doc. técnico §2.4]
 - **FR-001-10**: La herramienta MUST clasificar el enfoque diferencial por el prefijo de la columna, conforme a la sección 6 del contrato, sin inferir categorías del resto del texto, y advertir, citando la regla de la hoja Instrucciones, cuando el texto no siga esa regla. [Fuente: Matriz Instrucciones B14; doc. técnico §6.6; decisión de Jairo, 2-nov-2026]
@@ -331,14 +391,16 @@ Los casos borde se tratan como indica la sección 9 de `contrato-datos.md`. En p
 - **FR-001-17**: La herramienta MUST NOT tratar un valor calculado ausente como 0. [Fuente: doc. técnico §9.1]
 - **FR-001-18**: Si hay diferencias, la herramienta MUST advertir antes de presentar los resultados y explicar las que tengan causa conocida, como las filas con igual intervención en ambas columnas. [Fuente: doc. general §4.1; doc. técnico §3.2]
 - **FR-001-19**: La herramienta MUST identificar la matriz procesada por el nombre de su archivo e indicar la fecha de lectura. [Fuente: doc. técnico §4.2 RNF2]
-- **FR-001-20**: La herramienta MUST recibir la matriz por carga desde el navegador, y una carga nueva MUST reemplazar a la anterior dentro de la sesión. [Fuente: decisión de Jairo, 2-nov-2026]
+- **FR-001-20**: La herramienta MUST recibir la matriz por carga desde el navegador, y una carga nueva MUST reemplazar a la anterior dentro de la sesión. [Fuente: decisión de Jairo, 2-nov-2026; decisión de Jairo, 3-nov-2026]
 - **FR-001-21**: La herramienta MUST ignorar una columna de otro encabezado fuera del bloque de dimensiones e informarla en la nota «columnas no usadas: …», sin advertencia, salvo que tenga lista `1,0`. [Fuente: decisión de Jairo, 2-nov-2026]
 - **FR-001-22**: La herramienta MUST emitir error de contrato si las intervenciones o el nivel de evidencia no tienen lista de validación; en las demás columnas categóricas MUST emitir advertencia y usar los valores presentes. [Fuente: decisión de Jairo, 2-nov-2026]
 - **FR-001-23**: Sin valor ancla de estudio empírico, la herramienta MUST emitir un error de contrato que nombre el valor esperado y los encontrados; sin valor ancla de evaluación de impacto, MUST emitir advertencia y continuar. [Fuente: decisión de Jairo, 2-nov-2026]
-- **FR-001-24**: La herramienta MUST emitir advertencia ante un año que no sea un número entero, y tratarlo como «año no reconocido». [Propuesta sin fuente, pendiente de aprobación: doc. técnico §6.9 solo trata la celda vacía]
+- **FR-001-24**: La herramienta MUST emitir advertencia ante un año que no sea un número entero, y tratarlo como «año no reconocido». [Fuente: decisión de Jairo, 3-nov-2026]
 - **FR-001-25**: La herramienta MUST informar la verificación solo sobre las tablas comparables del contrato, cada una por el número de su título. [Fuente: decisión de Jairo, 2-nov-2026]
 - **FR-001-26**: La herramienta MUST delimitar cada tabla comparable de la hoja EGM y emparejar sus filas y columnas, incluida «Total estudios», solo dentro de esa tabla, conforme a la sección 7 del contrato y sin coordenadas fijas. [Fuente: decisión de Jairo, 2-nov-2026]
 - **FR-001-27**: La herramienta MUST clasificar una tabla como «coincide» solo si compara todos los valores esperados; como «difiere» si algún valor comparado es distinto; y en los demás casos como «no verificable». Si no compara todos, MUST emitir una advertencia que indique lo no comparado. [Fuente: decisión de Jairo, 2-nov-2026]
+- **FR-001-28**: La herramienta MUST permitir descartar el archivo cargado; al descartarlo, la sesión termina conforme a NFR-000-17. [Fuente: decisión de Jairo, 2-nov-2026]
+- **FR-001-29**: Si una carga nueva tiene un error de contrato, la herramienta MUST limpiar todo, incluidos la matriz anterior y sus resultados, y mostrar un mensaje de error que no incluya el nombre del archivo ni datos de la matriz; para volver a ver la matriz anterior hay que cargarla otra vez. Una carga nueva con solo advertencias o notas MUST aceptarse y reemplazar a la anterior. [Fuente: decisión de Jairo, 3-nov-2026] [NEEDS CLARIFICATION: no está decidido qué pasa con los filtros ya aplicados tras una carga nueva válida, cuyos valores pueden ser otros. Pendiente de Jairo; no se aplica.] [NEEDS CLARIFICATION: los errores de contrato nombran lo que falta o lo que se esperaba: la hoja o el encabezado (FR-001-02, FR-001-03; US-001-2.4, US-001-2.5, US-001-2.7), la columna sin lista (FR-001-22; US-001-2.11) o el valor ancla esperado y los encontrados (FR-001-23; US-001-2.9). Los valores encontrados se leen de la matriz, y un encabezado o un valor esperado puede tomarse como dato de ella. No está decidido si este mensaje los omite, ni si la regla vale también para un error de contrato en la primera carga. Decisión de Jairo; no se aplica.] [NEEDS CLARIFICATION: esta regla trata el error de contrato. No está decidido qué pasa con la matriz anterior si la carga nueva se rechaza antes de leerla, por tipo o tamaño (NFR-000-19). Pendiente de Jairo; no se aplica.]
 
 ### Key Entities
 

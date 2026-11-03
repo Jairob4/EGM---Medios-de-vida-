@@ -80,12 +80,10 @@ categorías analíticas», ambos excluidos, en el orden del archivo. Su nombre e
    en la validación o referencias a un rango. No se codifican a mano. `[Fuente: doc. técnico §12.2]`
 3. **Orden del archivo.** Las dimensiones van en el orden de sus columnas. Las intervenciones y los niveles van
    en el orden de su lista de validación; las intervenciones que solo estén en la lista de secundaria van al
-   final, en su orden. `[Propuesta sin fuente, pendiente de aprobación: el doc. técnico §2.4 usa el orden de la
+   final, en su orden. `[Fuente: decisión de Jairo, 3-nov-2026. El doc. técnico §2.4 usa el orden de la
    hoja EGM, pero esa hoja nunca es fuente y puede faltar. En la v4 ambos órdenes coinciden.]`
-4. **Fila vacía:** todas sus celdas están vacías. Fila con `N°` vacío pero con contenido: se procesa con
-   advertencia y se identifica por su número de fila del archivo. `[Fuente: doc. técnico §9.2]` La skill
-   `contrato-matriz` define fila vacía como columna A vacía; prevalece el doc. técnico §9.2, porque esa definición
-   descartaría en silencio las filas con `N°` vacío y contenido.
+4. **Fila vacía:** todas sus celdas están vacías. `[Fuente: decisión de Jairo, 2-nov-2026]` Fila con `N°` vacío pero con contenido: se procesa con
+   advertencia y se identifica por su número de fila del archivo. `[Fuente: doc. técnico §9.2]`
 5. Se leen **todas** las filas, sin límite fijo.
 6. Comparación de textos: exacta tras quitar espacios en los extremos. Si hubo que quitarlos, advertencia,
    porque la hoja `EGM` podría no contar ese valor. No se corrigen errores de escritura.
@@ -98,15 +96,15 @@ categorías analíticas», ambos excluidos, en el orden del archivo. Su nombre e
 9. Una celda vacía nunca equivale a 0. En el mapa ambas dan «no marcada», pero en las advertencias vacía es «sin
    diligenciar» y 0 es «no evaluada». `[Fuente: doc. técnico §6.12, §9.2]`
 10. Un valor en la columna de una dimensión distinto de 1 numérico, 0 numérico o vacío (incluido el texto
-    `"1"`) es advertencia `[Fuente: doc. técnico §9.2]` y no marca la dimensión. `[Propuesta sin fuente, pendiente
-    de aprobación: §9.2 pide documentar el tratamiento y contrastarlo con la hoja, sin fijarlo. Se elige no marcar
+    `"1"`) es advertencia `[Fuente: doc. técnico §9.2]` y no marca la dimensión. `[Fuente: decisión de Jairo, 2-nov-2026.
+    §9.2 pide documentar el tratamiento y contrastarlo con la hoja, sin fijarlo. Se elige no marcar
     porque la herramienta no corrige valores; el contraste queda en la sección 7.]`
 11. Guiones, `N/A` y marcadores en texto libre son contenido: se muestran tal cual.
     `[Fuente: doc. técnico §9.2]`
 12. **Año no reconocido.** Un valor de `Año` que no sea un número entero (incluido un año escrito como texto) es
     advertencia con `N°`, columna y valor. El documento se cuenta en $R$, no cumple un filtro de año activo y en la
-    composición por año aparece como «año no reconocido», separado de «sin diligenciar». `[Propuesta sin fuente,
-    pendiente de aprobación: el doc. técnico §6.9 solo trata la celda vacía.]`
+    composición por año aparece como «año no reconocido», separado de «sin diligenciar». `[Fuente: decisión de Jairo, 3-nov-2026.
+    El doc. técnico §6.9 solo trata la celda vacía.]`
 
 **Estado de cada documento.** Todo documento de $R$ queda en uno solo de estos estados, derivados de los conjuntos
 de la sección 5 `[Fuente: Matriz Instrucciones B20, para «En el mapa»; doc. técnico §9.2, para «Empírico pendiente»; decisión de Jairo, 2-nov-2026, para los otros dos estados]`:
@@ -172,7 +170,7 @@ $$M = \{\, r \in E : I_r \neq \varnothing,\ J_r \neq \varnothing \,\}, \qquad N 
 
 $P$ son los estudios empíricos que aún no entran al mapa.
 
-`[NEEDS CLARIFICATION: Instrucciones B20 exige «Tipo de intervención diligenciado», pero $I_r$ también admite una fila con la principal vacía y la secundaria diligenciada, caso que no está en la sección 9. ¿Qué se hace con esa fila? Propuesta: mantenerla en $M$ por su secundaria, porque la hoja EGM también la cuenta, y emitir una advertencia que cite B20. Alternativa: sacarla de $M$ y listarla como empírico pendiente, lo que respeta B20 al pie de la letra pero hace que la verificación difiera. Pendiente de Jairo; no se aplica.]`
+Una fila de $E$ con la intervención principal vacía y la secundaria diligenciada está en $M$ por su secundaria, si tiene al menos una dimensión en 1, y no genera advertencia por esa razón. La regla sigue la fórmula de la hoja `EGM`, que cuenta esa fila por la columna de la secundaria (segundo sumando de $T_1$); la hoja sigue siendo solo verificación y nunca fuente de datos. Instrucciones B20 dice «Tipo de intervención diligenciado»; la herramienta lo trata distinto, porque le basta la secundaria. `[Fuente: decisión de Jairo, 3-nov-2026]`
 
 **Conteo de la herramienta (estudios distintos):**
 
@@ -204,8 +202,7 @@ Se cumple $T_1(i,j) = S(i,j)$ salvo en filas con $G_r = H_r$, donde la hoja cuen
 **estudios distintos** y la verificación explica esa diferencia, no la oculta.
 
 **Filtros.** Un filtro es un predicado sobre las filas. Dentro de un filtro de lista, una fila lo cumple si su
-valor es uno de los seleccionados; en el de año, si su año está en el rango. Una celda vacía no cumple un filtro
-activo. Un filtro está **activo** cuando deja fuera algún valor de su lista o estrecha el rango de años. Varios
+valor es uno de los seleccionados; en el de año, si su año está en el rango. Una celda vacía no cumple un filtro activo, y el estudio no aparece; la única excepción es la entrada «Sin nivel» del filtro de nivel de evidencia (FR-002-12). Un filtro está **activo** cuando se aplica con el botón «Actualizar vista»; mover un control no lo activa. `[Fuente: decisión de Jairo, 2-nov-2026; decisión de Jairo, 3-nov-2026, para la excepción de «Sin nivel». Doc. técnico §2.4 y §4.1 RF2 definen el vector y el producto, no estas reglas.]` `[NEEDS CLARIFICATION: no está decidido si un filtro aplicado sin dejar fuera ningún valor de su lista, o con el rango completo de años, cuenta como activo. Si cuenta, deja fuera los estudios con la celda vacía en ese campo. Opciones: (a) cuenta como activo; (b) solo cuenta si deja fuera algún valor o estrecha el rango de años. Pendiente de Jairo; no se aplica.]` Varios
 filtros se combinan por conjunción en $\varphi$:
 
 $$S_\varphi(i,j) = \bigl|\{\, r \in E : \varphi(r),\ i \in I_r,\ j \in J_r \,\}\bigr|.$$
@@ -255,7 +252,7 @@ Se aplica solo cuando la hoja se reconoce. `[Fuente: decisión de Jairo, 1-nov-2
 2. Una tabla comparable se reconoce por una celda que empieza por un número seguido de punto y cuyo texto
    restante, sin distinguir mayúsculas, contiene su frase propia. Exigir el número evita confundir el título con
    un encabezado o un nombre de fila que repita la frase. Las filas y columnas se emparejan como indican los
-   puntos 7 y 8. Si ninguna celda cumple la condición, o la cumple más de una, la tabla no se reconoce.
+   puntos 7 y 8. Si ninguna celda cumple la condición, o la cumple más de una, la tabla no se reconoce. `[Fuente: decisión de Jairo, 2-nov-2026]`
 
    | Tabla comparable | Frase del título | Conteos de la herramienta | Semántica de la hoja |
    |---|---|---|---|
@@ -268,7 +265,7 @@ Se aplica solo cuando la hoja se reconoce. `[Fuente: decisión de Jairo, 1-nov-2
 4. Resultado de cada tabla, según el punto 9: **coincide**; **difiere**, con las celdas y su explicación; o **no verificable**, con
    advertencia. Si la hoja difiere de la herramienta y coincide con su semántica, la diferencia se explica por las filas
    con $G_r = H_r$, que se listan. Si persiste y hay filas con la dimensión escrita como texto (regla 10), se
-   explica por ellas, que también se listan. Si no, se informa como diferencia sin explicar.
+   explica por ellas, que también se listan. `[Fuente: decisión de Jairo, 2-nov-2026. Depende de la regla 10 y la comprueba US-001-3.8.]` Si no, se informa como diferencia sin explicar.
 5. Son «no verificable»: hoja ausente, tabla no reconocida, archivo sin valores calculados o una comparación incompleta sin diferencias (punto 9). Nunca producen
    error de contrato. Un valor calculado ausente nunca se trata como 0.
 6. La interfaz informa solo las tablas comparables de esta sección, cada una por el número inicial de su título.
@@ -325,6 +322,8 @@ $$1.96\sqrt{\frac{0.25}{100}} \approx 0.098 \le 0.10.$$
 | Fila solo con referencia | Sin tipo de documento válido; se cuenta en $R$, no en $M$ |
 | Empírico sin intervención | En $E$, no en $M$; se lista como pendiente |
 | Empírico con intervención y sin dimensiones | En $E$, no en $M$; la columna «Total estudios» de la hoja sí lo cuenta |
+| Empírico con la intervención principal vacía y la secundaria diligenciada | En $M$ por su secundaria si tiene al menos una dimensión en 1; sin advertencia por esa razón |
+| Estudio del mapa sin nivel de evidencia o con un nivel que empieza por `No aplica` | Se muestra como «Sin nivel», con entrada propia en la leyenda; con el filtro de nivel activo, solo sale al ocultar esa entrada (FR-002-12). Provisional |
 | $G_r = H_r$ | Advertencia; la herramienta lo cuenta una vez y la hoja dos |
 | No empírico con intervención distinta de «No aplica» | No entra en $E$; advertencia |
 | Dimensión con valor fuera de $\{0, 1, \varnothing\}$ | Advertencia; no marca la dimensión |
@@ -417,7 +416,7 @@ Consecuencias para la herramienta:
   (sección 7, punto 6).
 - La discrepancia conocida queda solo en registros internos del proyecto: este apéndice y los informes para
   Jairo. La herramienta no la calcula ni la anota en sus registros de ejecución, que no contienen datos de la
-  matriz (`NFR-000-17`). `[Fuente: decisión de Jairo, 2-nov-2026]`
+  matriz (`NFR-000-17`). `[Fuente: decisión de Jairo, 2-nov-2026, para «queda solo en registros internos» y para que los registros de ejecución no contengan datos de la matriz; doc. técnico §9.1, para «no la calcula», porque excluye esa tabla de la comparación. Decisión de Jairo, 2-nov-2026: entender «registros internos» como los del proyecto (este apéndice y los informes para Jairo) y no anotar la discrepancia en los registros de ejecución.]`
 
 Los N.º 2 y 7 se muestran «Sin clasificar», con la advertencia de la sección 6; nada más.
 `[Fuente: decisión de Jairo, 2-nov-2026]`

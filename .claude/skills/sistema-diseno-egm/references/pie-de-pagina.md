@@ -22,7 +22,7 @@ Código Minciencias: COL0016423.
 
 **Datos.** Matriz bibliográfica del estado del arte: nombre del archivo y número de documentos leídos en
 tiempo de ejecución (nunca escritos a mano), con fecha de lectura. La herramienta no afirma una versión
-que el archivo no declare. Propuesta pendiente de Jairo: «Matriz: <nombre del archivo tal como llegó>,
+que el archivo no declare. Decisión de Jairo, 3-nov-2026: «Matriz: <nombre del archivo tal como llegó>,
 leída el <fecha de la carga>, <n> documentos».
 
 **Referencia de diseño.** International Initiative for Impact Evaluation (3ie). Building Peaceful

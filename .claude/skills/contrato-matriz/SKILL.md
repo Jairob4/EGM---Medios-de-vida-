@@ -24,7 +24,8 @@ diligencia; nunca la modifica ni exige cambiarla. Los valores verificados de la 
    la letra; si un encabezado esperado falta o cambia, error de contrato explícito.
 2. Las listas de valores válidos (intervenciones, niveles, tipos) se leen de las **validaciones de datos**
    del archivo, no se codifican a mano. Si se agrega una intervención o dimensión, la herramienta la toma.
-3. Fila vacía = columna A vacía. Una fila con solo referencia está **pendiente de codificación**.
+3. Fila vacía = todas sus celdas vacías. Una fila con `N°` vacío y con contenido no es vacía: se procesa
+   con advertencia (decisión de Jairo, 2-nov-2026). Una fila con solo referencia está **pendiente de codificación**.
 4. Comparación de textos: exacta tras normalizar espacios en los extremos. No corregir errores de
    escritura; un valor fuera de la lista es una **advertencia** y no se cuenta (la hoja tampoco lo cuenta).
 
@@ -62,8 +63,12 @@ y se muestra así. Nunca inferir la categoría a partir del resto del texto.
 
 **Observación interna (no comunicar al equipo sin autorización de Jairo):** la tabla 3 de la hoja `EGM`
 aplica el criterio `"Sí*"` sobre la columna M (Humano, valores 1/0) en lugar de la U, por lo que vale 0
-en todas sus celdas. La herramienta aplica la regla documentada (prefijo de la columna U). La verificación
-cruzada de la tabla 3 debe registrarse como discrepancia conocida, no como error de lectura.
+en todas sus celdas. La herramienta aplica la regla documentada (prefijo de la columna U). La tabla 3 no es
+una tabla comparable: la herramienta no la compara ni la calcula, y la interfaz no muestra esa
+comparación. Su diferencia con la regla documentada es una discrepancia conocida, no un error de lectura, y queda
+solo en los registros internos del proyecto (apéndice B de `docs/specs/contrato-datos.md` e informes para Jairo).
+No se anota en los registros de ejecución de la herramienta (decisiones de Jairo del 2-nov-2026; «no la calcula»:
+doc. técnico §9.1).
 
 ## Valores calculados
 

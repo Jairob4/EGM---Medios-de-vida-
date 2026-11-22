@@ -100,5 +100,32 @@ corrector la editan. Las reglas permanentes están en `CLAUDE.md`.
 - **Regla desde el 21-nov-2026**: un ADR en estado «aceptado» solo cambia por una corrección `COR-NNN` (flujo de la regla 11) o por un ADR nuevo que lo reemplace.
 - COR-012 recoge los hallazgos F2-01 a F2-11 de `docs/informes/conformidad-fase-2-2026-11-21.md`. Jairo aprueba `arquitectura.md` después de aplicarla y verificarla.
 
+## Decisiones del 22-nov-2026
+- COR-012 aprobada: opción A en todos los hallazgos (F2-01 a F2-03 y F2-05 a F2-11) y P1 (a): las tipografías se sirven localmente (ADR-003, punto 6), sin Google Fonts. Verificada en `docs/informes/conformidad-fase-2-cierre-2026-11-22.md`.
+- Jairo aprueba `docs/arquitectura/arquitectura.md`: la Fase 2 queda cerrada. Empieza la Fase 3 (un plan por spec, con `_plantilla-plan-spec.md`).
+- F2-13 (fecha de la nota de revisión de ADR-003) y F2-14 (`pie-de-pagina.md` da por confirmados todos los datos aunque «Herramienta» sigue [POR CONFIRMAR]) van a COR-013, junto con lo que aparezca al preparar el plan 001.
+
+## Decisiones del 22-nov-2026 (Fase 3, planes)
+- Jairo autoriza las descargas del plan 001 (F3-09): dependencias de Python en `.venv` (FastAPI, Jinja2, Uvicorn, openpyxl, pytest, hypothesis, ruff, mypy y las que fije `pyproject.toml`), el navegador de pruebas de Playwright, axe-core, htmx y las tipografías servidas localmente. Nada de eso toca `data/raw/`.
+- Las correcciones de los planes y pendientes (F3-01 a F3-06, F3-10 a F3-17, O-1 a O-4, F2-13, F2-14) van en una sola COR-013, antes de aprobar los planes.
+- Los NC de los planes (NC-P001-*, NC-P002-*, NC-P003-*) los decide Jairo uno a uno.
+- Alcance: se ejecuta el camino crítico de `docs/planes/README.md` y se revisa el avance al cerrar el hito N1 del plan 001; ahí Jairo decide si recorta.
+
+- NC de los planes, decididos por Jairo el 22-nov-2026 (todos con la propuesta del plan):
+  - NC-P001-1: mientras no exista el mapa, una carga aceptada lleva a una vista provisional `/vista/resultado` (verificación, advertencias y cifras básicas); con el plan 002 la carga lleva al mapa.
+  - NC-P001-2: la revisión visual de SC-000-11 con los logos encendidos espera a que Jairo tenga la autorización y los archivos; no bloquea la demostración.
+  - NC-P002-1: las pruebas de US-001-4.10 y US-001-5.4 a 5.6 viven solo en el plan 002.
+  - NC-P002-2: revisión manual con NVDA en Windows.
+  - NC-P002-3: en el archivo de definiciones, cada encabezado es una línea que empieza por «# » seguida del nombre exacto; el texto va hasta el siguiente encabezado.
+  - NC-P002-4: una referencia con DOI y sin URL enlaza a https://doi.org/ seguido del DOI; una URL escrita se enlaza tal cual.
+  - NC-P002-5: los valores presentes de un filtro sin lista salen en el orden de su primera aparición en el archivo.
+  - NC-P003-1: la conclusión 3 toma como base los estudios del mapa y muestra «sin diligenciar» como quinta categoría, para que la suma dé el total (requiere ajustar FR-003-07 por COR-013).
+  - NC-P003-2: cada cifra de celdas lleva la lista de cruces y los N.º de los estudios que los ocupan; para las celdas sin estudios, los estudios revisados.
+  - NC-P003-3: conclusión 4 según la propuesta del plan (agrupación por el conjunto de dimensiones de cada estudio; «nunca juntas» = pares con estudios propios y ninguno en común; dimensiones sin estudios, aparte).
+  - NC-P003-4: en la conclusión 6, un campo de texto vacío muestra el rótulo «sin diligenciar», sin otro texto.
+  - NC-P003-5: Jairo coordina la comprobación manual de SC-003-05 con la matriz vigente y el resultado se registra en el informe de la fase.
+
+- COR-013 aprobada (22-nov-2026): opción A, P1 (a) y P2 (a). ADR-003 punto 2 se aclara: los controles son elementos reales de HTML que htmx envía con la ficha de sesión, y la herramienta necesita el guion activo (sin aviso para navegador sin guion). Las «cifras básicas» de la vista provisional `/vista/resultado` son las de la cabecera corrida. FR-003-07 pasa a cinco categorías sobre los estudios del mapa (NC-P003-1). El constructor es `tests/constructor.py` (M23) en todos los documentos. Los estados de `trazabilidad.md` pasan a «diseñado» y la regla de quién cambia cada estado queda escrita en `trazabilidad.md`.
+
 ## Pendientes de Jairo (no resolver por cuenta propia)
 - Ninguno a 21-nov-2026.

@@ -39,7 +39,7 @@ Tokens completos: `references/tokens.md`. Pie de página: `references/pie-de-pag
 
 ## Componentes
 
-1. **Cabecera corrida** (como la de una revista): título corto de la herramienta a la izquierda; a la derecha el corte de datos con el texto de NFR-000-12 («Matriz: <nombre del archivo tal como llegó>, leída el <fecha de la carga>, <n> documentos»), tomado en tiempo de ejecución y siempre visible.
+1. **Cabecera corrida** (como la de una revista): a la izquierda, el título corto de la herramienta, «Evidencias sobre medios de vida», sin la palabra «brechas» (decisión de Jairo, 21-nov-2026, NC-INT-3); a la derecha el corte de datos con el texto de NFR-000-12 («Matriz: <nombre del archivo tal como llegó>, leída el <fecha de la carga>, <n> documentos»), tomado en tiempo de ejecución y siempre visible, sin deducir ninguna versión de la matriz.
 2. **Cajonera (mapa)**: filas = intervenciones, columnas = dimensiones, leídas de la matriz.
    Dentro de cada cajón, una burbuja por nivel de evidencia presente, ordenadas por jerarquía;
    **área** proporcional al número de estudios: $r \propto \sqrt{n}$. El número siempre visible junto a
@@ -51,7 +51,7 @@ Tokens completos: `references/tokens.md`. Pie de página: `references/pie-de-pag
 5. **Filtros**: tipo de fuente, metodología, nivel de evidencia, año. Los filtros activos se resumen en
    una frase legible encima del mapa («Mostrando solo fuentes territoriales desde 2015»).
 6. **Conclusiones**: frases en lenguaje llano, cada una con su conteo y su nota al margen.
-7. **Colofón** (pie de página): ver referencia.
+7. **Colofón** (pie de página): ver referencia. Con la configuración por defecto solo se ven «Datos» y la referencia a 3ie; los demás bloques vienen apagados hasta la autorización de Jairo (ADR-005).
 
 ## Reglas de calidad
 

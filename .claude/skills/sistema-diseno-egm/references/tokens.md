@@ -32,7 +32,7 @@ derivado y mostrar una advertencia de diseño, no fallar.
 `--papel #17202E`, `--tinta #E6ECF4`, `--tinta-media #A9BCD6`, `--rayado #33445E`, `--cajon #1E293A`,
 `--cabecera #E0565D`. Invertir la escala de niveles para conservar «más contraste = mayor nivel».
 
-## Tipografía (Google Fonts)
+## Tipografía (servidas localmente; ADR-003, punto 6)
 
 | Rol | Familia | Tamaño / interlineado |
 |---|---|---|
@@ -57,10 +57,11 @@ Escala de razón $1.25$: $15 \to 18 \to 22.5 \to 28 \to 35 \to 44$ px. Sin mayú
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ Mapa de evidencias y brechas            Matriz v4, 27 documentos, leída hoy  │ ← cabecera corrida
+│ Evidencias sobre medios de vida                                             │ ← cabecera corrida
+│                         Matriz: <archivo>, leída el <fecha>, <n> documentos │
 ├───────────────────────────────────────────────────────┬─────────────────────┤
 │ Filtros: [Fuente ▾] [Metodología ▾] [Nivel ▾] [Año ▾]  │                     │
-│ «Mostrando todos los estudios empíricos codificados»   │  Notas al margen    │
+│ «Mostrando todos los estudios del mapa»                │  Notas al margen    │
 │                                                       │                     │
 │              Vuln. Hum. Soc. Nat. Fís. Fin. EyP Sost. │  1 estudio:         │
 │ Transf. act.  ●1   ●1   ┄    ┄    ┄    ●1   ┄   ┄     │  N.º 7 (Stark et    │
@@ -74,8 +75,8 @@ Escala de razón $1.25$: $15 \to 18 \to 22.5 \to 28 \to 35 \to 44$ px. Sin mayú
 ├───────────────────────────────────────────────────────┴─────────────────────┤
 │ Lo que dicen los datos (conclusiones con conteo y nota al margen)           │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ Colofón: proyecto, grupo, semillero, universidad, datos, créditos           │
+│ Colofón: «Datos» y referencia a 3ie; los demás bloques, apagados por defecto│
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-`[●1]` = cajón seleccionado (línea roja de cabecera). Las cifras del boceto corresponden a la matriz v4.
+`[●1]` = cajón seleccionado (línea roja de cabecera). Las cifras del boceto corresponden a la matriz v4. La cabecera usa el texto de NFR-000-12 con el nombre, la fecha y el número tomados en tiempo de ejecución, sin deducir ninguna versión; el boceto los abrevia como marcadores.

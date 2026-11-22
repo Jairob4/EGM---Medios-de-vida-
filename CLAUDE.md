@@ -72,7 +72,7 @@ de las categorías y de la metodología.
 | `data/fixtures/` | Matrices sintéticas para pruebas |
 | `src/egm/` | Núcleo Python (lectura, validación, modelo, análisis), sin dependencias de la web |
 | `app/` | Capa web (stack según ADR) |
-| `tests/` | `unit/`, `integracion/`, `propiedades/` |
+| `tests/` | `constructor.py` (M23), `unit/`, `integracion/`, `propiedades/`, `navegador/` |
 
 ## Subagentes
 

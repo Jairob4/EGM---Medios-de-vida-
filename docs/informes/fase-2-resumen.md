@@ -1,29 +1,38 @@
 # Resumen de la Fase 2 (arquitectura e interfaz)
 
-**Fecha**: 2026-11-21
+**Fecha**: 2026-11-21, actualizado el 2026-11-22 al cerrar COR-012
 **Autor**: `verificador`
 **Lector**: Jairo. Es un documento interno y no se comparte con el equipo.
-**Evidencia**: `docs/informes/conformidad-fase-2-2026-11-21.md`, con archivo y línea de cada dato.
+**Evidencia**: `docs/informes/conformidad-fase-2-2026-11-21.md` y
+`docs/informes/conformidad-fase-2-cierre-2026-11-22.md`, con el archivo y la línea de cada dato.
 
 ## 1. Estado de la fase
 
-**La Fase 2 está completa y puede cerrarse en cuanto usted apruebe la arquitectura.** La arquitectura
-(`docs/arquitectura/arquitectura.md`) está en estado «propuesta».
+**La Fase 2 está completa. Se cierra cuando usted apruebe la arquitectura.** Usted condicionó esa aprobación a que
+COR-012 quedara aplicada y verificada, y ya lo está. La arquitectura (`docs/arquitectura/arquitectura.md`) sigue en
+estado «propuesta» hasta su aprobación.
 
+- **Correcciones**:
+  - COR-011 está `verificada` (21-nov-2026).
+  - COR-012 está `verificada` (22-nov-2026). El texto para su sección 9 está en el informe de cierre, §9.
+- **Hallazgos**:
+  - Los de la Fase 2 (F2-01 a F2-11) quedan cerrados. F2-04 se cerró con su ratificación del 21-nov-2026 y los demás
+    con COR-012.
+  - Quedan tres hallazgos menores nuevos, ninguno bloqueante (sección 6).
 - **Cobertura completa**:
   - los 89 requisitos tienen al menos un módulo;
   - los 23 módulos cubren al menos un requisito;
   - la columna «Componente» de `docs/specs/trazabilidad.md` coincide con la arquitectura en los 89.
-- **Hallazgos**: no hay bloqueantes. Hay cuatro mayores (F2-01 a F2-04) y siete menores (F2-05 a F2-11).
-- **COR-011 queda `verificada`.** El texto de su sección 9 está en el informe de conformidad, §11.
-- **Specs**:
+- **Specs**: sin cambios en esta fase.
   - 0 `[NEEDS CLARIFICATION]` abiertos;
   - 89 requisitos, 15 historias, 122 escenarios y 35 criterios de éxito;
   - ID únicos y sin referencias colgantes.
 - **Integridad**:
   - la matriz está intacta: SHA-256 `7E1714DE871883818532BF6307C0E4093FB3B62F9B54662C3AC17A7C1952C3A1`;
-  - `data/raw/` y `docs/fuentes/` no tienen cambios;
-  - el trabajo de la Fase 2 sigue sin commit sobre 997e932, el commit con el que cerró la Fase 1.
+  - `data/raw/`, `docs/fuentes/` y los specs no tienen cambios.
+- **Commits**:
+  - el trabajo de la Fase 2 y COR-011 están en el commit `adafb0d`;
+  - los cambios de COR-012 están sin commit, en 9 archivos y en `docs/correcciones/COR-012.md`.
 
 ## 2. Módulos (lista cerrada)
 
@@ -53,8 +62,8 @@
 | M22 | `app.configuracion` | Configuración local leída al arrancar | 001 |
 | M23 | `tests.constructor` | Matrices sintéticas para las pruebas | 001 |
 
-Fuera del alcance, sin implementar: la vista de red y el módulo no supervisado. Quedan documentados como siete puntos
-de extensión (arquitectura §7).
+La vista de red y el módulo no supervisado quedan fuera del alcance y sin implementar. Están documentados como siete
+puntos de extensión (arquitectura §7).
 
 ## 3. ADR y su estado
 
@@ -62,9 +71,11 @@ de extensión (arquitectura §7).
 |---|---|---|
 | ADR-001 | La fuente es la hoja «Matriz bibliográfica»; se cuentan estudios distintos y cada número lleva su lista de filas | Aceptado, 21-nov-2026 |
 | ADR-002 | Sin recálculo de fórmulas; sin valores guardados, la verificación queda «no verificable» | Aceptado, 21-nov-2026 |
-| ADR-003 | FastAPI + Jinja2 + htmx, HTML y CSS propios, Uvicorn local, Python 3.13 | Aceptado, 21-nov-2026; editado después por decisiones de la interfaz (F2-04) |
+| ADR-003 | FastAPI + Jinja2 + htmx, HTML y CSS propios, Uvicorn local, Python 3.13 | Aceptado, 21-nov-2026. Los cambios a sus puntos 6 y 7 los ratificó usted. COR-012 agregó una nota de revisión y el segundo límite de NFR-000-19 |
 | ADR-004 | Carga desde el navegador, versión local en `127.0.0.1`, definiciones en texto UTF-8 y límite de contenido descomprimido | Aceptado, 21-nov-2026; NC-ADR004-1 abierto a propósito |
-| ADR-005 | Colofón por bloques; solo «Datos» y la referencia a 3ie visibles | Aceptado, 21-nov-2026; con nota de revisión del mismo día (NC-INT-1) |
+| ADR-005 | Colofón por bloques; solo «Datos» y la referencia a 3ie visibles | Aceptado, 21-nov-2026; su nota de revisión (NC-INT-1) la ratificó usted |
+
+Desde el 21-nov-2026, un ADR aceptado solo cambia por una propuesta COR o por un ADR nuevo que lo reemplace.
 
 ## 4. Decisiones suyas que constan
 
@@ -89,53 +100,77 @@ de extensión (arquitectura §7).
 - M20 entrega el SVG y M19 lo convierte en PNG (NC-INT-4).
 - Se autorizó completar las listas «Cubre» de M08 y M09.
 
-**COR-011**: aprobada (opción B) el 21-nov-2026, aplicada y verificada.
+**21-nov-2026, cierre de la Fase 2**
+- Ratificó los cambios a ADR-003 (puntos 6 y 7) y a ADR-005 (nota de revisión) posteriores a su aceptación (F2-04).
+- Fijó la regla de que un ADR aceptado solo cambia por COR o por un ADR nuevo.
+- Agrupó F2-01 a F2-11 en COR-012 y condicionó la aprobación de la arquitectura a que se aplique y se verifique.
 
-## 5. Decisiones abiertas
+**22-nov-2026**
+- Aprobó COR-012 con la opción A en todos los hallazgos.
+- Aprobó P1 (a): las tipografías se sirven localmente (ADR-003, punto 6).
 
-- **NC-ADR004-1, despliegue después de la demostración**. Lo decide el equipo una vez hecha la demostración. La
-  arquitectura sirve sin cambios para seguir en local o para un ejecutable empaquetado. Un servidor compartido exigiría
-  revisar los registros del alojamiento y el almacén de sesiones (ADR-004).
-- **Ratificación de las ediciones a ADR-003 y ADR-005 posteriores a su aceptación** (F2-04). La propuesta es que usted
-  las ratifique al aprobar la Fase 2 y que, desde entonces, un ADR aceptado solo cambie por una propuesta COR.
+**Correcciones**
+- COR-011: aprobada (opción B) el 21-nov-2026, aplicada y verificada.
+- COR-012: aprobada el 22-nov-2026, aplicada y verificada.
 
-## 6. Correcciones propuestas antes del plan 001
+## 5. Qué cambió con COR-012
 
-Las cuatro siguen el flujo de la regla 11: analista, su aprobación y corrector. Cuando terminen, se hace una sola
-auditoría.
+- **Interfaz**:
+  - nuevo estado E10, «Rechazo por contenido», en los flujos y en el boceto de carga, con el mensaje «El contenido del
+    libro es demasiado grande para abrirlo» y sin cifras;
+  - los cuatro puntos NC-INT figuran como decididos;
+  - el colofón explica los nueve bloques apagados;
+  - el tablero con filtro muestra «0 de 6» estudios empíricos que aún no entran al mapa;
+  - la frase sobre información interna ya no nombra la tabla.
+- **Arquitectura**:
+  - la vista V1 incluye el rechazo por contenido;
+  - la cabecera remite a las invariantes;
+  - NC-ARQ-1 queda registrado;
+  - un párrafo explica el andamiaje de `src/egm/`;
+  - se agregó la coma en M23.
+- **ADR-003**: nombra el segundo límite de NFR-000-19 y lleva nota de revisión.
+- **Skill de diseño**: el título sin «brechas», la cabecera sin versión deducida, el colofón con los bloques apagados
+  por defecto y las tipografías servidas localmente.
 
-1. **F2-01. Estado de interfaz del rechazo por contenido descomprimido (US-001-4.13).**
-   - Falta en `flujos.md`, en `carga.html` y en la vista V1 de la arquitectura.
-   - El mensaje es «El contenido del libro es demasiado grande para abrirlo».
-2. **F2-02. Llevar a `flujos.md` las decisiones NC-INT-1 a NC-INT-4.**
-   - Hoy figuran como abiertas y una de las recomendaciones dice lo contrario de lo decidido.
-   - En la misma corrección conviene marcar `flujos.md` como documento interno (F2-11).
-3. **F2-03. Actualizar la skill `sistema-diseno-egm`.**
-   - Sigue listando el grupo y la universidad en el colofón.
-   - Su boceto lleva el título «Mapa de evidencias y brechas» y una cabecera con «v4» y «leída hoy».
-   - Contradice ADR-005, NC-INT-3 y NFR-000-12.
-4. **F2-04. Registrar la ratificación indicada en la sección 5.**
+## 6. Hallazgos menores que quedan
 
-Los menores (F2-05 a F2-10) pueden ir en la misma tanda o atenderse al preparar el plan 001.
+Ninguno impide aprobar la arquitectura.
 
-## 7. Puntos que quedan para preparar los planes
+- **F2-12.** Falta registrar en las invariantes su aprobación de COR-012 del 22-nov-2026, con P1 (a). Lo hace la
+  sesión principal, sin el flujo de la regla 11. Conviene hacerlo antes de su aprobación de la arquitectura.
+- **F2-13.** La nota de revisión de ADR-003 lleva la fecha 21-nov-2026, aunque COR-012 se aprobó el 22-nov-2026. El
+  error venía en el texto de la propuesta. Como ADR-003 está aceptado, la fecha se corrige por COR, en la próxima
+  corrección que se abra.
+- **F2-14.** La guía del colofón dice que todos sus datos están confirmados, pero la línea «Herramienta» sigue
+  pendiente de confirmación. No tiene efecto en la interfaz, porque ese bloque se omite mientras siga pendiente. Se
+  propone ajustar la frase en una corrección posterior.
 
-- **Biblioteca de lectura ante una parte que se descomprime a más de lo declarado.** Se comprueba al preparar el plan
-  001. El spec ya trata ese caso como un archivo dañado (COR-011, §4 y §6). Hoy no consta en la arquitectura (F2-06).
+## 7. Decisiones abiertas que pasan a la preparación de los planes
+
+- **NC-ARQ-1, una parte del libro que se descomprime a más de lo declarado.** Se comprueba al preparar el plan 001
+  qué hace la biblioteca de lectura en ese caso. El spec ya lo trata como un archivo dañado (COR-011). Está registrado
+  en la arquitectura, §9 y §10.
+- **NC-ADR004-1, despliegue después de la demostración.**
+  - Es una decisión del equipo y queda abierta a propósito.
+  - La arquitectura sirve sin cambios para seguir en local o para un ejecutable empaquetado.
+  - Un servidor compartido obligaría a revisar los registros del alojamiento y el almacén de sesiones (ADR-004).
+
+## 8. Puntos que quedan para preparar los planes
+
 - **Plan 001** (ADR-003 y ADR-004):
-  - versiones fijadas de las dependencias;
+  - versiones fijadas de las dependencias en un `pyproject.toml`, que todavía no existe;
   - rutas de la aplicación;
   - comando de arranque y pasos de instalación;
-  - herramientas de prueba en navegador y de revisión de accesibilidad.
-- **Constructor de fixtures (M23)**, en la preparación del plan 001, con:
+  - herramientas de prueba en el navegador y de revisión de accesibilidad.
+- **Constructor de fixtures (M23)**, en la preparación del plan 001. `data/fixtures/` todavía no existe. Debe construir:
   - libros de tamaño exacto y de contenido descomprimido exacto;
   - validaciones de extensión para probar el respaldo de ADR-001;
   - valores guardados controlados para la verificación.
-- **Andamiaje de `src/egm/`.** Las carpetas `analisis/` y `validacion/` no corresponden a ningún módulo. El plan 001
-  debe conciliarlas con la lista cerrada (F2-10).
-- **Tablero con filtro**: definir cómo se presenta la cifra de empíricos pendientes con «n de N» (F2-09, plan 003).
+- **Andamiaje de `src/egm/`.** El plan 001 concilia las carpetas actuales con la lista cerrada y retira las que no
+  correspondan a un módulo: `analisis/` y `validacion/` no corresponden a ninguno (arquitectura §6).
+- **NC-ARQ-1**, como se indica en la sección 7.
 
-## 8. Cómo ver los bocetos
+## 9. Cómo ver los bocetos
 
 1. Abra en el navegador el archivo `docs/interfaz/bocetos/index.html`, con doble clic o arrastrándolo a una pestaña.
    No necesita servidor ni internet.
@@ -149,13 +184,15 @@ Los menores (F2-05 a F2-10) pueden ir en la misma tanda o atenderse al preparar 
    corchetes, como marcadores.
 6. Las tipografías Alegreya no se cargan en los bocetos; se ven con las del sistema.
 
-## 9. Lo que necesita la Fase 3 para empezar
+## 10. Lo que necesita la Fase 3 para empezar
 
-1. Su aprobación de `docs/arquitectura/arquitectura.md`, que pasa de «propuesta» a «aprobada».
-2. Las correcciones de la sección 6 aplicadas y auditadas, o su indicación expresa de cuáles pasan a la preparación
-   del plan 001. Como mínimo, F2-01, porque toca la historia US-001-4 del plan 001.
-3. La ratificación de la sección 5, registrada en `invariantes.md` por la sesión principal.
-4. Su commit del trabajo de la Fase 2 y de COR-011. Los commits los hace usted.
-5. Un plan por spec, con `docs/planes/_plantilla-plan-spec.md`, en el orden 001 → 002 → 003, para llegar al 6-dic-2026.
+1. El registro de F2-12 en las invariantes, a cargo de la sesión principal.
+2. Su aprobación de `docs/arquitectura/arquitectura.md`, que pasa de «propuesta» a «aprobada». Con eso se cierra la
+   Fase 2.
+3. Su commit de COR-012 y de los informes del cierre. Los commits los hace usted.
+4. Un plan por spec, hecho con `docs/planes/_plantilla-plan-spec.md`, en el orden 001 → 002 → 003, para llegar al
+   6-dic-2026. Cada plan va a `docs/planes/NNN-<feature>/plan.md` y necesita su aprobación antes de escribir código.
+5. En el plan 001, la preparación de la sección 8: dependencias, constructor M23, andamiaje y NC-ARQ-1.
 6. En cada historia, las pruebas antes que su implementación. Cada NFR-000 va en los planes cuyas historias afecta,
    según el reparto de la arquitectura §6.4.
+7. F2-13 y F2-14 no bloquean el comienzo. Pueden ir en la primera corrección que se abra durante la Fase 3.

@@ -40,7 +40,7 @@ description: Estándares de código y pruebas Python del proyecto EGM (estructur
 
 - Estructura: `tests/unit/`, `tests/integracion/`, `tests/propiedades/`.
 - Docstring de cada prueba: ID del escenario o criterio que verifica (`US-001-1.2`, `SC-003-01`).
-- Fixtures en `data/fixtures/`, generados por un script versionado (`tests/fixtures_builder.py`) para
+- Fixtures en `data/fixtures/`, generados por un script versionado (`tests/constructor.py`, módulo M23 `tests.constructor` de la arquitectura) para
   poder reconstruirlos; uno por caso borde del contrato.
 - Esperados escritos a mano a partir del contrato o de `referencia-v4.md`; nunca copiados de la salida
   del código bajo prueba.

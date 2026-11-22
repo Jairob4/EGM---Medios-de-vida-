@@ -10,7 +10,7 @@ propios, sin framework de JavaScript.
 **Entregables relacionados**: `docs/interfaz/tokens.css`, `docs/interfaz/bocetos/` (`index.html`, `carga.html`,
 `mapa.html`, `estudio.html`, `tablero.html`, `colofon.html`, `boceto.css`, `boceto.js`).
 
-Ningún flujo, boceto ni texto menciona la tabla 3 de la hoja EGM. Ninguna cifra viene de la lámina 7. Todas las cifras
+Ningún flujo, boceto ni texto usa información interna del proyecto. Ninguna cifra viene de la lámina 7. Todas las cifras
 son conteos que entrega el núcleo; la interfaz no calcula ningún conteo, solo dibuja el modelo de vista de
 `app.presentacion` (M17).
 
@@ -53,7 +53,8 @@ Se definen una vez y cada flujo indica cuáles le aplican.
 | **E1 Cargando** | Entre elegir el archivo y recibir la respuesta | «Leyendo la matriz. Esto puede tardar unos segundos.» (región de estado anunciada); el botón «Cargar la matriz» queda inactivo | US-001-4.1 |
 | **E2 Rechazo por tipo** | Archivo que no es un libro .xlsx, o .xlsx dañado | «No se pudo cargar el archivo. El archivo elegido no es un archivo de Excel (.xlsx) que la herramienta pueda abrir, o está dañado. No se leyó y no se muestra ningún resultado. Elija la matriz bibliográfica en formato .xlsx.» | US-001-4.3, NFR-000-19, SC-000-19 |
 | **E3 Rechazo por tamaño** | Más de 15 728 640 bytes | «No se pudo cargar el archivo. El archivo pesa más de 15 MB (15 728 640 bytes), el máximo que admite la herramienta. No se leyó y no se muestra ningún resultado de ese archivo.» | US-001-4.4, NFR-000-19, SC-000-19 |
-| E2 / E3 con matriz previa | Igual, con una sesión abierta | Se agrega: «La matriz que tenía cargada sigue disponible con sus resultados: Matriz: <nombre>, leída el <fecha>, <n> documentos. Volver al mapa» | US-001-4.11, FR-001-29 |
+| **E10 Rechazo por contenido** | Libro .xlsx dentro del límite de tamaño cuyo contenido descomprimido declarado supera el límite de NFR-000-19 | «No se pudo cargar el archivo. El contenido del libro es demasiado grande para abrirlo. No se leyó y no se muestra ningún resultado de ese archivo.» El mensaje no lleva cifras: ni el tamaño ni el límite | US-001-4.13, NFR-000-19, SC-000-19 |
+| E2 / E3 / E10 con matriz previa | Igual, con una sesión abierta | Se agrega: «La matriz que tenía cargada sigue disponible con sus resultados: Matriz: <nombre>, leída el <fecha>, <n> documentos. Volver al mapa» | US-001-4.11, US-001-4.13, FR-001-29 |
 | **E4 Estructura inesperada** (error de contrato) | Falta la hoja, un encabezado de rol, un delimitador del bloque de dimensiones, el valor ancla de estudio empírico, o la lista de intervenciones o de nivel | «No se pudo leer la matriz. Se esperaba <lo esperado>, y no se encontró / se encontraron: <lo encontrado>. No se muestra ninguna cifra. Revise que el archivo sea la matriz bibliográfica del proyecto y vuelva a cargarlo.» Nunca el nombre del archivo ni filas de datos | US-001-4.12, US-001-2.4, 2.5, 2.7, 2.9, 2.11, FR-001-02, FR-001-03, FR-001-23, FR-001-29 |
 | E4 con matriz previa | Carga nueva con estructura inesperada | Título «No se pudo leer la matriz y la sesión terminó»; se agrega: «La herramienta borró todo: la matriz que tenía cargada y sus resultados ya no están disponibles. Para volver a verlos, cárguela otra vez.» | US-001-4.7, FR-001-29, NFR-000-17 |
 | **E5 Sin estudios** | Matriz aceptada sin ningún estudio en el mapa | Mapa con todas las filas y columnas y el rótulo «ningún estudio registrado» en cada cajón; encima: «Todavía no hay estudios codificados en el mapa. Las filas y columnas son las de la matriz; cuando haya estudios empíricos con intervención y dimensiones marcadas, aparecerán aquí.» Tablero: cifras en 0 y cada conclusión dice que no hay casos y cuántos estudios se revisaron | casos borde de 002 y 003, FR-003-11 |
@@ -83,8 +84,8 @@ rechazo y de estructura usan `role="alert"`; los de estado, `role="status"`. El 
 - **Carga de otro archivo**: «Cargar otro archivo» en la cabecera lleva al formulario de carga sin cerrar la sesión.
   Si la carga nueva se acepta (con o sin advertencias o notas), los resultados son solo del archivo nuevo y los
   filtros vuelven a «ningún filtro activo»; el resumen de filtros dice «Mostrando todos los estudios del mapa».
-- **Estados**: E1, E2, E3 (con y sin matriz previa), E4 (con y sin matriz previa). Sin estudios: E5 tras la carga.
-- **Cubre**: US-001-4.1 a 4.12; FR-001-19, FR-001-20, FR-001-29; NFR-000-01, NFR-000-12, NFR-000-17, NFR-000-19;
+- **Estados**: E1, E2, E3 y E10 (con y sin matriz previa), E4 (con y sin matriz previa). Sin estudios: E5 tras la carga.
+- **Cubre**: US-001-4.1 a 4.13; FR-001-19, FR-001-20, FR-001-29; NFR-000-01, NFR-000-12, NFR-000-17, NFR-000-19;
   SC-000-12, SC-000-19. US-001-4.6 (huella) no tiene interfaz: la garantiza la lectura en memoria.
 
 ### F-001-1 Ver el resultado de la lectura (US-001-1)
@@ -256,8 +257,8 @@ rechazo y de estructura usan `role="alert"`; los de estado, `role="status"`. El 
      de impacto. Se revisó 1 estudio del mapa.» Con casos: «<cruce>: 3 estudios, ninguno es evaluación de impacto; 2
      son estudios de caso y 1 es informe de proyecto.» No disponible: «No disponible: la lista de niveles de evidencia
      de esta matriz no incluye «Evaluación de impacto».»
-  3. Tabla por intervención: estudios, lo incorporan, de forma parcial, no lo incorporan, sin clasificar (con sus N.º).
-     v4: Transferencia de activos y Acompañamiento técnico, 1 estudio: 0, 0, 0, 1 (N.º 7); las demás, «ningún estudio
+  3. Tabla por intervención, sobre los estudios del mapa: estudios, lo incorporan, de forma parcial, no lo incorporan, sin clasificar y sin diligenciar (con sus N.º); la suma de las cinco da los estudios.
+     v4: Transferencia de activos y Acompañamiento técnico, 1 estudio: 0, 0, 0, 1 (N.º 7), 0; las demás, «ningún estudio
      registrado». Aclaración sobre «Sin clasificar».
   4. «1 estudio analiza Acompañamiento técnico junto con Transferencia de activos.» «Vulnerabilidad, Humano y
      Financiero se miden juntas en 1 estudio.» Dimensiones que nunca se miden juntas, «solo sobre los estudios
@@ -273,11 +274,11 @@ rechazo y de estructura usan `role="alert"`; los de estado, `role="status"`. El 
 
 - **Vista**: V8 con el mismo bloque V7 (mismo formulario, mismo estado de la sesión).
 - **Acciones**: como F-002-4. Con filtro activo, cada cifra muestra «n de N» según su tipo (documentos sobre 27,
-  estudios del mapa sobre 1); conclusiones y listas se recalculan; ninguna dice «brecha»; una conclusión vacía dice
+  estudios empíricos registrados sobre 7, estudios del mapa sobre 1, estudios empíricos que aún no entran al mapa sobre 6); conclusiones y listas se recalculan; ninguna dice «brecha»; una conclusión vacía dice
   «Ningún estudio cumple estos filtros.» En las cifras de documentos, un documento no empírico cuenta como «Sin nivel»
-  (US-003-3.5).
+  (US-003-3.5); un estudio empírico que aún no entra al mapa y no tiene nivel no cuenta como «Sin nivel» y queda fuera mientras el filtro de nivel esté activo (NC-INT-2, §9).
 - **Estados**: E5 con filtros, E6.
-- **Cubre**: US-003-3.1 a 3.5; FR-003-13 a FR-003-16; SC-003-03, SC-003-04.
+- **Cubre**: US-003-3.1 a 3.5; FR-003-13 a FR-003-16, FR-003-21; SC-003-03, SC-003-04.
 
 ### F-003-4 Confiar en lo que se lee (US-003-4)
 
@@ -305,8 +306,10 @@ rechazo y de estructura usan `role="alert"`; los de estado, `role="status"`. El 
     «Datos. Aún no se ha cargado ninguna matriz.» Nunca una versión deducida del nombre.
   - «Referencia de diseño. International Initiative for Impact Evaluation (3ie). Building Peaceful Societies Evidence
     Gap Map (2019). Licencia CC BY-NC-SA 4.0. Se toma solo como referencia de diseño; no se reproduce su contenido.»
-- Los seis bloques institucionales (grupo, código Minciencias, contacto, los dos logos y la línea «Herramienta») están
-  apagados y no dejan rastro en el HTML. Nada marcado como pendiente de confirmación se publica.
+- Los nueve bloques configurables (proyecto, grupo, código Minciencias, semillero, equipo, herramienta, contacto y los
+  dos logos) vienen apagados por defecto y no dejan rastro en el HTML (ADR-005, punto 2; decisión de Jairo del
+  21-nov-2026, NC-INT-1). Cada uno se enciende por separado cuando Jairo tenga la autorización. Nada marcado como
+  pendiente de confirmación se publica.
 - **Cubre**: NFR-000-11 (con bloques apagados, ADR-005), NFR-000-12, NFR-000-16; SC-000-12, SC-000-16; US-001-4.2.
 
 ---
@@ -324,7 +327,7 @@ rechazo y de estructura usan `role="alert"`; los de estado, `role="status"`. El 
 4. **Aviso de inactividad (E7)**: WCAG 2.2.1 (nivel A, dentro de NFR-000-04) exige avisar antes de un límite de tiempo
    y permitir extenderlo. Los 45 minutos no cambian.
 5. **Título**: «Evidencias sobre medios de vida» en la cabecera y «Mapa de evidencias» en la vista, sin «brechas», para
-   que ningún texto fijo diga «brecha» con filtros activos (FR-002-14, SC-003-04). Ver NC-INT-3.
+   que ningún texto fijo diga «brecha» con filtros activos (FR-002-14, SC-003-04). Decidido por Jairo el 21-nov-2026 (NC-INT-3, §9).
 6. **Sin texto de «cambios sin aplicar» dinámico**: un texto fijo junto a «Actualizar vista» explica la regla; así no se
    agrega JavaScript que compare selecciones.
 7. **Burbujas en SVG**: el radio va como atributo, porque la política de contenido sin estilos en línea (ADR-003) impide
@@ -352,24 +355,19 @@ rechazo y de estructura usan `role="alert"`; los de estado, `role="status"`. El 
 
 ---
 
-## 9. `[NEEDS CLARIFICATION]` abiertos por la interfaz
+## 9. Puntos de la interfaz decididos por Jairo
 
-- `[NEEDS CLARIFICATION: NC-INT-1. Bloques visibles del colofón por defecto. La instrucción de esta tarea dice que solo
-  quedan visibles «Datos» y la referencia a 3ie; ADR-005 (opción b, recomendada) apaga seis bloques y deja encendidos
-  «Proyecto», «Semillero» y «Equipo». Los bocetos muestran solo «Datos» y 3ie. Recomendación: confirmar la opción (c) de
-  NC-ADR005-1 para la demostración (lo más prudente mientras no haya autorización) o, si Jairo prefiere la (b), encender
-  esos tres bloques, que no nombran a la Universidad del Magdalena.]`
-- `[NEEDS CLARIFICATION: NC-INT-2. En las cifras de documentos con el filtro de nivel activo, FR-003-14 trata como «Sin
-  nivel» solo a los documentos no empíricos. No dice qué pasa con los estudios empíricos que aún no entran al mapa y no
-  tienen nivel (en la v4, los N.º 10, 11, 13, 15, 16 y 24) ni con los documentos sin tipo de documento válido. Con la regla
-  general quedarían fuera al ocultar cualquier nivel. Recomendación: tratarlos también como «Sin nivel», para que el
-  control se comporte igual con todo documento sin nivel; requiere decisión de Jairo y corrección del spec por el flujo
-  de la regla 11.]`
-- `[NEEDS CLARIFICATION: NC-INT-3. Título de la herramienta. «Mapa de evidencias y brechas» contiene «brecha» y quedaría
-  visible con filtros activos (FR-002-14, SC-003-04). Recomendación: «Evidencias sobre medios de vida» como título corto
-  y «Mapa de evidencias» como título de la vista, como en los bocetos.]`
-- `[NEEDS CLARIFICATION: NC-INT-4. Conversión a PNG. ADR-003 (NC-ADR003-1, opción b) dice que el PNG se convierte en el
-  navegador a partir del SVG, pero M19 `app.cliente` no tiene esa responsabilidad («no calcula ni dibuja datos», tres
-  llamadas al servidor) y M20 `app.exportacion` expone solo `imagen_mapa -> bytes`. Recomendación: asignar la conversión
-  a M19 (dibujar el SVG recibido en un lienzo y descargarlo como PNG, sin calcular nada) y que M20 entregue el SVG;
-  requiere que el arquitecto lo registre por el flujo de corrección.]`
+Los cuatro puntos que la interfaz planteó como `[NEEDS CLARIFICATION]` quedaron decididos el 21-nov-2026
+[Fuente: decisión de Jairo, 21-nov-2026]. Ninguno queda abierto.
+
+- **NC-INT-1. Bloques visibles del colofón por defecto.** Hasta la autorización solo quedan visibles «Datos» y la
+  referencia a 3ie; también se apagan por defecto «Proyecto», «Semillero» y «Equipo». Aplicado en ADR-005 (nota de
+  revisión y punto 2) y en M21. Ver §6.
+- **NC-INT-2. Estudios empíricos pendientes sin nivel en las cifras de documentos.** Siguen fuera de las cifras de
+  documentos del tablero mientras el filtro de nivel esté activo; no se tratan como «Sin nivel». El spec no cambia:
+  solo los documentos no empíricos se tratan como «Sin nivel» (FR-003-14). Los documentos «Sin tipo de documento
+  válido» con el nivel vacío siguen también la regla general (COR-009). Aplicado en M06. Ver F-003-3.
+- **NC-INT-3. Título de la cabecera.** «Evidencias sobre medios de vida», sin la palabra «brechas». El título de la
+  vista, «Mapa de evidencias», es una decisión de diseño (§7, punto 5).
+- **NC-INT-4. Exportación del mapa.** `app.exportacion` (M20) entrega el SVG y `app.cliente` (M19) lo convierte en PNG
+  en el navegador (ADR-003, punto 7).

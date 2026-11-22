@@ -1,10 +1,10 @@
 # Arquitectura de la herramienta EGM · Medios de vida
 
-**Fecha**: 2026-11-21 · **Estado**: propuesta, pendiente de revisión de Jairo
+**Fecha**: 2026-11-21 · **Estado**: aprobada por Jairo el 2026-11-22 (COR-011 y COR-012 verificadas)
 **Autor**: `arquitecto`
 **Entradas**: `docs/specs/000-vision-alcance.md`, `contrato-datos.md`, specs 001 a 003 (v0, aprobados por Jairo el
 21-nov-2026), `docs/fuentes/`, skills `contrato-matriz` y `sistema-diseno-egm`, decisiones de Jairo del 21-nov-2026
-(`prompts/PROMPT_FASE_2_arquitectura.md:10-21`).
+(`.claude/skills/analisis-impacto/references/invariantes.md`, secciones «Decisiones del 21-nov-2026»).
 **Decisiones**: ADR-001 a ADR-005 en `docs/arquitectura/adr/`. Todas en estado «aceptado» desde el 21-nov-2026
 [Fuente: decisión de Jairo, 21-nov-2026]. Solo queda abierta, a propósito, NC-ADR004-1 (despliegue posterior a la
 demostración), como decisión futura del equipo.
@@ -264,6 +264,11 @@ Esta lista es **cerrada**: ningún plan, tarea o código crea un módulo que no 
 corrección de la arquitectura (regla 11 de `CLAUDE.md`). Las firmas son la interfaz pública mínima; los planes pueden
 precisar tipos auxiliares internos sin cambiar lo público.
 
+El andamiaje inicial de `src/egm/` tiene las carpetas `analisis/`, `lectura/`, `modelo/` y `validacion/`, solo con
+`.gitkeep`. No forman parte de esta lista: `analisis/` y `validacion/` no corresponden a ningún módulo, y la forma de
+`egm.lectura` y `egm.modelo` (archivo o paquete) la fija el plan 001. El plan 001 concilia el andamiaje con esta
+lista y retira las carpetas que no correspondan a un módulo.
+
 Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `Advertencia`, `Nota`, `ErrorContrato`, `Esquema`, `Documento`,
 `Corpus`, `Identificacion`, `ResultadoLectura`, `Rechazo`, `FalloContrato`.
 
@@ -409,7 +414,7 @@ Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `Advertencia`, `Nota`, `Er
   def activos(filtro: Filtro) -> tuple[str, ...]  # qué controles están activos, para «n de N» y el resumen
   ```
 - **Cubre**: FR-002-09, FR-002-10, FR-002-11, FR-002-12, FR-002-13, FR-002-18, FR-002-19, FR-003-13, FR-003-14.
-- **Planes**: 002 (crea), 003 (amplía con documentos y «Sin nivel» de no empíricos, FR-003-14).
+- **Planes**: 002 (crea; `opciones` incluye la entrada «Sin nivel» también cuando solo hay documentos no empíricos, FR-002-12), 003 (amplía con `cumple_documento`: un documento no empírico cumple el filtro de nivel como «Sin nivel», FR-003-14).
 
 #### M07 `egm.conteo`
 - **Responsabilidad**: conjuntos y conteos del contrato §5 como `Conteo` (con su lista): $R$, $E$, $M$, $P$, $N$;
@@ -435,8 +440,7 @@ Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `Advertencia`, `Nota`, `Er
 - **Cubre**: FR-001-07, FR-001-08, FR-001-09, FR-001-11, FR-001-13 (lista de pendientes), FR-001-14 (conteos que se
   comparan), FR-002-01 (orden), FR-002-03 (desglose), FR-002-05 (estudios de la celda), FR-002-13 («n de N»),
   FR-003-06, FR-003-08, FR-003-21, NFR-000-02, NFR-000-06.
-- **Planes**: 001 (crea: conjuntos, mapa sin filtro, $S^{IE}$, $u$, $T_4$, semántica de la hoja), 002 (filtro, desglose
-  por nivel), 003 (coocurrencias).
+- **Planes**: 001 (crea: conjuntos, mapa, $S^{IE}$, $u$, $T_4$, semántica de la hoja; `conjuntos`, `mapa` y `evaluacion_impacto` sin el parámetro `filtro`, porque `Filtro` llega con M06 en el plan 002), 002 (agrega `filtro: Filtro = SIN_FILTRO` a `conjuntos`, `mapa` y `evaluacion_impacto` sin romper las llamadas existentes, y el desglose por nivel), 003 (coocurrencias).
 
 #### M08 `egm.verificacion`
 - **Responsabilidad**: verificación cruzada con la hoja EGM según contrato §7 y ADR-002: localizar las tablas comparables
@@ -663,7 +667,7 @@ Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `Advertencia`, `Nota`, `Er
   def componer(config: ConfiguracionColofon, ident: Identificacion | None, n_documentos: int | None) -> VistaColofon
   ```
 - **Cubre**: NFR-000-11, NFR-000-12, NFR-000-16.
-- **Planes**: 001.
+- **Planes**: 001 (crea, con los bloques siempre presentes «Datos» y «Referencia de diseño»). SC-000-16 se verifica en las vistas del mapa, en el plan 002 (§6.4).
 
 #### M22 `app.configuracion`
 - **Responsabilidad**: leer al arrancar la configuración local de texto (colofón, política de porcentajes, ruta del
@@ -679,7 +683,7 @@ Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `Advertencia`, `Nota`, `Er
 #### M23 `tests.constructor`
 - **Responsabilidad**: constructor de matrices sintéticas `.xlsx` para `data/fixtures/` (decisión de Jairo, 21-nov-2026,
   Q11: va en la preparación del plan 001): hojas, encabezados, validaciones (listas escritas y por rango), filas, hoja
-  EGM con fórmulas **y** valores guardados controlados, archivos sin valores guardados, archivos dañados, de otro tipo
+  EGM con fórmulas **y** valores guardados controlados, archivos sin valores guardados, archivos dañados, de otro tipo,
   de tamaño exacto y de contenido descomprimido declarado exacto; generación al azar para propiedades. Nunca toca `data/raw/`.
 - **Interfaz pública**: `MatrizSintetica` (constructor fluido) y `.a_bytes() -> bytes`; estrategias para pruebas de
   propiedades.
@@ -716,8 +720,8 @@ Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `Advertencia`, `Nota`, `Er
 | M23 `tests.constructor` | crea | amplía | amplía |
 
 NFR-000 por plan (Q11, «cada NFR-000 va en los planes cuyas historias afecta»): 001 lleva NFR-000-01, 02, 03, 06, 09,
-11, 12, 14, 15, 17, 18, 19 y la base de 04, 05 y 13; 002 lleva 04, 05, 08, 10, 13 y 16 sobre el mapa; 003 lleva 07, 08
-y 13 sobre el tablero, y repite 02, 03 y 04 en sus vistas. Los escenarios de actividad US-001-5.4 a 5.6 dependen del
+11, 12, 14, 15, 17, 18, 19 y la base de 04, 05 y 13; 002 lleva 04, 05, 08, 09 (exportaciones), 10, 13 y 16 sobre el mapa; 003 lleva 05, 07, 08
+y 13 sobre el tablero, y repite 02, 03 y 04 en sus vistas. NFR-000-16 la verifica el plan 002 (SC-000-16) sobre el bloque «Referencia de diseño» que M21 crea en el plan 001. Los escenarios de actividad US-001-5.4 a 5.6 dependen del
 mapa (plan 002), como dice el spec 001.
 
 ---
@@ -748,7 +752,7 @@ filas del mapa, que son categorías del equipo (estado §7); su alcance lo decid
 | Vista o fragmento | Contenido | Requisitos |
 |---|---|---|
 | V0 Inicio sin matriz | Opción de cargar; ninguna cifra; límite de tamaño indicado | US-001-4.2, NFR-000-19 |
-| V1 Mensajes de carga | Rechazo por tipo o tamaño (con la matriz anterior conservada si la había); error de contrato (esperado y encontrado, sin nombre ni filas); sesión terminada | FR-001-29, NFR-000-17 |
+| V1 Mensajes de carga | Rechazo por tipo, tamaño o contenido descomprimido (con la matriz anterior conservada si la había); error de contrato (esperado y encontrado, sin nombre ni filas); sesión terminada | FR-001-29, NFR-000-17, NFR-000-19 |
 | V2 Avisos de lectura | Resultado de la verificación en lenguaje llano (tablas verificadas por número), advertencias y notas; aparecen antes de los resultados | FR-001-12, FR-001-18, FR-001-25, FR-002-17 |
 | V3 Mapa (cajonera) | Filas y columnas del archivo, burbujas por nivel con número, leyenda = filtro de nivel, rótulos de cajón vacío | FR-002-01 a FR-002-04, FR-002-12 |
 | V4 Cajón abierto (fichas) | Estudios de la celda con N.º, referencia (enlace), año, nivel | FR-002-05, FR-002-06 |
@@ -774,11 +778,12 @@ Ningún flujo, boceto ni texto de interfaz menciona la tabla 3 de la hoja EGM.
 | Registros de accesos con rutas o cabeceras | Podrían contener datos de la matriz o el nombre del archivo | M14: registro de accesos apagado; URL por posición; nombre en cabecera no registrada |
 | Recarga de la página o pestaña duplicada | Fin de sesión no deseado o sesión compartida entre dos pestañas | ADR-003, punto 9: 10 s de gracia; la pestaña duplicada se acepta como limitación conocida |
 | Libro con contenido descomprimido desmesurado | Memoria agotada | ADR-004, punto 5: rechazo por encima de 256 MiB declarados (NFR-000-19, COR-011) |
+| Una parte del libro se descomprime a más de lo que declara el índice del paquete | La comprobación de M02 sobre lo declarado no basta para esa parte | Preparación del plan 001 (M02, M03): `[NEEDS CLARIFICATION: NC-ARQ-1. Qué hace la biblioteca de lectura ante una parte que se descomprime a más de lo declarado; se comprueba en la preparación del plan 001. El spec ya lo trata como archivo dañado (COR-011).]` |
 | Plazo del 6-dic-2026 | Tres specs en quince días | ADR-003: stack sin compilación de front-end; planes en orden 001 → 002 → 003 |
 
 ## 10. `[NEEDS CLARIFICATION]` de la fase
 
-Ninguno queda pendiente de la Fase 2. NC-ADR004-1 sigue abierto a propósito como **decisión futura** del equipo.
+Ninguno queda pendiente de la Fase 2. NC-ADR004-1 sigue abierto a propósito como **decisión futura** del equipo. NC-ARQ-1 (§9) no es pendiente de la Fase 2: se resuelve en la preparación del plan 001.
 
 | ID | Tema | ADR | Estado |
 |---|---|---|---|
@@ -788,4 +793,5 @@ Ninguno queda pendiente de la Fase 2. NC-ADR004-1 sigue abierto a propósito com
 | NC-ADR004-2 | Formato y ubicación del archivo de definiciones | ADR-004, punto 4 | Decidido: texto UTF-8 junto a la instalación, leído al arrancar; un encabezado por nombre exacto y la definición debajo [Fuente: decisión de Jairo, 21-nov-2026] |
 | NC-ADR004-3 | Límite de tamaño descomprimido del libro | ADR-004, punto 5 | Decidido: más de 256 MiB declarados ⇒ archivo que no se puede abrir; aplicado en NFR-000-19 por COR-011 [Fuente: decisión de Jairo, 21-nov-2026] |
 | NC-ADR005-1 | Qué bloques del colofón vienen apagados | ADR-005, punto 2 | Decidido: apagados grupo, código Minciencias, contacto, los dos logos y la línea «Herramienta»; «Datos» y referencia 3ie siempre visibles [Fuente: decisión de Jairo, 21-nov-2026]. Ampliado por NC-INT-1: también apagados proyecto, semillero y equipo [Fuente: decisión de Jairo, 21-nov-2026] |
-| NC-INT-1 a NC-INT-4 | Colofón, empíricos pendientes sin nivel, título de la cabecera, exportación del mapa (abiertos en `docs/interfaz/flujos.md`) | ADR-005; M06; —; ADR-003, punto 7 | Decididos: ver M21, M06, M19 y M20; el título «Evidencias sobre medios de vida» no lo fija la arquitectura [Fuente: decisión de Jairo, 21-nov-2026] |
+| NC-INT-1 a NC-INT-4 | Colofón, empíricos pendientes sin nivel, título de la cabecera, exportación del mapa (planteados en `docs/interfaz/flujos.md`, §9, y registrados allí como decididos) | ADR-005; M06; —; ADR-003, punto 7 | Decididos: ver M21, M06, M19 y M20; el título «Evidencias sobre medios de vida» no lo fija la arquitectura [Fuente: decisión de Jairo, 21-nov-2026] |
+| NC-ARQ-1 | Parte del libro que se descomprime a más de lo declarado | — (M02, M03; COR-011) | Abierto para la preparación del plan 001; el spec ya lo trata como archivo dañado |

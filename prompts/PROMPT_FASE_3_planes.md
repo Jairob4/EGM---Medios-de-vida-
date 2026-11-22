@@ -10,7 +10,7 @@ Lee `CLAUDE.md`, `docs/arquitectura/arquitectura.md` y la skill `plan-modulo`. V
 ## Reglas
 - Un plan por spec; ninguna tarea sobre un módulo que la arquitectura no defina.
 - En cada historia, las pruebas antes que su implementación; cada prueba cita su escenario o criterio y su fixture.
-- El constructor de fixtures (`tests/fixtures_builder.py`), con un fixture por caso borde de `contrato-datos.md`, va en la fase de preparación del plan 001; los planes 002 y 003 dependen de él. Cada NFR-000 se asigna en «Requisitos que cubre este plan» a los planes cuyas historias afecta.
+- El constructor de fixtures (`tests/constructor.py`, M23 `tests.constructor`), con un fixture por caso borde de `contrato-datos.md`, va en la fase de preparación del plan 001; los planes 002 y 003 dependen de él. Cada NFR-000 se asigna en «Requisitos que cubre este plan» a los planes cuyas historias afecta.
 - Orden sugerido de ejecución en `docs/planes/README.md`, según dependencias.
 - Actualiza la columna «Tarea» de `trazabilidad.md`.
 - Cierra con el subagente `verificador` (fase planes) y `docs/informes/fase-3-resumen.md`.

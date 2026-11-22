@@ -5,6 +5,11 @@
 NFR-000-17, NFR-000-18, NFR-000-19, FR-001-20, FR-001-28, FR-001-29, FR-002-15, FR-002-16, FR-002-19, FR-003-03,
 SC-000-04, SC-000-13, SC-000-17, SC-000-18, SC-002-04
 
+> **Nota de revisión, 2026-11-22 (COR-012, F2-07).** Qué cambió: la verificación de NFR-000-19 en «Consecuencias»
+> nombra también el límite de contenido descomprimido, que fija ADR-004, punto 5. La decisión de este ADR no cambia.
+>
+> **Nota de revisión, 2026-11-22 (COR-013, O-2 y F3-16).** Qué cambió: el punto 2 ya no dice que todo funcione sin el guion; aclara que los controles son elementos reales de HTML que htmx envía con la ficha de sesión del punto 4 y que la carga y la sesión necesitan el guion, como ya exigían los puntos 3 y 4. La decisión de este ADR no cambia.
+
 ## Contexto
 
 - Aplicación web; análisis y tablero con filtros en Python (restricciones 1 y 2 de `000`; decisión de Jairo,
@@ -67,8 +72,9 @@ Concreción:
    memoria; ADR-004). Plantillas Jinja2 con autoescape. Versiones fijadas en el archivo de dependencias del plan 001,
    compatibles con Python 3.13.
 2. **Interacción**: htmx para enviar «Actualizar vista», «Restablecer», abrir un cajón o una ficha y reemplazar los
-   fragmentos de mapa, tablero y avisos en una sola respuesta. Todo funciona con formularios y enlaces reales; htmx
-   solo evita recargar la página.
+   fragmentos de mapa, tablero y avisos en una sola respuesta. Los controles son formularios, botones y enlaces reales
+   de HTML (semántica, teclado y accesibilidad); htmx los envía con la ficha de sesión del punto 4 y evita recargar la
+   página. La herramienta necesita el guion activo: la carga (punto 3) y la sesión (punto 4) dependen de él.
 3. **Carga**: `app.cliente` envía el archivo con una petición cuyo cuerpo son los bytes del archivo y cuyo nombre va en
    una cabecera (codificado). `app.carga` lee el flujo contando bytes y corta al pasar `LIMITE_BYTES`; nunca usa el
    analizador multiparte. Ningún archivo temporal.
@@ -127,7 +133,9 @@ Concreción:
   - NFR-000-17: SC-000-17 con una matriz sintética con marcadores, terminando la sesión de las cuatro formas y buscando
     los marcadores en la carpeta temporal del sistema, en la carpeta de la aplicación y en los registros.
   - NFR-000-18: SC-000-18 con dos pestañas o dos navegadores.
-  - NFR-000-19: SC-000-19 con archivos de 15 728 640 bytes y de un byte más.
+  - NFR-000-19: SC-000-19 con archivos de 15 728 640 bytes y de un byte más, y con un libro dentro de ese tamaño cuyo
+    contenido descomprimido declarado es igual al límite de NFR-000-19 y otro con un byte más (ADR-004, punto 5;
+    US-001-4.13).
   - NFR-000-04, NFR-000-05, SC-002-04: revisión automática y manual en navegador, a 360 px y solo con teclado.
   - FR-002-19: US-002-4.10 y US-003-5.4 (mover un control no cambia la vista).
   - FR-002-16: la exportación produce PNG (en el navegador, desde el SVG), SVG y `.xlsx` con los filtros activos, el

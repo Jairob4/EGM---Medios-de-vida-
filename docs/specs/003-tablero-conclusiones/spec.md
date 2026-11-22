@@ -72,7 +72,7 @@ sostienen y cuáles son.
 4. **Scenario**: US-003-2.4 Conclusión 3, enfoque diferencial
    - **Given** la instancia de ejemplo
    - **When** la persona lee la conclusión para Acompañamiento técnico
-   - **Then** de 1 estudio ve 0 que lo incorporan, 0 de forma parcial, 0 que no lo incorporan y 1 sin clasificar (N.º 7)
+   - **Then** de 1 estudio del mapa ve 0 que lo incorporan, 0 de forma parcial, 0 que no lo incorporan, 1 sin clasificar (N.º 7) y 0 sin diligenciar
 
 5. **Scenario**: US-003-2.5 Conclusión 4, qué aparece junto
    - **Given** la instancia de ejemplo
@@ -236,7 +236,7 @@ La persona pasa del mapa al tablero sin perder lo que estaba mirando. Esta histo
 - **FR-003-04**: Cada conclusión MUST decir cuántos estudios o documentos la sostienen y permitir ver cuáles son, con su N.º y su referencia. [Fuente: doc. general §5, §7]
 - **FR-003-05**: La conclusión 1 MUST listar los cruces sin ningún estudio registrado, con la fecha de lectura y la aclaración de que es una brecha provisional. [Fuente: doc. general §5.1]
 - **FR-003-06**: La conclusión 2 MUST listar los cruces con estudios sin ninguna evaluación de impacto, con el conteo por nivel de evidencia. [Fuente: doc. general §5.2]
-- **FR-003-07**: La conclusión 3 MUST indicar, por intervención, cuántos estudios incorporan el enfoque de género o diferencial, cuántos de forma parcial, cuántos no y cuántos quedan sin clasificar. [Fuente: doc. general §5.3; doc. técnico §6.6]
+- **FR-003-07**: La conclusión 3 MUST indicar, por intervención y sobre los estudios del mapa, cuántos incorporan el enfoque de género o diferencial, cuántos de forma parcial, cuántos no, cuántos quedan sin clasificar y cuántos tienen el campo sin diligenciar, de modo que la suma de las cinco categorías dé el número de estudios del mapa de esa intervención. [Fuente: doc. general §5.3; doc. técnico §6.6; decisión de Jairo, 22-nov-2026]
 - **FR-003-08**: La conclusión 4 MUST indicar qué intervenciones se estudian combinadas y qué dimensiones se miden en los mismos estudios o nunca juntas. [Fuente: doc. general §5.4]
 - **FR-003-09**: La conclusión 5 MUST mostrar cómo se reparten los documentos por tipo de documento, tipo de fuente, metodología y año, con «sin diligenciar» como categoría visible. [Fuente: doc. general §5.5; doc. técnico §6.9]
 - **FR-003-10**: La conclusión 6 MUST reunir por celda, tal cual, los indicadores, los vacíos y las limitaciones de sus estudios, sin resumirlos ni interpretarlos. [Fuente: doc. general §5.6; doc. técnico §6.11]

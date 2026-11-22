@@ -71,8 +71,7 @@ los esperados de `contrato-datos.md`, sin ninguna interfaz.
 
 ### User Story 2 - Recibir advertencias legibles (Priority: P1)
 
-Jairo quiere saber qué filas no se pudieron usar y por qué, en palabras claras, para decidir qué hacer. La
-herramienta nunca corrige la matriz.
+Quien carga la matriz quiere saber qué filas no se pudieron usar y por qué, en palabras claras. La herramienta nunca corrige la matriz.
 
 **Why this priority**: un dato mal leído en silencio invalidaría cualquier conclusión.
 
@@ -169,7 +168,7 @@ leerlo y lo conserva solo mientras dure la sesión.
 
 **Why this priority**: es la única entrada de datos; sin ella no hay nada que mostrar.
 
-**Independent Test**: se comprueba cargando archivos válidos y no válidos, sin revisar ningún conteo.
+**Independent Test**: se comprueba cargando archivos válidos y no válidos, sin revisar ningún conteo. US-001-4.6 y US-001-4.10 dependen de las features 002 y 003.
 
 **Acceptance Scenarios**:
 
@@ -206,12 +205,32 @@ leerlo y lo conserva solo mientras dure la sesión.
 7. **Scenario**: US-001-4.7 Carga nueva con error de contrato
    - **Given** una sesión con una matriz cargada
    - **When** la persona carga otro archivo con un error de contrato
-   - **Then** ve un mensaje de error sin el nombre del archivo ni datos de la matriz, ya no ve los resultados de la matriz anterior y, para volver a verlos, debe cargarla otra vez
+   - **Then** ve un mensaje de error que indica lo esperado y lo encontrado, sin el nombre del archivo ni filas de datos de la matriz, ya no ve los resultados de la matriz anterior y, para volver a verlos, debe cargarla otra vez, y la sesión termina
 
 8. **Scenario**: US-001-4.8 Carga nueva con advertencias
    - **Given** una sesión con una matriz cargada
    - **When** la persona carga otro archivo con un valor fuera de lista y sin errores de contrato
    - **Then** el archivo nuevo se acepta con su advertencia, y los resultados corresponden solo a él
+
+9. **Scenario**: US-001-4.9 Carga nueva con solo una nota
+   - **Given** una sesión con una matriz cargada
+   - **When** la persona carga otro archivo sin errores de contrato ni advertencias, con una columna «Observaciones» sin lista fuera del bloque de dimensiones
+   - **Then** el archivo nuevo se acepta con la nota «columnas no usadas: Observaciones», y los resultados corresponden solo a él
+
+10. **Scenario**: US-001-4.10 Filtros tras una carga nueva válida
+    - **Given** una sesión con una matriz cargada y un filtro aplicado
+    - **When** la persona carga otro archivo válido
+    - **Then** el mapa y el tablero muestran la vista sin filtros del archivo nuevo, y ningún filtro queda activo
+
+11. **Scenario**: US-001-4.11 Carga nueva rechazada antes de leerla
+    - **Given** una sesión con una matriz cargada
+    - **When** la persona carga un archivo de otro tipo, o uno mayor que el límite de tamaño
+    - **Then** ve el mensaje legible del rechazo, y la matriz anterior y sus resultados siguen disponibles
+
+12. **Scenario**: US-001-4.12 Primera carga con error de contrato
+    - **Given** la herramienta abierta, sin matriz cargada
+    - **When** la persona carga una matriz sintética sin el encabezado «Nivel de evidencia»
+    - **Then** ve un mensaje de error que nombra ese encabezado, sin el nombre del archivo ni filas de datos de la matriz, y ninguna cifra
 
 ---
 
@@ -239,7 +258,7 @@ coinciden o si no se puede comprobar.
 3. **Scenario**: US-001-3.3 Archivo sin valores calculados
    - **Given** la instancia de ejemplo del apéndice A, que no trae valores calculados
    - **When** la herramienta verifica
-   - **Then** el resultado es «no verificable» con una advertencia, y ningún valor ausente se toma como 0
+   - **Then** el resultado es «no verificable» con una advertencia, sin lista de tablas verificadas, y ningún valor ausente se toma como 0
 
 4. **Scenario**: US-001-3.4 Hoja EGM ausente
    - **Given** una matriz sintética sin hoja EGM
@@ -306,12 +325,17 @@ coinciden o si no se puede comprobar.
     - **When** la herramienta verifica
     - **Then** la tabla queda «no verificable» y la advertencia lo indica
 
+17. **Scenario**: US-001-3.17 Valor con espacios en los extremos
+    - **Given** una matriz sintética con valores calculados guardados, un estudio con un espacio al final de su intervención y una hoja EGM que no lo cuenta
+    - **When** la herramienta verifica
+    - **Then** la tabla queda como «difiere», indica las celdas y explica que se debe a esa fila
+
 ---
 
 ### User Story 5 - Terminar la sesión (Priority: P2)
 
-La sesión empieza al cargar el archivo y termina al descartarlo, al cerrar la pestaña o tras 45 minutos sin
-interacción con la página. Al terminar, no queda copia del archivo ni de su contenido. Los escenarios de actividad
+La sesión empieza al cargar el archivo y termina al descartarlo, al cerrar la pestaña, tras 45 minutos sin
+interacción con la página, o cuando una carga nueva tiene un error de contrato. Al terminar, no queda copia del archivo ni de su contenido. Los escenarios de actividad
 dependen de la feature 002.
 
 **Why this priority**: protege el archivo del equipo, pero la lectura y el mapa funcionan sin ella.
@@ -383,7 +407,7 @@ Los casos borde se tratan como indica la sección 9 de `contrato-datos.md`. En p
 - **FR-001-09**: La herramienta MUST calcular el número de estudios del mapa sobre estudios distintos, nunca sumando celdas. [Fuente: doc. técnico §2.4]
 - **FR-001-10**: La herramienta MUST clasificar el enfoque diferencial por el prefijo de la columna, conforme a la sección 6 del contrato, sin inferir categorías del resto del texto, y advertir, citando la regla de la hoja Instrucciones, cuando el texto no siga esa regla. [Fuente: Matriz Instrucciones B14; doc. técnico §6.6; decisión de Jairo, 2-nov-2026]
 - **FR-001-11**: La herramienta MUST conservar, para cada conteo, la lista de N.º que lo producen. [Fuente: doc. general §4.2]
-- **FR-001-12**: La herramienta MUST emitir una advertencia legible, con N.º, columna y valor, por cada caso que el contrato trate como advertencia, y MUST NOT corregir ningún valor. [Fuente: doc. técnico §9.2]
+- **FR-001-12**: La herramienta MUST emitir una advertencia legible por cada caso que el contrato trate como advertencia: con N.º o número de fila, columna y valor cuando se refiera a un valor de una fila; las que se refieren al archivo, a una hoja, a una columna o a una tabla de la hoja EGM indican lo que el contrato les asigna. MUST NOT corregir ningún valor. [Fuente: doc. técnico §9.2]
 - **FR-001-13**: La herramienta MUST asignar a cada documento uno de los estados del contrato y listar los estudios empíricos pendientes. [Fuente: doc. técnico §9.2; decisión de Jairo, 2-nov-2026]
 - **FR-001-14**: La herramienta MUST comparar sus conteos con las tablas comparables de la hoja EGM definidas en el contrato, celda a celda, y clasificar cada tabla como coincide, difiere o no verificable. [Fuente: doc. general §4.1; doc. técnico §9.1]
 - **FR-001-15**: La herramienta MUST localizar las tablas de la hoja EGM por su título y sus filas por su nombre, sin coordenadas fijas. [Fuente: decisión de Jairo, 1-nov-2026]
@@ -400,7 +424,7 @@ Los casos borde se tratan como indica la sección 9 de `contrato-datos.md`. En p
 - **FR-001-26**: La herramienta MUST delimitar cada tabla comparable de la hoja EGM y emparejar sus filas y columnas, incluida «Total estudios», solo dentro de esa tabla, conforme a la sección 7 del contrato y sin coordenadas fijas. [Fuente: decisión de Jairo, 2-nov-2026]
 - **FR-001-27**: La herramienta MUST clasificar una tabla como «coincide» solo si compara todos los valores esperados; como «difiere» si algún valor comparado es distinto; y en los demás casos como «no verificable». Si no compara todos, MUST emitir una advertencia que indique lo no comparado. [Fuente: decisión de Jairo, 2-nov-2026]
 - **FR-001-28**: La herramienta MUST permitir descartar el archivo cargado; al descartarlo, la sesión termina conforme a NFR-000-17. [Fuente: decisión de Jairo, 2-nov-2026]
-- **FR-001-29**: Si una carga nueva tiene un error de contrato, la herramienta MUST limpiar todo, incluidos la matriz anterior y sus resultados, y mostrar un mensaje de error que no incluya el nombre del archivo ni datos de la matriz; para volver a ver la matriz anterior hay que cargarla otra vez. Una carga nueva con solo advertencias o notas MUST aceptarse y reemplazar a la anterior. [Fuente: decisión de Jairo, 3-nov-2026] [NEEDS CLARIFICATION: no está decidido qué pasa con los filtros ya aplicados tras una carga nueva válida, cuyos valores pueden ser otros. Pendiente de Jairo; no se aplica.] [NEEDS CLARIFICATION: los errores de contrato nombran lo que falta o lo que se esperaba: la hoja o el encabezado (FR-001-02, FR-001-03; US-001-2.4, US-001-2.5, US-001-2.7), la columna sin lista (FR-001-22; US-001-2.11) o el valor ancla esperado y los encontrados (FR-001-23; US-001-2.9). Los valores encontrados se leen de la matriz, y un encabezado o un valor esperado puede tomarse como dato de ella. No está decidido si este mensaje los omite, ni si la regla vale también para un error de contrato en la primera carga. Decisión de Jairo; no se aplica.] [NEEDS CLARIFICATION: esta regla trata el error de contrato. No está decidido qué pasa con la matriz anterior si la carga nueva se rechaza antes de leerla, por tipo o tamaño (NFR-000-19). Pendiente de Jairo; no se aplica.]
+- **FR-001-29**: Si una carga nueva tiene un error de contrato, la herramienta MUST limpiar todo, incluidos la matriz anterior y sus resultados, y mostrar un mensaje de error que indique lo esperado y lo encontrado: la hoja o el encabezado que falta (incluido el de una columna que perdió su lista), o el valor ancla esperado y los valores encontrados. El mensaje MUST NOT incluir el nombre del archivo ni filas de datos de la matriz, y esta regla vale también para un error de contrato en la primera carga. Para volver a ver la matriz anterior hay que cargarla otra vez. Limpiar todo termina la sesión conforme a NFR-000-17, y la siguiente carga válida empieza otra. Una carga nueva con solo advertencias o notas MUST aceptarse y reemplazar a la anterior. Tras una carga nueva válida, la herramienta MUST borrar todos los filtros aplicados, y el mapa y el tablero MUST mostrar la vista sin filtros del archivo nuevo. Si la carga nueva se rechaza antes de leerla, por tipo o por tamaño (NFR-000-19), la herramienta MUST conservar la matriz anterior y sus resultados, y mostrar el mensaje legible del rechazo. [Fuente: decisión de Jairo, 3-nov-2026; decisión de Jairo, 21-nov-2026]
 
 ### Key Entities
 
@@ -410,7 +434,7 @@ Los casos borde se tratan como indica la sección 9 de `contrato-datos.md`. En p
 - **Dimensión**: columna del bloque de dimensiones. Columna del mapa.
 - **Nivel de evidencia**: categoría de la lista de nivel, sin los valores «No aplica».
 - **Celda del mapa**: cruce de una intervención y una dimensión, con su conteo y su lista de N.º.
-- **Advertencia de validación**: mensaje con tipo, N.º o fila, columna, valor y texto legible.
+- **Advertencia de validación**: mensaje con tipo y texto legible y, si se refiere a un valor de una fila, N.º o número de fila, columna y valor.
 - **Nota informativa**: mensaje que no señala ningún problema, como «columnas no usadas: …».
 - **Resultado de verificación**: por tabla, coincide, difiere o no verificable, con su explicación y lo que no se pudo comparar.
 
@@ -421,5 +445,5 @@ Los casos borde se tratan como indica la sección 9 de `contrato-datos.md`. En p
 - **SC-001-01**: Con la instancia de ejemplo, todos los valores del apéndice A del contrato se reproducen exactamente.
 - **SC-001-02**: Cada caso borde del contrato tiene una matriz sintética, y en el 100 % de ellos la herramienta da el tratamiento indicado.
 - **SC-001-03**: Los invariantes de la sección 5 del contrato se cumplen en todas las matrices sintéticas generadas al azar.
-- **SC-001-04**: Una persona que no conoce el código identifica, solo con el texto de la advertencia, qué fila y qué columna debe revisar, en todos los tipos de advertencia.
+- **SC-001-04**: Una persona que no conoce el código identifica, solo con el texto de la advertencia, qué fila y qué columna debe revisar en las advertencias que se refieren a un valor de una fila, y qué hoja, columna o tabla en las demás.
 - **SC-001-05**: Procesar una matriz nueva con categorías distintas no requiere ningún cambio de código ni de configuración.

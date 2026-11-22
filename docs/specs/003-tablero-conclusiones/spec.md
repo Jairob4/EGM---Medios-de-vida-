@@ -8,7 +8,7 @@
 ### User Story 1 - Ver las cifras clave (Priority: P1)
 
 Una persona del equipo abre el tablero y ve cuántos documentos hay, cuántos estudios empíricos y cuántas celdas
-tienen estudios, con el mapa a la vista.
+tienen estudios.
 
 **Why this priority**: resume el estado de la matriz y da el contexto de todas las conclusiones.
 
@@ -19,7 +19,7 @@ tienen estudios, con el mapa a la vista.
 1. **Scenario**: US-003-1.1 Cifras de la matriz vigente
    - **Given** la instancia de ejemplo del apéndice A del contrato
    - **When** la persona abre el tablero
-   - **Then** ve 27 documentos, 7 estudios empíricos registrados, 1 estudio en el mapa, 6 celdas con estudios y 42 celdas vacías
+   - **Then** ve 27 documentos, 7 estudios empíricos registrados, 1 estudio en el mapa, 6 celdas con estudios y 42 celdas sin ningún estudio registrado
 
 2. **Scenario**: US-003-1.2 Rastrear una cifra
    - **Given** el tablero abierto con la instancia de ejemplo
@@ -32,7 +32,7 @@ tienen estudios, con el mapa a la vista.
    - **Then** el total de celdas es 63, sin ningún cambio en la herramienta
 
 4. **Scenario**: US-003-1.4 Cifras junto a las conclusiones
-   - **Given** el tablero abierto
+   - **Given** el tablero abierto, con las cifras clave y las conclusiones de la historia 2 construidas
    - **When** la persona lo recorre
    - **Then** encuentra juntas las cifras clave y las conclusiones
 
@@ -173,6 +173,11 @@ La persona aplica al tablero los mismos filtros del mapa para ser específica.
    - **When** la persona abre la lista de N.º de una conclusión y vuelve al tablero
    - **Then** el mismo filtro sigue activo
 
+5. **Scenario**: US-003-3.5 Documentos no empíricos y el filtro de nivel
+   - **Given** una matriz sintética con dos estudios del mapa, uno de nivel «Estudio de caso» y otro sin nivel, y dos documentos no empíricos
+   - **When** la persona oculta «Estudio de caso» en la leyenda y pulsa «Actualizar vista»; luego muestra «Estudio de caso», oculta «Sin nivel» y vuelve a pulsarlo
+   - **Then** la cifra de documentos muestra primero «3 de 4» y luego «1 de 4»
+
 ---
 
 ### User Story 5 - Recorrer el mapa y el tablero (Priority: P3)
@@ -215,8 +220,8 @@ La persona pasa del mapa al tablero sin perder lo que estaba mirando. Esta histo
 - ¿Qué pasa con una conclusión de la que no hay casos? Dice que no hay casos e indica cuántos estudios se revisaron; nunca desaparece en silencio.
 - ¿Qué pasa si ningún estudio está en el mapa? Las cifras muestran 0 y cada conclusión lo indica; no se presenta como hallazgo.
 - ¿Qué pasa con filas de enfoque sin clasificar? Se cuentan aparte, con su N.º y su texto, sin inferir categoría.
-- ¿Qué pasa con documentos sin el campo de un filtro? Quedan fuera mientras el filtro esté activo, y en la composición aparecen como «sin diligenciar». En el nivel de evidencia rige, para los estudios del mapa, la excepción de «Sin nivel» de FR-002-12.
-- ¿Qué valores de nivel se ofrecen en el filtro? Los de la lista, sin «No aplica», más la entrada «Sin nivel» cuando existan esos estudios (FR-002-12). Los documentos no empíricos quedan fuera mientras ese filtro esté activo. [NEEDS CLARIFICATION: FR-002-12 trata como «Sin nivel» a los estudios del mapa sin nivel o con un nivel que empieza por «No aplica», y solo salen al ocultar esa entrada. No está decidido si eso vale también para los documentos no empíricos en las cifras de documentos del tablero, que hoy quedan fuera con el filtro de nivel activo. Pendiente de Jairo; no se aplica.]
+- ¿Qué pasa con documentos sin el campo de un filtro? Quedan fuera mientras el filtro esté activo, y en la composición aparecen como «sin diligenciar». En el nivel de evidencia rige la excepción de «Sin nivel» de FR-002-12, para los estudios del mapa y, en las cifras de documentos, para los documentos no empíricos (FR-003-14).
+- ¿Qué valores de nivel se ofrecen en el filtro? Los de la lista, sin «No aplica», más la entrada «Sin nivel» cuando existan esos estudios o documentos no empíricos (FR-002-12). En las cifras de documentos, un documento no empírico se trata como «Sin nivel»: sigue contado con el filtro de nivel activo y solo sale al ocultar esa entrada (FR-003-14). [Fuente: decisión de Jairo, 21-nov-2026]
 - ¿Qué es «N» en «n de N»? Cuenta el mismo tipo de elemento que la cifra: documentos en las cifras de documentos, estudios en las de estudios.
 - ¿Qué pasa si falta el ancla de evaluación de impacto? La conclusión 2 queda «no disponible»; ver `contrato-datos.md` §4.1.
 - ¿Qué pasa con un documento con año no reconocido? En la composición por año aparece como «año no reconocido», separado de «sin diligenciar».
@@ -225,7 +230,7 @@ La persona pasa del mapa al tablero sin perder lo que estaba mirando. Esta histo
 
 ### Functional Requirements
 
-- **FR-003-01**: El tablero MUST mostrar como cifras clave los documentos, los estudios empíricos registrados, los estudios del mapa, las celdas con estudios y las celdas vacías. [Fuente: doc. general §9]
+- **FR-003-01**: El tablero MUST mostrar como cifras clave los documentos, los estudios empíricos registrados, los estudios del mapa, las celdas con estudios y las celdas sin ningún estudio registrado. [Fuente: doc. general §9]
 - **FR-003-02**: El total de celdas MUST calcularse a partir de las categorías del archivo. [Fuente: decisión de Jairo, 1-nov-2026]
 - **FR-003-03**: El mapa, las cifras clave y las conclusiones MUST presentarse juntos en el tablero. [Fuente: doc. general §9]
 - **FR-003-04**: Cada conclusión MUST decir cuántos estudios o documentos la sostienen y permitir ver cuáles son, con su N.º y su referencia. [Fuente: doc. general §5, §7]
@@ -238,14 +243,14 @@ La persona pasa del mapa al tablero sin perder lo que estaba mirando. Esta histo
 - **FR-003-11**: Cuando una conclusión no tenga casos, MUST decirlo e indicar cuántos estudios se revisaron. [Fuente: doc. general §7]
 - **FR-003-12**: Las conclusiones MUST escribirse en lenguaje llano a partir de plantillas, llenando solo los datos calculados. [Fuente: doc. general §5]
 - **FR-003-13**: El tablero MUST ofrecer los mismos cuatro filtros del mapa (tipo de fuente, metodología, nivel de evidencia y año), con estado compartido. [Fuente: decisión de Jairo, 1-nov-2026]
-- **FR-003-14**: Con un filtro activo, cifras, conclusiones y listas de N.º MUST recalcularse, el filtro MUST quedar siempre visible y MUST mostrarse «n de N». [Fuente: decisión de Jairo, 1-nov-2026; doc. general §9]
+- **FR-003-14**: Con un filtro activo, cifras, conclusiones y listas de N.º MUST recalcularse, el filtro MUST quedar siempre visible y MUST mostrarse «n de N». En las cifras de documentos, un documento no empírico se trata como «Sin nivel» en el filtro de nivel de evidencia (FR-002-12). [Fuente: decisión de Jairo, 1-nov-2026; doc. general §9; decisión de Jairo, 21-nov-2026]
 - **FR-003-15**: Con un filtro activo, una celda en 0 MUST rotularse «ningún estudio registrado con los filtros activos», nunca «brecha». [Fuente: decisión de Jairo, 1-nov-2026]
 - **FR-003-16**: Una conclusión cuyo subconjunto quede vacío MUST decir «ningún estudio cumple estos filtros». [Fuente: decisión de Jairo, 1-nov-2026]
 - **FR-003-17**: El tablero MUST mostrar conteos y no porcentajes, y ninguna conclusión MUST depender de un porcentaje. [Fuente: doc. general §7; decisión de Jairo, 1-nov-2026]
 - **FR-003-18**: El tablero MUST contar estudios distintos cuando diga cuántos estudios hay, y aclarar que un estudio puede ocupar varias celdas. [Fuente: doc. general §7]
 - **FR-003-19**: El tablero MUST aclarar que el mapa indica dónde hay evidencia y dónde falta, no qué ayuda funciona. [Fuente: doc. general §2.3]
 - **FR-003-20**: El tablero MUST mostrar el resultado de la verificación contra la hoja EGM, en lenguaje llano. [Fuente: doc. general §7]
-- **FR-003-21**: El tablero MUST mostrar el número de estudios empíricos que aún no entran al mapa, derivado de la regla de inclusión del equipo, con su lista de N.º. [Fuente: Matriz Instrucciones B20; decisión de Jairo, 2-nov-2026]
+- **FR-003-21**: El tablero MUST mostrar el número de estudios empíricos que aún no entran al mapa, derivado de la regla de inclusión del equipo, con su lista de N.º. [Fuente: Matriz Instrucciones B20; decisión de Jairo, 2-nov-2026; decisión de Jairo, 21-nov-2026]
 - **FR-003-22**: Sin valor ancla de evaluación de impacto, la conclusión 2 MUST indicar «no disponible», y las demás conclusiones MUST mostrarse. [Fuente: decisión de Jairo, 2-nov-2026]
 
 ### Key Entities
@@ -265,4 +270,4 @@ La persona pasa del mapa al tablero sin perder lo que estaba mirando. Esta histo
 - **SC-003-03**: En todas las combinaciones de filtros de una matriz sintética, cifras y conclusiones coinciden con un recálculo independiente.
 - **SC-003-04**: Una revisión de los textos no encuentra porcentajes, «brecha» con filtros activos, ni afirmaciones sobre si una ayuda funciona.
 - **SC-003-05**: Una persona del equipo comprueba cualquier conclusión con la matriz abierta, usando solo los N.º que muestra el tablero.
-- **SC-003-06**: Dos matrices sintéticas con datos distintos producen, en cada conclusión, la misma frase, y solo cambian los datos calculados.
+- **SC-003-06**: Dos matrices sintéticas con datos distintos producen, en cada conclusión y para un mismo caso (con casos, sin casos, ningún estudio que cumpla los filtros o no disponible), la misma frase, y solo cambian los datos calculados.

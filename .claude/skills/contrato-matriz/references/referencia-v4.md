@@ -47,7 +47,7 @@ Jerarquía declarada por el equipo (`Instrucciones`, B11): Evaluación de impact
 | 3 | A25:J31 | Ídem, enfoque de género = Sí (ver observación interna en SKILL.md) |
 | 4 | A35:B39 | Estudios empíricos por nivel de evidencia |
 
-Fórmulas: `COUNTIFS` sobre `'Matriz bibliográfica'!$X$2:$X$200` (rango fijo 2:200). Nota A41 de la hoja:
+Fórmulas: `COUNTIFS` sobre rangos fijos de las filas 2 a 200 de `'Matriz bibliográfica'`. Los bloques 1 a 3 condicionan por las columnas D (tipo de documento), G y H (intervención principal y secundaria, un `COUNTIFS` para cada una) y la de cada dimensión (L a S); según la semántica del contrato (§5), «Total estudios» no condiciona por dimensión. El bloque 2 condiciona además por la columna J (nivel de evidencia) igual a «Evaluación de impacto». El bloque 3 aplica `"Sí*"` sobre M en lugar de U (ver observación interna en SKILL.md). El bloque 4 condiciona solo por D y J (el nivel de su fila). Comprobado en B6, B16, J16, B26, J26, B36 y B37. Nota A41 de la hoja:
 un estudio cuenta una vez por intervención (principal o secundaria) y por dimensión en 1; el bloque 3
 requiere que la columna U empiece por «Sí». El archivo v4 no trae valores calculados guardados.
 

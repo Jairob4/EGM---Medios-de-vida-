@@ -25,7 +25,7 @@ por acordar con la investigadora principal.
 | `docs/specs/` | Contrato de datos, visión y alcance, specs por feature y trazabilidad |
 | `docs/arquitectura/` | Arquitectura y ADR (fase siguiente) |
 | `docs/interfaz/` | Flujos y bocetos (fase siguiente) |
-| `docs/planes/` | Plan por módulo (fase posterior) |
+| `docs/planes/` | Plan por spec (fase posterior) |
 | `docs/informes/` | Informes de fase y de conformidad |
 | `data/raw/` | Matriz vigente, solo lectura |
 | `data/fixtures/` | Matrices sintéticas para pruebas |

@@ -35,22 +35,42 @@ corrector la editan. Las reglas permanentes están en `CLAUDE.md`.
 - Un valor de dimensión escrito como texto (por ejemplo, «1» como texto) es advertencia y no marca la dimensión, a diferencia del número 1 (P2). Cuando la hoja EGM difiere de la herramienta, la diferencia se explica primero por las filas con la misma intervención en principal y secundaria y, si persiste, por las filas con dimensión escrita como texto, que se listan (F2). Ambas en COR-004.
 - **Estados de documento** (COR-002 y COR-003): cada documento queda en uno solo de estos estados: «En el mapa», «Empírico pendiente», «No empírico» o «Sin tipo de documento válido». «No empírico» no se lista como pendiente ni genera advertencia por esa razón. El rótulo es «Sin tipo de documento válido» y no «pendiente de codificación», que la skill `contrato-matriz` conserva. Si el tipo de documento no tiene lista, todo valor no vacío distinto del valor ancla es no empírico, y la advertencia de la columna indica los valores presentes. Tipo de documento, tipo de fuente y metodología sin lista generan advertencia y usan los valores presentes. No hay métrica de avance por fila.
 - **Fila vacía**: todas sus celdas están vacías. Una fila con `N°` vacío y con contenido no es vacía: se procesa con advertencia y se identifica por su número de fila del archivo (F5a, COR-004).
-- **Filtros y sesión** (F3 y F7, COR-005): un filtro está activo solo cuando se aplica con «Actualizar vista»; hay un solo «Actualizar vista» y un solo «Restablecer», comunes a mapa y tablero, y con selecciones sin aplicar ambas vistas muestran lo último aplicado. Un estudio con la celda vacía en el campo filtrado no cumple el filtro. No hay vista tabular de la matriz. La sesión empieza al cargar el archivo y termina al descartarlo, al cerrar la pestaña o tras 45 minutos de inactividad; actividad es cualquier interacción con la página.
-- **Interno**: la tabla 3 de la hoja EGM no es comparable: la herramienta no la compara ni la calcula, y la interfaz no muestra esa comparación. La discrepancia queda solo en los registros internos del proyecto (apéndice B del contrato e informes para Jairo) y no se anota en los registros de ejecución de la herramienta (F6d, COR-004). Los N.º 2 y 7 se muestran «Sin clasificar».
+- **Filtros y sesión** (F3 y F7, COR-005): un filtro está activo solo cuando se aplica con «Actualizar vista»; hay un solo «Actualizar vista» y un solo «Restablecer», comunes a mapa y tablero, y con selecciones sin aplicar ambas vistas muestran lo último aplicado. Un estudio con la celda vacía en el campo filtrado no cumple el filtro. No hay vista tabular de la matriz. La sesión empieza al cargar el archivo y termina al descartarlo, al cerrar la pestaña o tras 45 minutos de inactividad; actividad es cualquier interacción con la página. (Precisado el 21-nov-2026: ver «Decisiones del 21-nov-2026», que prevalecen.)
+- **Interno**: la tabla 3 de la hoja EGM no es comparable: la herramienta no la compara ni la calcula, y la interfaz no muestra esa comparación. La discrepancia es grupo B de la regla 9 de `CLAUDE.md`: queda en los registros internos del proyecto (`docs/informes/interno-tabla3-hoja-egm.md`, informes para Jairo y `hallazgos-matriz-para-equipo.md`) y se comunica al equipo solo en el informe final de fase, como nota del grupo B, nunca en la interfaz ni en otro texto (21-nov-2026). No se anota en los registros de ejecución de la herramienta (F6d, COR-004). Los N.º 2 y 7 se muestran «Sin clasificar».
 
 ## Decisiones del 3-nov-2026
 - **Orden del archivo** (P1, COR-004): las dimensiones van en el orden de sus columnas. Las intervenciones y los niveles van en el orden de su lista de validación, y las que solo están en la lista de secundaria van al final. No se toma el orden de la hoja EGM.
 - **Año no reconocido** (P3, COR-004): un año que no sea número entero es advertencia. El documento se cuenta, no cumple un filtro de año activo y en la composición por año aparece como «año no reconocido», separado de «sin diligenciar».
 - Los registros de la herramienta no contienen el nombre del archivo cargado (F8, COR-004).
-- Una carga nueva reemplaza a la anterior dentro de la sesión (F9, COR-004). Si la carga nueva tiene un error de contrato, se limpia todo y se muestra un mensaje de error sin el nombre del archivo ni datos de la matriz; una carga con solo advertencias o notas se acepta (COR-005).
-- **Nivel de evidencia** (H-08, COR-005, provisional): la leyenda agrega «Sin nivel» como una entrada más cuando existan esos estudios; un nivel «No aplica…» se trata como «Sin nivel».
+- Una carga nueva reemplaza a la anterior dentro de la sesión (F9, COR-004). Si la carga nueva tiene un error de contrato, se limpia todo y se muestra un mensaje de error con lo esperado y lo encontrado, sin el nombre del archivo ni filas de datos (21-nov-2026); una carga con solo advertencias o notas se acepta (COR-005).
+- **Nivel de evidencia** (H-08, COR-005, provisional): la leyenda agrega «Sin nivel» como una entrada más cuando existan esos estudios; un nivel «No aplica…» se trata como «Sin nivel». (Ampliado el 21-nov-2026: ver «Decisiones del 21-nov-2026».)
 - **Intervención secundaria** (H-16, COR-005): la fila con la principal vacía y la secundaria diligenciada queda en $M$ por su secundaria, sin advertencia.
 - **Colofón** (H-20, COR-005): «Matriz: <nombre del archivo tal como llegó>, leída el <fecha de la carga>, <n> documentos»; no se deduce ninguna versión. Mostrar el nombre en pantalla no es un registro.
-- **Límite de tamaño** (COR-008): 15 MB. Un archivo de ese tamaño se acepta y uno mayor se rechaza. El valor vive solo en NFR-000-19; los demás textos remiten a él.
+- **Límite de tamaño** (COR-008): 15 MiB = 15 728 640 bytes, fijo (21-nov-2026). Un archivo de ese tamaño se acepta y uno mayor se rechaza. El valor vive solo en NFR-000-19; los demás textos remiten a él.
+
+## Decisiones del 21-nov-2026 (COR-009)
+- Un filtro está activo solo si, aplicado con «Actualizar vista», deja fuera algún valor de su control o estrecha el rango de años.
+- Ocultar o mostrar una entrada de la leyenda de nivel espera a «Actualizar vista».
+- «Restablecer» aplica de inmediato la vista sin filtros; FR-002-18 queda aprobado y lo cumple «Restablecer».
+- En las cifras de documentos del tablero, los documentos no empíricos se tratan como «Sin nivel» y solo salen al ocultar esa entrada. La entrada «Sin nivel» aparece también cuando solo hay documentos no empíricos sin nivel (Q8).
+- Tras una carga nueva válida se borran todos los filtros aplicados.
+- El mensaje de error de contrato muestra lo esperado y lo encontrado (hoja, encabezado, valor ancla esperado y valores encontrados), sin el nombre del archivo ni filas de datos, también en la primera carga.
+- Si una carga nueva se rechaza antes de leerla, por tipo o tamaño, se conservan la matriz anterior y sus resultados, con el mensaje del rechazo.
+- Una carga nueva con error de contrato limpia todo y termina la sesión; la siguiente carga válida empieza otra (Q7).
+- Tiempo de inactividad: 45 minutos, fijo.
+- La huella SHA-256 es un control del proceso del proyecto, no una función de la herramienta (Q1).
+- Ningún valor de lista que empiece por «No aplica», o varios tipos de documento que empiecen por «Estudio empírico»: advertencia y seguir (Q4). Bloque de dimensiones degenerado o con columna de rol dentro: advertencia y seguir (Q6). La lista cerrada de errores de contrato del 2-nov-2026 no cambia.
+- Una diferencia con la hoja EGM se explica también por filas con espacios en los extremos de un valor (Q2).
+- FR-003-21 (empíricos pendientes en el tablero) es obligatorio (Q5).
+- Colofón: nombre completo del grupo (Organización y Empresa, GIOE), Santa Marta y director del grupo Óscar García Vargas, confirmados por Jairo (Q3).
+- Inconsistencias de la matriz: grupos A y B, solo en el informe final de fase (regla 9 de `CLAUDE.md`). La tabla 3 de la hoja EGM es grupo B.
+- La Fase 3 usa `docs/planes/_plantilla-plan-spec.md`, un plan por spec; `_plantilla-plan.md` se eliminó (Q10). El constructor de fixtures va en la preparación del plan 001 y cada NFR-000 en los planes cuyas historias afecta (Q11). Los commits los hace Jairo (Q9).
+- COR-005 ratificada.
+
+## Decisiones del 21-nov-2026 (COR-010)
+- Cuando solo hay documentos no empíricos sin nivel, la entrada «Sin nivel» aparece en la leyenda del mapa y en la del tablero, porque el control es el mismo, y en el mapa cuenta 0 estudios (H-59).
+- La observación de la tabla 3 de la hoja EGM sale del contrato y queda en `docs/informes/interno-tabla3-hoja-egm.md`. El contrato solo dice que esa tabla no es comparable, no se lee ni se compara (§7), sin describir la discrepancia (H-69).
+- En los planes, «plan» designa la unidad de plan y «módulo», la de la arquitectura; en cada historia, las pruebas van antes que su implementación (H-62).
 
 ## Pendientes de Jairo (no resolver por cuenta propia)
-- Si se comunica al equipo la observación de la tabla 3 (apéndice B del contrato).
-- Límite de tamaño: si 15 MB son 15 000 000 o 15 728 640 bytes (`000-vision-alcance.md`, «Puntos abiertos»; COR-008).
-- Tiempo de inactividad y límite de tamaño: si son fijos o configurables.
-- Filtros (marcas abiertas en COR-005): si un filtro aplicado que no deja fuera nada cuenta como activo; si «Restablecer» aplica de inmediato (choca con P4, FR-002-18, propuesta sin aprobar); si la leyenda espera a «Actualizar vista»; si «Sin nivel» vale para los documentos no empíricos del tablero.
-- Carga nueva: qué pasa con los filtros tras una carga válida; si el mensaje de error omite lo que nombran los errores de contrato y vale para la primera carga; qué pasa con la matriz anterior si la carga se rechaza por tipo o tamaño.
+- Ninguno a 21-nov-2026.

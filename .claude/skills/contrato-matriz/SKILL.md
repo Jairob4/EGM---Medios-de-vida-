@@ -61,14 +61,7 @@ mayúsculas («No desarrolla…» → No; «Nota:…» no es No). «Si» sin til
 «Si bien…»): queda sin clasificar con advertencia. Si no hay prefijo válido, la categoría es **«Sin clasificar»**
 y se muestra así. Nunca inferir la categoría a partir del resto del texto.
 
-**Observación interna (no comunicar al equipo sin autorización de Jairo):** la tabla 3 de la hoja `EGM`
-aplica el criterio `"Sí*"` sobre la columna M (Humano, valores 1/0) en lugar de la U, por lo que vale 0
-en todas sus celdas. La herramienta aplica la regla documentada (prefijo de la columna U). La tabla 3 no es
-una tabla comparable: la herramienta no la compara ni la calcula, y la interfaz no muestra esa
-comparación. Su diferencia con la regla documentada es una discrepancia conocida, no un error de lectura, y queda
-solo en los registros internos del proyecto (apéndice B de `docs/specs/contrato-datos.md` e informes para Jairo).
-No se anota en los registros de ejecución de la herramienta (decisiones de Jairo del 2-nov-2026; «no la calcula»:
-doc. técnico §9.1).
+**Observación interna (grupo B de la regla 9 de `CLAUDE.md`):** la tabla 3 de la hoja `EGM` aplica el criterio `"Sí*"` sobre la columna M (Humano, valores 1/0) en lugar de la U, por lo que vale 0 en todas sus celdas. La herramienta aplica la regla documentada (prefijo de la columna U). La tabla 3 no es una tabla comparable: la herramienta no la compara ni la calcula, y la interfaz no muestra esa comparación. Su diferencia con la regla documentada es una discrepancia conocida, no un error de lectura. Queda en los registros internos del proyecto (`docs/informes/interno-tabla3-hoja-egm.md`, informes para Jairo y `docs/informes/hallazgos-matriz-para-equipo.md`) y solo se comunica al equipo en el informe final de fase, como nota del grupo B, una vez aprobado por Jairo. Nunca se menciona en la interfaz ni en ningún otro texto. No se anota en los registros de ejecución de la herramienta (decisiones de Jairo del 2-nov-2026 y del 21-nov-2026; «no la calcula»: doc. técnico §9.1).
 
 ## Valores calculados
 

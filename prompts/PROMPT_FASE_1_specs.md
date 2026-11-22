@@ -59,8 +59,7 @@ Las subcarpetas de `src/egm/` son provisionales: las confirma la arquitectura.
 2. Compáralo con `.claude/skills/contrato-matriz/references/referencia-v4.md` y registra cada diferencia.
 3. Registra el **SHA-256** del archivo (el `verificador` lo usará para comprobar que nunca se modificó).
 4. Escribe el contrato: reglas de lectura, definiciones formales en LaTeX ($E$, $S(i,j)$, $T_1$, $T_2$,
-   $T_4$), regla de la columna U, casos borde y valores esperados verificados. La observación interna
-   sobre la tabla 3 va en una sección marcada «Interna — no publicar».
+   $T_4$), regla de la columna U, casos borde y valores esperados verificados. La observación interna sobre la tabla 3 no va en el contrato: va en `docs/informes/interno-tabla3-hoja-egm.md`; el contrato solo dice que esa tabla no es comparable (§7).
 
 ### T3. Visión y alcance → `docs/specs/000-vision-alcance.md`
 Con la plantilla como guía de estilo (no es un spec de feature): propósito, actores (equipo de

@@ -20,9 +20,9 @@ Fuente → requisito → componente → tarea → prueba. Cada fase llena su col
 | NFR-000-14 | decisión de Jairo, 31-oct-2026 |  |  |  | especificado |
 | NFR-000-15 | doc. general §4.2; decisión de Jairo, 31-oct-2026 |  |  |  | especificado |
 | NFR-000-16 | doc. general §3 |  |  |  | especificado |
-| NFR-000-17 | decisión de Jairo, 2-nov-2026; decisión de Jairo, 3-nov-2026 |  |  |  | especificado |
+| NFR-000-17 | decisión de Jairo, 2-nov-2026; decisión de Jairo, 3-nov-2026; decisión de Jairo, 21-nov-2026 |  |  |  | especificado |
 | NFR-000-18 | decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
-| NFR-000-19 | decisión de Jairo, 2-nov-2026; decisión de Jairo, 3-nov-2026 |  |  |  | especificado |
+| NFR-000-19 | decisión de Jairo, 2-nov-2026; decisión de Jairo, 3-nov-2026; decisión de Jairo, 21-nov-2026 |  |  |  | especificado |
 | FR-001-01 | doc. técnico §5.1 |  |  |  | especificado |
 | FR-001-02 | doc. técnico §5.1, §5.3 |  |  |  | especificado |
 | FR-001-03 | decisión de Jairo, 1-nov-2026 |  |  |  | especificado |
@@ -51,7 +51,7 @@ Fuente → requisito → componente → tarea → prueba. Cada fase llena su col
 | FR-001-26 | decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
 | FR-001-27 | decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
 | FR-001-28 | decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
-| FR-001-29 | decisión de Jairo, 3-nov-2026 |  |  |  | especificado |
+| FR-001-29 | decisión de Jairo, 3-nov-2026; decisión de Jairo, 21-nov-2026 |  |  |  | especificado |
 | FR-002-01 | lámina 5; doc. general §2.2; decisión de Jairo, 3-nov-2026 |  |  |  | especificado |
 | FR-002-02 | doc. general §3; doc. técnico §4.1 |  |  |  | especificado |
 | FR-002-03 | lámina 5; doc. general §2.2 |  |  |  | especificado |
@@ -63,14 +63,14 @@ Fuente → requisito → componente → tarea → prueba. Cada fase llena su col
 | FR-002-09 | doc. general §4.3; decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
 | FR-002-10 | decisión de Jairo, 1-nov-2026 |  |  |  | especificado |
 | FR-002-11 | doc. técnico §4.1 RF2; decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
-| FR-002-12 | decisión de Jairo, 1-nov-2026; decisión de Jairo, 3-nov-2026 |  |  |  | especificado |
+| FR-002-12 | decisión de Jairo, 1-nov-2026; decisión de Jairo, 3-nov-2026 (provisional); decisión de Jairo, 21-nov-2026 |  |  |  | especificado |
 | FR-002-13 | decisión de Jairo, 1-nov-2026 |  |  |  | especificado |
 | FR-002-14 | decisión de Jairo, 1-nov-2026 |  |  |  | especificado |
 | FR-002-15 | decisión de Jairo, 1-nov-2026 |  |  |  | especificado |
 | FR-002-16 | doc. general §3; doc. técnico §4.1 |  |  |  | especificado |
 | FR-002-17 | doc. general §4.1 |  |  |  | especificado |
-| FR-002-18 | propuesta sin fuente, pendiente de aprobación |  |  |  | especificado |
-| FR-002-19 | decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
+| FR-002-18 | decisión de Jairo, 21-nov-2026 |  |  |  | especificado |
+| FR-002-19 | decisión de Jairo, 2-nov-2026; decisión de Jairo, 21-nov-2026 |  |  |  | especificado |
 | FR-003-01 | doc. general §9 |  |  |  | especificado |
 | FR-003-02 | decisión de Jairo, 1-nov-2026 |  |  |  | especificado |
 | FR-003-03 | doc. general §9 |  |  |  | especificado |
@@ -84,14 +84,14 @@ Fuente → requisito → componente → tarea → prueba. Cada fase llena su col
 | FR-003-11 | doc. general §7 |  |  |  | especificado |
 | FR-003-12 | doc. general §5 |  |  |  | especificado |
 | FR-003-13 | decisión de Jairo, 1-nov-2026 |  |  |  | especificado |
-| FR-003-14 | decisión de Jairo, 1-nov-2026; doc. general §9 |  |  |  | especificado |
+| FR-003-14 | decisión de Jairo, 1-nov-2026; doc. general §9; decisión de Jairo, 21-nov-2026 |  |  |  | especificado |
 | FR-003-15 | decisión de Jairo, 1-nov-2026 |  |  |  | especificado |
 | FR-003-16 | decisión de Jairo, 1-nov-2026 |  |  |  | especificado |
 | FR-003-17 | doc. general §7; decisión de Jairo, 1-nov-2026 |  |  |  | especificado |
 | FR-003-18 | doc. general §7 |  |  |  | especificado |
 | FR-003-19 | doc. general §2.3 |  |  |  | especificado |
 | FR-003-20 | doc. general §7 |  |  |  | especificado |
-| FR-003-21 | Matriz Instrucciones B20; decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
+| FR-003-21 | Matriz Instrucciones B20; decisión de Jairo, 2-nov-2026; decisión de Jairo, 21-nov-2026 |  |  |  | especificado |
 | FR-003-22 | decisión de Jairo, 2-nov-2026 |  |  |  | especificado |
 
 ## Cobertura de la fase de specs
@@ -116,7 +116,7 @@ Escenario o criterio que verifica cada requisito.
 | NFR-000-14 | SC-000-14 |
 | NFR-000-15 | SC-000-15 |
 | NFR-000-16 | SC-000-16 |
-| NFR-000-17 | SC-000-17, US-001-5.1, US-001-5.2, US-001-5.3, US-001-5.4, US-001-5.5, US-001-5.6 |
+| NFR-000-17 | SC-000-17, US-001-5.1, US-001-5.2, US-001-5.3, US-001-5.4, US-001-5.5, US-001-5.6, US-001-4.7 |
 | NFR-000-18 | SC-000-18 |
 | NFR-000-19 | SC-000-19, US-001-4.3, US-001-4.4 |
 | FR-001-01 | US-001-1.8, US-001-3.5, SC-001-05 |
@@ -136,18 +136,18 @@ Escenario o criterio que verifica cada requisito.
 | FR-001-15 | US-001-3.5, US-001-3.9 |
 | FR-001-16 | US-001-3.3, US-001-3.4, US-001-3.6 |
 | FR-001-17 | US-001-3.3, US-001-3.13 |
-| FR-001-18 | US-001-3.2, US-001-3.8 |
+| FR-001-18 | US-001-3.2, US-001-3.8, US-001-3.17 |
 | FR-001-19 | US-001-1.7 |
 | FR-001-20 | US-001-4.1, US-001-4.2, US-001-4.5 |
 | FR-001-21 | US-001-2.8 |
-| FR-001-22 | US-001-2.11, US-001-2.12, US-001-2.15 |
+| FR-001-22 | US-001-2.11, US-001-2.12, US-001-2.15, SC-001-02 |
 | FR-001-23 | US-001-2.9, US-001-2.10 |
 | FR-001-24 | US-001-2.13 |
-| FR-001-25 | US-001-3.7 |
+| FR-001-25 | US-001-3.3, US-001-3.7 |
 | FR-001-26 | US-001-3.9, US-001-3.10, US-001-3.15, US-001-3.16 |
 | FR-001-27 | US-001-3.11, US-001-3.12, US-001-3.13, US-001-3.14 |
 | FR-001-28 | US-001-5.1 |
-| FR-001-29 | US-001-4.7, US-001-4.8 |
+| FR-001-29 | US-001-4.7, US-001-4.8, US-001-4.9, US-001-4.10, US-001-4.11, US-001-4.12 |
 | FR-002-01 | US-002-1.1, US-002-1.4, US-002-1.7 |
 | FR-002-02 | US-002-1.2, SC-002-01 |
 | FR-002-03 | US-002-1.3 |
@@ -155,18 +155,18 @@ Escenario o criterio que verifica cada requisito.
 | FR-002-05 | US-002-2.1, SC-002-02 |
 | FR-002-06 | US-002-2.2 |
 | FR-002-07 | US-002-2.4 |
-| FR-002-08 | US-002-3.1, US-002-3.2 |
+| FR-002-08 | US-002-3.1, US-002-3.2, US-002-3.3 |
 | FR-002-09 | US-002-4.1, US-002-4.9 |
 | FR-002-10 | US-002-4.4 |
 | FR-002-11 | US-002-4.3, US-002-4.8 |
-| FR-002-12 | US-002-4.5, US-002-4.11, US-002-4.12 |
+| FR-002-12 | US-002-4.5, US-002-4.11, US-002-4.12, US-002-4.14 |
 | FR-002-13 | US-002-4.1, SC-002-03 |
 | FR-002-14 | US-002-4.2 |
 | FR-002-15 | US-002-4.7, US-003-3.4, US-003-5.1, US-003-5.2 |
 | FR-002-16 | US-002-5.1, US-002-5.2, SC-002-05 |
 | FR-002-17 | US-002-1.5, US-002-1.6 |
 | FR-002-18 | US-002-4.6 |
-| FR-002-19 | US-002-4.10, US-003-5.4, US-003-5.5 |
+| FR-002-19 | US-002-4.6, US-002-4.10, US-002-4.13, US-003-5.4, US-003-5.5 |
 | FR-003-01 | US-003-1.1, SC-003-02 |
 | FR-003-02 | US-003-1.3 |
 | FR-003-03 | US-003-1.4, US-003-5.3 |
@@ -180,7 +180,7 @@ Escenario o criterio que verifica cada requisito.
 | FR-003-11 | US-003-2.3 |
 | FR-003-12 | SC-003-04, SC-003-06 |
 | FR-003-13 | US-003-3.1 |
-| FR-003-14 | US-003-3.1, SC-003-03 |
+| FR-003-14 | US-002-4.14, US-003-3.1, US-003-3.5, SC-003-03 |
 | FR-003-15 | US-003-3.3 |
 | FR-003-16 | US-003-3.2 |
 | FR-003-17 | US-003-4.1 |

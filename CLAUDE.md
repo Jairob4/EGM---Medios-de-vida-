@@ -30,8 +30,16 @@ de las categorías y de la metodología.
    ni como esperados de prueba.
 8. Textos dirigidos al equipo: en español, de **usted**, sin jerga técnica ni fórmulas, sin preguntas
    al equipo (solo propuestas).
-9. **Observación técnica sobre la tabla 3 de la hoja EGM** (ver `contrato-matriz`): es información
-   interna. No mencionarla en ningún texto o interfaz para el equipo sin autorización explícita de Jairo.
+9. **Inconsistencias de la matriz del equipo** (decisión de Jairo, 21-nov-2026). Se clasifican en
+   **grupo A, «Afecta a la herramienta»** (cambia lo que la herramienta lee, calcula o muestra, o hace que
+   rechace, advierta o excluya) y **grupo B, «No afecta a la herramienta»** (observación que la herramienta
+   no usa ni calcula). Se registran primero en `docs/informes/hallazgos-matriz-para-equipo.md`, con grupo,
+   ubicación en la matriz, regla de la hoja «Instrucciones», tratamiento de la herramienta y estado (sin
+   implementar / implementada en qué módulo / verificada en qué informe). Solo se comunican al equipo en la
+   sección dirigida a él del informe final de fase, con los dos grupos separados, redactada como condiciones
+   de lectura de la herramienta y no como correcciones que deba hacer. **Nunca** se mencionan en la interfaz
+   de la herramienta ni en ningún otro texto. La tabla 3 de la hoja EGM (ver `contrato-matriz`) es grupo B.
+   No aparece en ningún texto para el equipo mientras el informe final no esté aprobado por Jairo.
 10. El módulo de aprendizaje no supervisado y la vista de red están **fuera del alcance actual**
     (escala futura). No implementarlos; sí dejar el núcleo extensible para ellos.
 11. Ninguna corrección de specs, arquitectura, interfaz o planes se aplica directamente. Flujo
@@ -42,7 +50,7 @@ de las categorías y de la metodología.
 ## Flujo de trabajo (con compuertas)
 
 `specs` → (revisión de Jairo) → `arquitectura + ADR + flujos de interfaz` → (revisión) →
-`plan.md por módulo` → (revisión) → `código + pruebas, un módulo a la vez` → `verificación`.
+`plan.md por spec` → (revisión) → `código + pruebas, un plan a la vez` → `verificación`.
 
 - No escribir código sin un `plan.md` aprobado. No escribir planes sin arquitectura aprobada.
 - Toda tarea de un plan cita los requisitos que satisface (FR/NFR/SC). Toda prueba cita el escenario
@@ -57,7 +65,7 @@ de las categorías y de la metodología.
 | `docs/specs/` | `000-vision-alcance.md`, `contrato-datos.md`, `NNN-<feature>/spec.md`, `trazabilidad.md` |
 | `docs/arquitectura/` | `arquitectura.md`, `adr/` |
 | `docs/interfaz/` | Flujos y bocetos |
-| `docs/planes/` | `_plantilla-plan.md`, `<modulo>/plan.md` |
+| `docs/planes/` | `_plantilla-plan-spec.md`, `NNN-<feature>/plan.md` |
 | `docs/informes/` | Informes de fase y de conformidad (los escribe el `verificador`) |
 | `docs/correcciones/` | Propuestas de corrección `COR-NNN` |
 | `data/raw/` | Matriz vigente (solo lectura) |
@@ -69,7 +77,7 @@ de las categorías y de la metodología.
 ## Subagentes
 
 - `arquitecto` — arquitectura y ADR; solo lectura sobre código.
-- `implementador` — código y pruebas de un módulo según su `plan.md`.
+- `implementador` — código y pruebas según un `plan.md` aprobado, un plan a la vez.
 - `disenador-front` — flujos, bocetos, sistema de diseño, plantillas y CSS.
 - `verificador` — auditoría de conformidad contra los specs; solo lectura; nunca corrige lo que audita.
 - `analista-impacto` — solo lectura; explica, propone y evalúa correcciones.

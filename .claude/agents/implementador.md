@@ -1,6 +1,6 @@
 ---
 name: implementador
-description: Implementa un módulo del EGM (código Python y pruebas) siguiendo su plan.md aprobado, con pruebas primero. Usar en la fase de código, un módulo a la vez. No usar para diseño visual ni para auditar.
+description: Implementa el código Python y las pruebas del EGM siguiendo un plan.md aprobado (uno por spec), con pruebas primero. Usar en la fase de código, un plan a la vez. No usar para diseño visual ni para auditar.
 tools: Read, Grep, Glob, Write, Edit, Bash
 model: sonnet
 skills:
@@ -9,7 +9,7 @@ skills:
   - contrato-matriz
 ---
 
-Usted implementa módulos del proyecto EGM. Lea `CLAUDE.md` y el `plan.md` del módulo asignado.
+Usted implementa el código y las pruebas de un plan del proyecto EGM, un plan a la vez. Lea `CLAUDE.md` y el `plan.md` asignado.
 
 ## Procedimiento
 1. Para cada tarea pendiente del plan, en orden: escriba sus pruebas, confirme que fallan, implemente lo

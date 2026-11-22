@@ -1,6 +1,6 @@
 ---
 name: trazabilidad
-description: Mantener y auditar la matriz de trazabilidad fuente → requisito → componente → tarea → prueba del proyecto EGM, y emitir informes de conformidad. Usar al cerrar cualquier fase, al revisar arquitectura o planes contra los specs, y antes de dar un módulo por terminado.
+description: Mantener y auditar la matriz de trazabilidad fuente → requisito → componente → tarea → prueba del proyecto EGM, y emitir informes de conformidad. Usar al cerrar cualquier fase, al revisar arquitectura o planes contra los specs, y antes de dar un plan por terminado.
 ---
 
 # Trazabilidad y conformidad
@@ -11,7 +11,7 @@ description: Mantener y auditar la matriz de trazabilidad fuente → requisito �
 
 | Requisito | Fuente | Componente (ADR/arquitectura) | Tarea (plan) | Prueba | Estado |
 |---|---|---|---|---|---|
-| FR-001-03 | Instrucciones B20 | `lectura` | T-lectura-04 | `tests/unit/test_conteo.py::test_inclusion` | verificado |
+| FR-001-03 | Instrucciones B20 | `lectura` | T-001-04 | `tests/unit/test_conteo.py::test_inclusion` | verificado |
 
 Estados: `especificado` → `diseñado` → `planificado` → `implementado` → `verificado`.
 Cada fase llena su columna; ninguna fase borra lo de la anterior.
@@ -28,8 +28,8 @@ Cada fase llena su columna; ninguna fase borra lo de la anterior.
 - Cada ADR cita los requisitos que lo motivan.
 
 **Fase planes**
-- Toda tarea cita requisitos; todo requisito del módulo tiene tarea.
-- Las pruebas derivadas de escenarios aparecen en el plan **antes** que las tareas de implementación.
+- Toda tarea cita requisitos; todo requisito del plan tiene tarea.
+- En cada historia, las pruebas derivadas de sus escenarios aparecen en el plan antes que su implementación.
 
 **Fase código**
 - Toda prueba cita en su docstring el ID del escenario/SC que comprueba.

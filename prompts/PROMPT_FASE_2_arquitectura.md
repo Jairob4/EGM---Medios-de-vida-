@@ -5,7 +5,7 @@
 ---
 
 Lee `CLAUDE.md` y `docs/informes/fase-1-resumen.md`. Vas a ejecutar la **Fase 2**. No escribas código
-de la aplicación ni planes de módulo.
+de la aplicación ni planes.
 
 Decisiones de Jairo tomadas después de la fase 1 (completar antes de pegar):
 - [Respuestas a los NEEDS CLARIFICATION de la fase 1]

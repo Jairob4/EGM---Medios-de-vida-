@@ -14,7 +14,7 @@ CLAUDE.md                         reglas permanentes del proyecto
   calidad-python/                 estándares de código y pruebas
   sistema-diseno-egm/             sistema de diseño «Fichero» + tokens + colofón
 docs/specs/_plantilla/            su spec-template.md, sin cambios
-docs/planes/_plantilla-plan.md    plantilla de plan por módulo
+docs/planes/_plantilla-plan-spec.md   plantilla de plan por spec (la que rige la Fase 3)
 docs/arquitectura/adr/_plantilla-adr.md
 prompts/                          un prompt por fase (1 specs, 2 arquitectura, 3 planes; 4 de referencia)
 ```
@@ -43,14 +43,11 @@ prompts/                          un prompt por fase (1 specs, 2 arquitectura, 3
 ## Compuertas
 
 Fase 1 → usted revisa specs y responde los `[NEEDS CLARIFICATION]` → Fase 2 → revisa arquitectura y
-bocetos → Fase 3 → revisa planes → Fase 4, un módulo a la vez.
+bocetos → Fase 3 → revisa planes → Fase 4, un plan a la vez.
 
 ## Pendientes suyos que el kit deja marcados
 
-- Datos del colofón: código Minciencias y categoría vigente del GIOE, línea de investigación, correo de
-  contacto, si su nombre aparece y con qué rol, permiso de uso de logos institucionales.
-- Umbral para pasar de conteos a porcentajes.
-- Métrica de avance por fila («diligenciado por completo»), sin definición en la matriz.
-- Si la discrepancia de la tabla 3 se muestra en la interfaz o queda solo en registros internos.
-- Stack web (ADR-003) y despliegue (ADR-004).
-- Versión de Python de su entorno.
+- Colofón: si su nombre aparece y con qué rol (`pie-de-pagina.md`), y el permiso de uso de los logos institucionales. El código Minciencias, el correo de contacto, los logos y la omisión de la categoría y de la línea de investigación ya están decididos (NFR-000-11).
+- Stack web (lo propone el ADR-003). Despliegue (ADR-004), que el equipo decide después de la demostración.
+
+Ya decididos: umbral de porcentajes ($n_{min} = 100$, `contrato-datos.md` §8); métrica de avance por fila (no se incluye); tabla 3 de la hoja EGM (regla 9 de `CLAUDE.md`); versión de Python (la elige Claude Code para el entorno del proyecto).

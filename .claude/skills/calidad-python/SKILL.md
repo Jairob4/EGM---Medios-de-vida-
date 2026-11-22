@@ -21,7 +21,7 @@ description: Estándares de código y pruebas Python del proyecto EGM (estructur
 
 | Aspecto | Herramienta | Regla |
 |---|---|---|
-| Versión | Python ≥ 3.11 | [NEEDS CLARIFICATION: versión exacta del entorno de Jairo] |
+| Versión | Python ≥ 3.11 | La elige Claude Code para el entorno aislado del proyecto y se registra en el resumen de la fase (decisión de Jairo, 2-nov-2026; `000-vision-alcance.md`, «Notas sobre las fuentes») |
 | Proyecto | `pyproject.toml` | dependencias fijadas con rango compatible |
 | Lint y formato | `ruff` | sin errores |
 | Tipado | `mypy --strict` en `src/egm/` | sin errores |

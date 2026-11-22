@@ -43,8 +43,8 @@ Se publican los logos de Minciencias y de la Universidad del Magdalena. Jairo lo
 
 ## Fuentes de lo confirmado
 
-- Grupo, director, semillero, tutora y nombre del proyecto: formato de vinculación de semillerista
-  (25-sep-2026).
+- Sigla del grupo y semillero: documento general de la propuesta (portada). Nombre del proyecto: estado del proyecto al 31-oct-2026 (§2), que lo toma de la presentación del equipo.
+- Nombre completo del grupo, ciudad y director: decisión de Jairo, 21-nov-2026.
 - Investigadora principal y coinvestigadora: presentación del equipo (octubre de 2026).
 - Código Minciencias, correo de contacto, logos y omisión de categoría y línea: decisión de Jairo
   (2-nov-2026).

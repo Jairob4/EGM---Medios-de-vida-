@@ -30,8 +30,8 @@ parte de la definición.
 La matriz llega por carga desde el navegador y vive solo durante la sesión. Antes de leerla, la herramienta
 comprueba su tipo y su tamaño: debe ser un libro de hoja de cálculo `.xlsx`, comprobado por su contenido y no solo
 por su extensión, y no superar el límite de tamaño de `000-vision-alcance.md`. Si no cumple, lo rechaza con un
-mensaje legible y sin resultados parciales. El archivo cargado nunca se modifica.
-`[Fuente: decisión de Jairo, 2-nov-2026]`
+mensaje legible y sin resultados parciales. Si ya había una matriz cargada, se conservan ella y sus resultados (FR-001-29). El archivo cargado nunca se modifica.
+`[Fuente: decisión de Jairo, 2-nov-2026; decisión de Jairo, 21-nov-2026]`
 
 ## 3. Roles de columna
 
@@ -72,6 +72,8 @@ categorías analíticas», ambos excluidos, en el orden del archivo. Su nombre e
 - Columna del bloque sin lista `1,0`, o columna con lista `1,0` fuera del bloque: **advertencia**, nunca
   error.
 - Falta alguno de los dos encabezados que delimitan el bloque: **error de contrato**.
+- Delimitador final antes del inicial, o ninguna columna entre ellos: el bloque no tiene dimensiones; advertencia; ningún estudio entra al mapa y los estudios empíricos quedan pendientes. `[Fuente: decisión de Jairo, 21-nov-2026]`
+- Columna con encabezado de rol dentro del bloque: se toma con su rol y no como dimensión, con advertencia. `[Fuente: decisión de Jairo, 21-nov-2026]`
 
 ## 4. Reglas de lectura
 
@@ -122,13 +124,13 @@ Estos estados indican la relación de cada documento con el mapa. No miden cuán
 
 ### 4.1 Valores ancla
 
-Tres reglas dependen del significado de un valor concreto:
+Tres reglas dependen del significado de un valor concreto. $v_{\text{emp}}$ y $v_{\text{IE}}$ son los valores de las dos primeras anclas:
 
 | Ancla | Valor | Se usa en |
 |---|---|---|
 | Estudio empírico | El valor de la lista de tipo de documento que empieza por `Estudio empírico` | Conjunto $E$ |
 | Evaluación de impacto | El valor de la lista de nivel igual a `Evaluación de impacto` | $S^{IE}$, conclusión 2 |
-| Prefijo no aplicable | `No aplica` | Regla 8 |
+| Prefijo no aplicable | `No aplica` | Regla 8; «Sin nivel» (sección 9, FR-002-12) |
 
 Se espera que estos valores no cambien. Si una versión los renombra `[Fuente: decisión de Jairo, 2-nov-2026]`:
 
@@ -136,9 +138,11 @@ Se espera que estos valores no cambien. Si una versión los renombra `[Fuente: d
   mapa no se puede construir.
 - Sin ancla de evaluación de impacto: **advertencia**. La conclusión 2 queda «no disponible», $S^{IE}$ no se
   calcula y la tabla comparable de evaluación de impacto queda «no verificable».
+- Ningún valor de una lista empieza por `No aplica`: advertencia que nombra la columna; todos sus valores se toman como categorías. `[Fuente: decisión de Jairo, 21-nov-2026]`
+- Más de un valor de la lista de tipo de documento empieza por `Estudio empírico`: advertencia que los nombra; todos se toman como estudio empírico. `[Fuente: decisión de Jairo, 21-nov-2026]`
 
-El ancla se busca en la lista de la columna o, si esa columna no tiene lista (sección 4.2), en sus valores
-presentes.
+El ancla de estudio empírico se busca en la lista de la columna o, si esa columna no tiene lista (sección 4.2), en sus valores
+presentes. El ancla de evaluación de impacto se busca solo en la lista de nivel, porque sin esa lista hay error de contrato (sección 4.2).
 
 ### 4.2 Columnas categóricas sin lista de validación
 
@@ -202,7 +206,7 @@ Se cumple $T_1(i,j) = S(i,j)$ salvo en filas con $G_r = H_r$, donde la hoja cuen
 **estudios distintos** y la verificación explica esa diferencia, no la oculta.
 
 **Filtros.** Un filtro es un predicado sobre las filas. Dentro de un filtro de lista, una fila lo cumple si su
-valor es uno de los seleccionados; en el de año, si su año está en el rango. Una celda vacía no cumple un filtro activo, y el estudio no aparece; la única excepción es la entrada «Sin nivel» del filtro de nivel de evidencia (FR-002-12). Un filtro está **activo** cuando se aplica con el botón «Actualizar vista»; mover un control no lo activa. `[Fuente: decisión de Jairo, 2-nov-2026; decisión de Jairo, 3-nov-2026, para la excepción de «Sin nivel». Doc. técnico §2.4 y §4.1 RF2 definen el vector y el producto, no estas reglas.]` `[NEEDS CLARIFICATION: no está decidido si un filtro aplicado sin dejar fuera ningún valor de su lista, o con el rango completo de años, cuenta como activo. Si cuenta, deja fuera los estudios con la celda vacía en ese campo. Opciones: (a) cuenta como activo; (b) solo cuenta si deja fuera algún valor o estrecha el rango de años. Pendiente de Jairo; no se aplica.]` Varios
+valor es uno de los seleccionados; en el de año, si su año está en el rango. Una celda vacía no cumple un filtro activo, y el estudio no aparece; la única excepción es la entrada «Sin nivel» del filtro de nivel de evidencia (FR-002-12; para los documentos no empíricos, FR-003-14). Un filtro está **activo** solo si, al aplicarse con el botón «Actualizar vista», deja fuera algún valor de los que ofrece su control o estrecha el rango de años que ofrece el control; mover un control no lo activa. Un filtro aplicado con todos sus valores seleccionados, o con el rango completo de años, no está activo y no deja fuera los estudios con la celda vacía en ese campo. `[Fuente: decisión de Jairo, 2-nov-2026; decisión de Jairo, 3-nov-2026, para la excepción de «Sin nivel»; decisión de Jairo, 21-nov-2026, para la condición de dejar fuera algún valor o estrechar el rango; decisión de Jairo, 21-nov-2026, para los documentos no empíricos. Doc. técnico §2.4 y §4.1 RF2 definen el vector y el producto, no estas reglas.]` Varios
 filtros se combinan por conjunción en $\varphi$:
 
 $$S_\varphi(i,j) = \bigl|\{\, r \in E : \varphi(r),\ i \in I_r,\ j \in J_r \,\}\bigr|.$$
@@ -265,7 +269,7 @@ Se aplica solo cuando la hoja se reconoce. `[Fuente: decisión de Jairo, 1-nov-2
 4. Resultado de cada tabla, según el punto 9: **coincide**; **difiere**, con las celdas y su explicación; o **no verificable**, con
    advertencia. Si la hoja difiere de la herramienta y coincide con su semántica, la diferencia se explica por las filas
    con $G_r = H_r$, que se listan. Si persiste y hay filas con la dimensión escrita como texto (regla 10), se
-   explica por ellas, que también se listan. `[Fuente: decisión de Jairo, 2-nov-2026. Depende de la regla 10 y la comprueba US-001-3.8.]` Si no, se informa como diferencia sin explicar.
+   explica por ellas, que también se listan. Si aún persiste y hay filas con espacios en los extremos de un valor (regla 6), se explica por ellas, que también se listan. `[Fuente: decisión de Jairo, 2-nov-2026; decisión de Jairo, 21-nov-2026, para las filas con espacios en los extremos. La explicación por texto depende de la regla 10 y la comprueba US-001-3.8; la de espacios depende de la regla 6 y la comprueba US-001-3.17.]` Si no, se informa como diferencia sin explicar.
 5. Son «no verificable»: hoja ausente, tabla no reconocida, archivo sin valores calculados o una comparación incompleta sin diferencias (punto 9). Nunca producen
    error de contrato. Un valor calculado ausente nunca se trata como 0.
 6. La interfaz informa solo las tablas comparables de esta sección, cada una por el número inicial de su título.
@@ -276,8 +280,8 @@ Se aplica solo cuando la hoja se reconoce. `[Fuente: decisión de Jairo, 1-nov-2
    primera fila con contenido debajo del título. El cuerpo empieza en la fila siguiente y termina antes de la
    primera fila cuya celda en la columna de nombres esté vacía o empiece por un número seguido de punto, o donde
    termine la hoja. Cada tabla se lee solo dentro de su alcance, de modo que un nombre repetido en otra tabla no
-   interfiere. Las tablas que no sean comparables no se leen ni generan advertencias.
-   `[Fuente: decisión de Jairo, 2-nov-2026]`
+   interfiere. Las tablas que no sean comparables no se leen ni generan advertencias. La tabla 3 de la hoja no es comparable: no se lee ni se compara, y la herramienta no la calcula.
+   `[Fuente: decisión de Jairo, 2-nov-2026; doc. técnico §9.1, para la tabla 3]`
 8. **Emparejamiento.** Los nombres se comparan de forma exacta tras quitar espacios en los extremos.
    - En las tablas de total y de evaluación de impacto, las filas se emparejan con $\mathcal{I}$ y las columnas
      con $\mathcal{J}$. La columna cuyo encabezado sea `Total estudios`, tras quitar espacios en los extremos y
@@ -324,6 +328,7 @@ $$1.96\sqrt{\frac{0.25}{100}} \approx 0.098 \le 0.10.$$
 | Empírico con intervención y sin dimensiones | En $E$, no en $M$; la columna «Total estudios» de la hoja sí lo cuenta |
 | Empírico con la intervención principal vacía y la secundaria diligenciada | En $M$ por su secundaria si tiene al menos una dimensión en 1; sin advertencia por esa razón |
 | Estudio del mapa sin nivel de evidencia o con un nivel que empieza por `No aplica` | Se muestra como «Sin nivel», con entrada propia en la leyenda; con el filtro de nivel activo, solo sale al ocultar esa entrada (FR-002-12). Provisional |
+| Documento no empírico, en las cifras de documentos del tablero | Se trata como «Sin nivel»; con el filtro de nivel activo, solo sale al ocultar esa entrada (FR-003-14) |
 | $G_r = H_r$ | Advertencia; la herramienta lo cuenta una vez y la hoja dos |
 | No empírico con intervención distinta de «No aplica» | No entra en $E$; advertencia |
 | Dimensión con valor fuera de $\{0, 1, \varnothing\}$ | Advertencia; no marca la dimensión |
@@ -333,11 +338,13 @@ $$1.96\sqrt{\frac{0.25}{100}} \approx 0.098 \le 0.10.$$
 | `N°` vacío con contenido, o `N°` repetido | Advertencia; la trazabilidad usa también el número de fila |
 | Encabezado de rol renombrado o ausente | Error de contrato |
 | Hoja de la matriz faltante | Error de contrato |
-| Archivo de otro tipo, dañado o mayor que el límite | Se rechaza antes de leerlo; sin resultados parciales |
+| Archivo de otro tipo, dañado o mayor que el límite | Se rechaza antes de leerlo; sin resultados parciales; si había una matriz cargada, se conservan ella y sus resultados (FR-001-29) |
 | Columna de otro encabezado fuera del bloque, sin lista `1,0` | Se ignora; nota informativa «columnas no usadas: …» |
 | Columna de otro encabezado fuera del bloque, con lista `1,0` | Advertencia |
 | Valor ancla de estudio empírico ausente | Error de contrato con el valor esperado y los encontrados |
 | Valor ancla de evaluación de impacto ausente | Advertencia; conclusión 2 «no disponible»; tabla «no verificable» |
+| Ningún valor de una lista empieza por `No aplica` | Advertencia que nombra la columna; todos sus valores se toman como categorías (sección 4.1) |
+| Más de un valor de la lista de tipo de documento empieza por `Estudio empírico` | Advertencia que los nombra; todos se toman como estudio empírico (sección 4.1) |
 | Intervenciones o nivel sin lista de validación | Error de contrato |
 | Tipo de documento, tipo de fuente o metodología sin lista | Advertencia; se usan los valores presentes |
 | Tipo de documento sin lista, con un valor no vacío distinto del valor ancla | No empírico; la advertencia de la columna indica los valores presentes |
@@ -352,6 +359,8 @@ $$1.96\sqrt{\frac{0.25}{100}} \approx 0.098 \le 0.10.$$
 | Nombre repetido dentro de una tabla comparable | Sin pareja; mismo tratamiento |
 | Intervención o nivel agregado a la lista | Se toma sin cambios en la herramienta; la verificación sigue la sección 7, punto 9 |
 | Columna agregada dentro del bloque de dimensiones | Se toma como dimensión; advertencia si no tiene lista `1,0` |
+| Delimitador final del bloque de dimensiones antes del inicial, o ninguna columna entre ellos | Advertencia; el bloque no tiene dimensiones, ningún estudio entra al mapa y los estudios empíricos quedan pendientes (sección 3.1) |
+| Columna con encabezado de rol dentro del bloque de dimensiones | Se toma con su rol y no como dimensión; advertencia (sección 3.1) |
 | Categoría o dimensión retirada | Desaparece del mapa; las filas que aún usen el valor generan advertencia; la verificación sigue la sección 7, punto 9 |
 | Número escrito como texto | Advertencia; no marca la dimensión |
 
@@ -398,27 +407,3 @@ función de la herramienta.
 | Verificación cruzada | No verificable: el archivo no trae valores calculados |
 
 **Nota de lectura.** Los estados no reproducen el avance que informa la presentación del equipo (láminas 8 y 10: 27 documentos, 7 diligenciados por completo y 20 solo con referencia), porque miden otra cosa. Las láminas no indican qué filas son esas 20 referencias. En el archivo, los N.º 8 a 27 son las 20 filas con solo N.º, referencia, año y tipo: 6 son empíricos pendientes y 14 no empíricos. Los 20 no empíricos de la tabla son otro conjunto (N.º 1 a 6, 8, 9, 12, 14, 17 a 23 y 25 a 27), que comparte 14 documentos con el anterior. Los N.º 8 a 27 también son los 20 de tipo de fuente sin diligenciar. Esta nota es una aclaración: no es un valor esperado, una regla ni un cálculo de la herramienta.
-
-## Apéndice B. Interna — no publicar
-
-> Información interna para Jairo y el mantenedor. No se reproduce en ningún texto o interfaz para el equipo sin
-> autorización explícita de Jairo.
-
-La tabla 3 de la hoja `EGM` aplica el criterio `"Sí*"` sobre `$M$2:$M$200` (columna «Humano», valores 1/0) en
-lugar de la columna de enfoque de género/diferencial. Por eso vale 0 en todas sus celdas con cualquier dato que
-respete la lista. Comprobado en B26 y J26 del archivo vigente. La nota A41 de la hoja describe el bloque en
-términos de la columna de enfoque.
-
-Consecuencias para la herramienta:
-
-- Calcula el enfoque desde su columna (sección 6) y no necesita esa tabla para funcionar.
-- La tabla queda fuera de las comparables de la sección 7, y la interfaz no muestra esa comparación
-  (sección 7, punto 6).
-- La discrepancia conocida queda solo en registros internos del proyecto: este apéndice y los informes para
-  Jairo. La herramienta no la calcula ni la anota en sus registros de ejecución, que no contienen datos de la
-  matriz (`NFR-000-17`). `[Fuente: decisión de Jairo, 2-nov-2026, para «queda solo en registros internos» y para que los registros de ejecución no contengan datos de la matriz; doc. técnico §9.1, para «no la calcula», porque excluye esa tabla de la comparación. Decisión de Jairo, 2-nov-2026: entender «registros internos» como los del proyecto (este apéndice y los informes para Jairo) y no anotar la discrepancia en los registros de ejecución.]`
-
-Los N.º 2 y 7 se muestran «Sin clasificar», con la advertencia de la sección 6; nada más.
-`[Fuente: decisión de Jairo, 2-nov-2026]`
-
-`[NEEDS CLARIFICATION: ¿se comunica al equipo la discrepancia de la tabla 3? Pendiente de Jairo; mientras no indique otra cosa, se mantiene lo anterior.]`

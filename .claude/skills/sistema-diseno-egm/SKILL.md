@@ -17,8 +17,7 @@ description: Sistema de diseño «Fichero» de la web del EGM — concepto, toke
 La matriz es, literalmente, un **fichero bibliográfico**: una ficha por documento. La web adopta el
 vocabulario del fichero de biblioteca:
 
-- el **mapa es una cajonera**: cada cruce intervención × dimensión es un cajón; el número de estudios
-  es cuántas fichas contiene; un cajón vacío es una brecha;
+- el **mapa es una cajonera**: cada cruce intervención × dimensión es un cajón; el número de estudios es cuántas fichas contiene; un cajón vacío dice «ningún estudio registrado» y es una brecha provisional; con filtros activos dice «ningún estudio registrado con los filtros activos» y no se llama brecha;
 - abrir un cajón muestra sus **fichas** (detalle de los estudios), con el rayado de una ficha de catálogo;
 - las cifras del tablero llevan **notas al margen** que remiten a las fichas que las producen.
 
@@ -40,8 +39,7 @@ Tokens completos: `references/tokens.md`. Pie de página: `references/pie-de-pag
 
 ## Componentes
 
-1. **Cabecera corrida** (como la de una revista): título corto de la herramienta a la izquierda; a la
-   derecha el corte de datos («Matriz v4, 27 documentos, leída el …»), siempre visible.
+1. **Cabecera corrida** (como la de una revista): título corto de la herramienta a la izquierda; a la derecha el corte de datos con el texto de NFR-000-12 («Matriz: <nombre del archivo tal como llegó>, leída el <fecha de la carga>, <n> documentos»), tomado en tiempo de ejecución y siempre visible.
 2. **Cajonera (mapa)**: filas = intervenciones, columnas = dimensiones, leídas de la matriz.
    Dentro de cada cajón, una burbuja por nivel de evidencia presente, ordenadas por jerarquía;
    **área** proporcional al número de estudios: $r \propto \sqrt{n}$. El número siempre visible junto a

@@ -29,7 +29,7 @@ parte de la definición.
 
 La matriz llega por carga desde el navegador y vive solo durante la sesión. Antes de leerla, la herramienta
 comprueba su tipo y su tamaño: debe ser un libro de hoja de cálculo `.xlsx`, comprobado por su contenido y no solo
-por su extensión, y no superar el límite de tamaño de `000-vision-alcance.md`. Si no cumple, lo rechaza con un
+por su extensión, y no superar el límite de tamaño de `000-vision-alcance.md`. Su contenido descomprimido declarado tampoco puede superar el límite de NFR-000-19: si lo supera, el libro se rechaza como un archivo que no se puede abrir. Si no cumple, lo rechaza con un
 mensaje legible y sin resultados parciales. Si ya había una matriz cargada, se conservan ella y sus resultados (FR-001-29). El archivo cargado nunca se modifica.
 `[Fuente: decisión de Jairo, 2-nov-2026; decisión de Jairo, 21-nov-2026]`
 
@@ -339,6 +339,7 @@ $$1.96\sqrt{\frac{0.25}{100}} \approx 0.098 \le 0.10.$$
 | Encabezado de rol renombrado o ausente | Error de contrato |
 | Hoja de la matriz faltante | Error de contrato |
 | Archivo de otro tipo, dañado o mayor que el límite | Se rechaza antes de leerlo; sin resultados parciales; si había una matriz cargada, se conservan ella y sus resultados (FR-001-29) |
+| Libro cuyo contenido descomprimido declarado supera su límite (NFR-000-19) | Se rechaza como archivo que no se puede abrir, antes de leerlo, con el mensaje propio de NFR-000-19; sin resultados parciales; si había una matriz cargada, se conservan ella y sus resultados (FR-001-29) |
 | Columna de otro encabezado fuera del bloque, sin lista `1,0` | Se ignora; nota informativa «columnas no usadas: …» |
 | Columna de otro encabezado fuera del bloque, con lista `1,0` | Advertencia |
 | Valor ancla de estudio empírico ausente | Error de contrato con el valor esperado y los encontrados |

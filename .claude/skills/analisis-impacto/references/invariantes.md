@@ -72,5 +72,33 @@ corrector la editan. Las reglas permanentes están en `CLAUDE.md`.
 - La observación de la tabla 3 de la hoja EGM sale del contrato y queda en `docs/informes/interno-tabla3-hoja-egm.md`. El contrato solo dice que esa tabla no es comparable, no se lee ni se compara (§7), sin describir la discrepancia (H-69).
 - En los planes, «plan» designa la unidad de plan y «módulo», la de la arquitectura; en cada historia, las pruebas van antes que su implementación (H-62).
 
+## Decisiones del 21-nov-2026 (después de cerrar la Fase 1)
+- Jairo aprueba la Fase 1 y pide seguir con la arquitectura.
+- Colofón: nada de la Universidad del Magdalena (logos ni nombres) se publica hasta que Jairo tenga autorización. Los specs no cambian; cada bloque institucional del colofón se activa por configuración y viene apagado por defecto.
+- Stack web: lo propone el ADR-003; Jairo lo aprueba.
+- `prompts/RETOMAR_2026-11-21.md` se eliminó (cumplió su propósito; cierra H-72).
+
+## Decisiones del 21-nov-2026 (Fase 2, arquitectura)
+- ADR-001 a ADR-005 aceptados. Stack: FastAPI + Jinja2 + htmx, HTML y CSS propios, Uvicorn local (ADR-003).
+- Exportación: mapa en PNG con SVG adicional; conteos en .xlsx con filtros activos, archivo y fecha de lectura.
+- Recargar la página no termina la sesión (10 s de gracia); cerrar la pestaña sí.
+- Definiciones de filas y columnas: texto UTF-8 junto a la instalación, leído al arrancar.
+- **Límite de contenido descomprimido** (COR-011): 256 MiB = 268 435 456 bytes, fijo, sobre la suma de los tamaños descomprimidos que declara el paquete (21-nov-2026). Un libro con ese contenido declarado se acepta y uno mayor se rechaza antes de leerlo, como archivo que no se puede abrir, con un mensaje propio sin cifras («El contenido del libro es demasiado grande para abrirlo»); si había una matriz cargada, se conservan ella y sus resultados. No es error de contrato. El valor vive solo en NFR-000-19; los demás textos remiten a él.
+- Colofón: seis bloques apagados por defecto (grupo, código Minciencias, contacto, los dos logos, línea «Herramienta»); «Datos» y la referencia a 3ie siempre visibles (ADR-005).
+- ADR-002, punto 2 (filas que abarcan las fórmulas) aprobado.
+- El despliegue posterior a la demostración lo decide el equipo (NC-ADR004-1, abierto a propósito).
+
+## Decisiones del 21-nov-2026 (Fase 2, interfaz)
+- Colofón: hasta la autorización solo quedan visibles «Datos» y la referencia a 3ie; también se apagan por defecto «Proyecto», «Semillero» y «Equipo» (NC-INT-1; modifica ADR-005).
+- Los estudios empíricos pendientes sin nivel siguen fuera de las cifras de documentos del tablero mientras el filtro de nivel esté activo; no se tratan como «Sin nivel» (NC-INT-2; sin corrección de spec).
+- Título de la cabecera: «Evidencias sobre medios de vida», sin la palabra «brechas» (NC-INT-3).
+- Exportación del mapa: M20 entrega el SVG y M19 (cliente) lo convierte en PNG en el navegador (NC-INT-4).
+- Jairo autorizó al arquitecto a completar las listas «Cubre» de M08 (FR-001-12) y M09 (NFR-000-02) en el borrador de la arquitectura.
+
+## Decisiones del 21-nov-2026 (cierre de la Fase 2)
+- Jairo ratifica los cambios del 21-nov-2026 a ADR-003 (puntos 6 y 7) y ADR-005 (nota de revisión), hechos después de quedar «aceptados» (F2-04).
+- **Regla desde el 21-nov-2026**: un ADR en estado «aceptado» solo cambia por una corrección `COR-NNN` (flujo de la regla 11) o por un ADR nuevo que lo reemplace.
+- COR-012 recoge los hallazgos F2-01 a F2-11 de `docs/informes/conformidad-fase-2-2026-11-21.md`. Jairo aprueba `arquitectura.md` después de aplicarla y verificarla.
+
 ## Pendientes de Jairo (no resolver por cuenta propia)
 - Ninguno a 21-nov-2026.

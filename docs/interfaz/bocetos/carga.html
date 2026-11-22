@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cargar la matriz. Evidencias sobre medios de vida (boceto)</title>
+<link rel="stylesheet" href="boceto.css">
+<script src="boceto.js" defer></script>
+</head>
+<body>
+<!-- Boceto de baja fidelidad. Cubre: US-001-4.1 a 4.12, US-001-5.1 a 5.3, US-001-2.4, 2.5, 2.7, 2.9, 2.11; FR-001-02, 03, 20, 23, 28, 29; NFR-000-01, 17, 19; SC-000-17, 19.
+     Datos: apéndice A de docs/specs/contrato-datos.md (instancia v4); nombres de listas: referencia-v4.md.
+     Ninguna cifra de la lámina 7. Lo que no está en esas fuentes va entre corchetes como marcador. -->
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header class="cabecera-corrida">
+  <p class="titulo-herramienta">Evidencias sobre medios de vida</p>
+</header>
+<main id="contenido">
+<h1>Cargue la matriz bibliográfica</h1>
+<div class="prosa">
+<p>La herramienta lee la matriz del estado del arte y muestra el mapa de evidencias y el tablero de conclusiones. Cada cifra lleva a los N.º de la matriz que la producen.</p>
+<p>El archivo solo se lee: no se modifica ni se guarda. Vive en esta pestaña mientras dure la sesión, y la sesión termina cuando usted descarta el archivo, cierra la pestaña o pasan 45 minutos sin actividad.</p>
+</div>
+<form class="carga" id="cargar" action="mapa.html" method="get">
+  <label for="archivo">Archivo de la matriz (Excel .xlsx, hasta 15 MB)</label>
+  <input id="archivo" name="archivo" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" aria-describedby="archivo-ayuda">
+  <p id="archivo-ayuda" class="leyenda-cuenta">El límite exacto es 15 728 640 bytes.</p>
+  <button class="boton boton--principal" type="submit">Cargar la matriz</button>
+</form>
+
+<section class="estado-muestra" aria-labelledby="e1">
+  <p class="nota-boceto">Estado: cargando (US-001-4.1). El botón queda inactivo y el aviso se anuncia a lectores de pantalla. Al terminar, se abre el mapa con la cabecera corrida.</p>
+  <h2 id="e1">Cargando</h2>
+  <p class="mensaje" role="status">Leyendo la matriz. Esto puede tardar unos segundos.</p>
+</section>
+
+<section class="estado-muestra" aria-labelledby="e2">
+  <p class="nota-boceto">Estado: rechazo por tipo, sin matriz previa (US-001-4.3; NFR-000-19). No se muestra el nombre del archivo ni ningún resultado.</p>
+  <h2 id="e2">Rechazo por tipo</h2>
+  <div class="mensaje" role="alert"><h3>No se pudo cargar el archivo</h3>
+  <p>El archivo elegido no es un archivo de Excel (.xlsx) que la herramienta pueda abrir, o está dañado. No se leyó y no se muestra ningún resultado. Elija la matriz bibliográfica en formato .xlsx.</p></div>
+</section>
+
+<section class="estado-muestra" aria-labelledby="e3">
+  <p class="nota-boceto">Estado: rechazo por tamaño con una matriz ya cargada (US-001-4.4, US-001-4.11; FR-001-29). La matriz anterior y sus resultados se conservan.</p>
+  <h2 id="e3">Rechazo por tamaño</h2>
+  <div class="mensaje" role="alert"><h3>No se pudo cargar el archivo</h3>
+  <p>El archivo pesa más de 15 MB (15 728 640 bytes), el máximo que admite la herramienta. No se leyó y no se muestra ningún resultado de ese archivo.</p>
+  <p>La matriz que tenía cargada sigue disponible con sus resultados: Matriz: matriz_bibliografica_estado_del_arte_v4.xlsx, leída el 21 de noviembre de 2026, 27 documentos. <a href="mapa.html">Volver al mapa</a></p></div>
+</section>
+
+<section class="estado-muestra" aria-labelledby="e4">
+  <p class="nota-boceto">Estado: primera carga con una matriz que no tiene la estructura esperada (US-001-4.12, US-001-2.4; FR-001-02, FR-001-29). El mensaje dice lo esperado y lo encontrado, sin nombre de archivo ni filas de datos, y ninguna cifra.</p>
+  <h2 id="e4">La matriz no tiene la estructura esperada</h2>
+  <div class="mensaje" role="alert"><h3>No se pudo leer la matriz</h3>
+  <p>Se esperaba la columna «Nivel de evidencia» en la hoja «Matriz bibliográfica», y no se encontró. No se muestra ninguna cifra.</p>
+  <p>Revise que el archivo sea la matriz bibliográfica del proyecto y vuelva a cargarlo.</p></div>
+  <p class="nota-boceto">Otras formas del mismo mensaje: «Se esperaba la hoja «Matriz bibliográfica»…» (US-001-2.7); «Se esperaba la columna «Indicadores o categorías analíticas», que cierra el grupo de dimensiones…» (US-001-2.5); «La columna «Tipo de intervención (EGM)» no tiene lista de valores…» (US-001-2.11); «Se esperaba el valor «Estudio empírico (evaluación/caso)» en la lista de «Tipo de documento»; se encontraron: …» (US-001-2.9).</p>
+</section>
+
+<section class="estado-muestra" aria-labelledby="e5">
+  <p class="nota-boceto">Estado: carga nueva con estructura inesperada estando otra matriz cargada (US-001-4.7; FR-001-29; NFR-000-17). La sesión termina y la matriz anterior deja de estar disponible.</p>
+  <h2 id="e5">Carga nueva que termina la sesión</h2>
+  <div class="mensaje" role="alert"><h3>No se pudo leer la matriz y la sesión terminó</h3>
+  <p>Se esperaba la columna «Nivel de evidencia» en la hoja «Matriz bibliográfica», y no se encontró.</p>
+  <p>La herramienta borró todo: la matriz que tenía cargada y sus resultados ya no están disponibles. Para volver a verlos, cárguela otra vez.</p></div>
+</section>
+
+<section class="estado-muestra" aria-labelledby="e6" id="descartado">
+  <p class="nota-boceto">Estado: archivo descartado (US-001-5.1; FR-001-28). Se vuelve a esta vista sin cifras.</p>
+  <h2 id="e6">Archivo descartado</h2>
+  <p class="mensaje" role="status">Descartó el archivo. La sesión terminó y la herramienta no guarda ninguna copia del archivo ni de sus resultados.</p>
+</section>
+
+<section class="estado-muestra" aria-labelledby="e7">
+  <p class="nota-boceto">Estado: aviso previo al fin por inactividad, 2 minutos antes de cumplirse los 45 (WCAG 2.2.1). Cualquier interacción, incluido pulsar el botón, vuelve a contar los 45 minutos (US-001-5.4 a 5.6). Aparece sobre la vista en curso.</p>
+  <h2 id="e7">Aviso de inactividad</h2>
+  <div class="mensaje" role="alert"><p>Su sesión se cerrará en 2 minutos por falta de actividad. Al cerrarse, la matriz deja de estar disponible.</p>
+  <button class="boton boton--principal" type="button">Seguir con la sesión</button></div>
+</section>
+
+<section class="estado-muestra" aria-labelledby="e8">
+  <p class="nota-boceto">Estado: sesión terminada por inactividad (US-001-5.3; NFR-000-17).</p>
+  <h2 id="e8">Sesión terminada</h2>
+  <p class="mensaje" role="status">La sesión terminó porque pasaron 45 minutos sin actividad. La herramienta no guarda ninguna copia del archivo. Para seguir, cargue de nuevo la matriz.</p>
+</section>
+
+<section class="estado-muestra" aria-labelledby="e9">
+  <p class="nota-boceto">Estado: recarga de la página (NC-ADR003-2, opción b). Si la misma pestaña vuelve antes de 10 segundos, la sesión sigue con sus filtros; si no, se muestra la vista de carga sin mensaje.</p>
+  <h2 id="e9">Recuperando la sesión</h2>
+  <p class="mensaje" role="status">Recuperando su sesión.</p>
+</section>
+</main>
+<footer class="colofon" aria-label="Colofón">
+  <div class="prosa">
+    <p><b>Datos.</b> Aún no se ha cargado ninguna matriz.</p>
+    <p><b>Referencia de diseño.</b> International Initiative for Impact Evaluation (3ie). Building Peaceful Societies Evidence Gap Map (2019). Licencia CC BY-NC-SA 4.0. Se toma solo como referencia de diseño; no se reproduce su contenido.</p>
+  </div>
+</footer>
+<p id="anuncio" class="visualmente-oculto" aria-live="polite"></p>
+</body>
+</html>

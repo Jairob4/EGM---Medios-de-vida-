@@ -231,6 +231,10 @@ leerlo y lo conserva solo mientras dure la sesión.
     - **Given** la herramienta abierta, sin matriz cargada
     - **When** la persona carga una matriz sintética sin el encabezado «Nivel de evidencia»
     - **Then** ve un mensaje de error que nombra ese encabezado, sin el nombre del archivo ni filas de datos de la matriz, y ninguna cifra
+13. **Scenario**: US-001-4.13 Contenido descomprimido excedido
+    - **Given** una sesión con una matriz cargada
+    - **When** la persona carga un libro dentro del límite de tamaño cuyo contenido descomprimido declarado supera el límite de NFR-000-19
+    - **Then** ve el mensaje «El contenido del libro es demasiado grande para abrirlo», sin resultados del libro rechazado, y la matriz anterior y sus resultados siguen disponibles
 
 ---
 
@@ -389,7 +393,7 @@ Los casos borde se tratan como indica la sección 9 de `contrato-datos.md`. En p
 - ¿Y si se retira una categoría que algunas filas aún usan? Desaparece del mapa y esas filas generan advertencia.
 - ¿Y si cambia un valor ancla o una columna pierde su lista? Se trata según `contrato-datos.md` §4.1 y §4.2.
 - ¿Y si tipo de documento no tiene lista? Todo valor no vacío distinto del valor ancla queda como no empírico, la celda vacía queda sin tipo de documento válido y la advertencia de la columna indica los valores presentes. Se trata como indica la sección 4 de `contrato-datos.md`.
-- ¿Y si el archivo está dañado o no se puede abrir? Se rechaza como un tipo no admitido, sin resultados parciales.
+- ¿Y si el archivo está dañado o no se puede abrir, incluido un libro cuyo contenido descomprimido declarado supera el límite de NFR-000-19? Se rechaza como un tipo no admitido, sin resultados parciales; en el caso del contenido descomprimido, con el mensaje propio de NFR-000-19.
 - ¿Y si una categoría está solo en la matriz o solo en la hoja EGM, o una tabla trae valores parciales? Si lo comparado no difiere, la tabla queda «no verificable» con advertencia; si algo difiere, queda como «difiere» y se advierte lo no comparado. Se trata como indica la sección 7 de `contrato-datos.md`. [Fuente: decisión de Jairo, 2-nov-2026]
 
 ## Requirements *(mandatory)*

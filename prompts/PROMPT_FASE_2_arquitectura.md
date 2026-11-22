@@ -8,8 +8,7 @@ Lee `CLAUDE.md` y `docs/informes/fase-1-resumen.md`. Vas a ejecutar la **Fase 2*
 de la aplicación ni planes.
 
 Decisiones de Jairo tomadas después de la fase 1 (completar antes de pegar):
-- [Respuestas a los NEEDS CLARIFICATION de la fase 1]
-- [Stack web, si ya lo decidió; si no, el ADR-003 lo propone]
+- [Stack web, si ya lo decidió; si no, el ADR-003 lo propone] 
 
 ## Tareas
 1. **Subagente `arquitecto`**: `docs/arquitectura/arquitectura.md` y los ADR 001–004 descritos en su

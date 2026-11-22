@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Colofón. Evidencias sobre medios de vida (boceto)</title>
+<link rel="stylesheet" href="boceto.css">
+<script src="boceto.js" defer></script>
+</head>
+<body>
+<!-- Boceto de baja fidelidad. Cubre: NFR-000-11 (bloques apagados, ADR-005), NFR-000-12, NFR-000-16; SC-000-12, SC-000-16; US-001-4.2.
+     Datos: apéndice A de docs/specs/contrato-datos.md (instancia v4); nombres de listas: referencia-v4.md.
+     Ninguna cifra de la lámina 7. Lo que no está en esas fuentes va entre corchetes como marcador. -->
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header class="cabecera-corrida">
+  <p class="titulo-herramienta">Evidencias sobre medios de vida</p>
+  <nav aria-label="Vistas"><ul><li><a href="mapa.html">Mapa</a></li><li><a href="tablero.html">Tablero</a></li></ul></nav>
+  <div class="corte-datos">
+    <p>Matriz: matriz_bibliografica_estado_del_arte_v4.xlsx, leída el 21 de noviembre de 2026, 27 documentos</p>
+    <a class="boton boton--discreto" href="carga.html#cargar">Cargar otro archivo</a>
+    <form action="carga.html" method="get"><input type="hidden" name="estado" value="descartado"><button class="boton boton--discreto" type="submit">Descartar el archivo</button></form>
+    <p class="sesion-estado">La sesión se cierra sola tras 45 minutos sin actividad. El archivo solo se lee: no se modifica ni se guarda.</p>
+  </div>
+</header>
+<main id="contenido">
+<h1 class="visualmente-oculto">Colofón</h1>
+<p class="nota-boceto">Colofón con la configuración por defecto: los seis bloques institucionales (grupo, código Minciencias, contacto, los dos logos y la línea «Herramienta») están apagados y no dejan rastro en el HTML (ADR-005, decisión de Jairo del 21-nov-2026). Solo quedan «Datos», armado en tiempo de ejecución, y la referencia a 3ie. Los bloques «Proyecto», «Semillero» y «Equipo» también se muestran apagados aquí, según la instrucción de esta tarea; ver NC-INT-1 en flujos.md.</p>
+<p class="nota-boceto">Debajo, el mismo colofón sin matriz cargada: «Datos» no muestra cifras (US-001-4.2).</p>
+</main>
+<footer class="colofon" aria-label="Colofón">
+  <div class="prosa">
+    <p><b>Datos.</b> Matriz: matriz_bibliografica_estado_del_arte_v4.xlsx, leída el 21 de noviembre de 2026, 27 documentos.</p>
+    <p><b>Referencia de diseño.</b> International Initiative for Impact Evaluation (3ie). Building Peaceful Societies Evidence Gap Map (2019). Licencia CC BY-NC-SA 4.0. Se toma solo como referencia de diseño; no se reproduce su contenido.</p>
+  </div>
+</footer>
+<footer class="colofon" aria-label="Colofón">
+  <div class="prosa">
+    <p><b>Datos.</b> Aún no se ha cargado ninguna matriz.</p>
+    <p><b>Referencia de diseño.</b> International Initiative for Impact Evaluation (3ie). Building Peaceful Societies Evidence Gap Map (2019). Licencia CC BY-NC-SA 4.0. Se toma solo como referencia de diseño; no se reproduce su contenido.</p>
+  </div>
+</footer>
+<p id="anuncio" class="visualmente-oculto" aria-live="polite"></p>
+</body>
+</html>

@@ -25,7 +25,7 @@ description: Escribir y ejecutar el plan.md de un spec del proyecto EGM (tareas 
 1. Leer el plan, los specs citados y `contrato-matriz`.
 2. Escribir las pruebas de la tarea; verificar que fallan.
 3. Implementar lo mínimo para pasarlas; respetar `calidad-python`.
-4. Marcar la tarea `[x]` en el plan y actualizar la columna *Tarea/Prueba* de `trazabilidad.md`.
+4. Marcar la tarea `[x]` en el plan y anotar sus pruebas en la columna «Prueba» de `trazabilidad.md`; la columna «Tarea» no se toca (solo cambia por una corrección) y el estado `implementado` se pone en la tarea de cierre del plan.
 5. Al terminar el plan: pedir verificación al subagente `verificador`. No marcar el plan como terminado con hallazgos abiertos.
 
 Si una tarea exige algo fuera del plan: detenerse y reportarlo; no ampliar el alcance por iniciativa propia.

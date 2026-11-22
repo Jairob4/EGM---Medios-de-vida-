@@ -12,7 +12,7 @@
   - Toda tarea cita los requisitos que satisface (FR/NFR/SC). Toda prueba cita su escenario o criterio.
   - Pruebas primero: en cada historia, las pruebas se escriben y se ven fallar antes del código.
   - Lo que no esté en el spec no se implementa. Datos no verificados → [NEEDS CLARIFICATION: …].
-  - Las pruebas usan `data/fixtures/`, nunca `data/raw/`.
+  - Las pruebas usan `data/fixtures/`. Solo las pruebas de integración que el plan nombre en «Almacenamiento» abren la matriz vigente de `data/raw/`, en modo lectura y sin guardar nunca (regla 1 de `CLAUDE.md`; skill `calidad-python`). La herramienta nunca lee `data/raw/` (ADR-004, punto 1).
 -->
 
 ## Resumen
@@ -28,7 +28,7 @@
 
 **Lenguaje/versión**: [p. ej., Python 3.x — ver ADR · NEEDS CLARIFICATION]
 **Dependencias principales**: [p. ej., lector de xlsx, capa web según ADR · NEEDS CLARIFICATION]
-**Almacenamiento**: [p. ej., lectura de `data/raw/` en solo lectura · N/A]
+**Almacenamiento**: [p. ej., ninguno: todo vive en la memoria de la sesión (NFR-000-17) y la herramienta nunca lee `data/raw/` (ADR-004, punto 1); nombrar aquí las pruebas de integración que abren `data/raw/` en modo lectura · N/A]
 **Pruebas**: [p. ej., pytest + pruebas de propiedades — ver skill `calidad-python`]
 **Plataforma objetivo**: [p. ej., navegador web, servidor local · NEEDS CLARIFICATION]
 **Tipo de proyecto**: núcleo Python (`src/egm/`) + capa web (`app/`)
@@ -73,9 +73,11 @@ app/
 └── [vista o ruta]/      # capa web según ADR
 
 tests/
+├── constructor.py       # M23 `tests.constructor` (matrices sintéticas)
 ├── unit/
 ├── integracion/
-└── propiedades/
+├── propiedades/
+└── navegador/           # pruebas en navegador (marca `navegador`)
 
 data/fixtures/
 └── [matriz-sintetica].xlsx
@@ -131,7 +133,7 @@ Ejemplos (ajustar a la feature):
 
 ### Pruebas de la historia 1 (se escriben primero y deben fallar)
 
-| ID prueba | Tipo (unit / integración / propiedades / e2e) | Verifica | Fixture | Esperado |
+| ID prueba | Tipo (unit / integración / propiedades / navegador) | Verifica | Fixture | Esperado |
 |---|---|---|---|---|
 | P-NNN-01 | | US-xxx-1.1 | `data/fixtures/…` | |
 | P-NNN-02 | | SC-xxx-nn | `data/fixtures/…` | |
@@ -202,7 +204,7 @@ Ejemplos (ajustar a la feature):
 
 **Propósito**: mejoras que afectan a varias historias.
 
-- [ ] T-NNN-90 Actualizar `docs/specs/trazabilidad.md` (tarea y prueba por requisito).
+- [ ] T-NNN-90 Actualizar `docs/specs/trazabilidad.md`: columna «Prueba» de cada requisito del plan y estado `implementado` de los requisitos cuyas tareas, en todos los planes, estén terminadas (regla de estados de `trazabilidad.md`). La columna «Tarea» no se toca: la llenó la fase de planes y solo cambia por una corrección. Requisitos: todos los del plan.
 - [ ] T-NNN-91 Limpieza y refactorización sin cambiar comportamiento (pruebas en verde).
 - [ ] T-NNN-92 [P] Pruebas de propiedades adicionales en `tests/propiedades/`.
 - [ ] T-NNN-93 Revisión de accesibilidad y textos de interfaz (español, de usted, sin jerga), si aplica.

@@ -1,6 +1,6 @@
 # Plan de implementación: 003-tablero-conclusiones
 
-**Creado**: 2026-11-22 · **Estado**: borrador (pendiente de revisión de Jairo)
+**Creado**: 2026-11-22 · **Estado**: aprobado por Jairo el 2026-11-22 (COR-013 verificada)
 **Spec**: [`docs/specs/003-tablero-conclusiones/spec.md`](../../specs/003-tablero-conclusiones/spec.md)
 **Arquitectura**: `docs/arquitectura/arquitectura.md` (aprobada el 22-nov-2026) §4, §5, §5.1, §6.1 (M06, M07, M09, M10,
 M11), §6.2 (M14, M15, M17, M18, M22), §6.3 (M23), §6.4, §7 y §8 (V2, V7, V8, V9) · **ADR relacionados**: ADR-001
@@ -144,7 +144,8 @@ tests/
 ├── constructor.py       # M23 tests.constructor (amplía): fixtures FX-003-nn
 ├── unit/                 # test_conclusiones_*.py, test_porcentajes.py, test_filtros_documentos.py, test_textos_conclusiones.py
 ├── integracion/          # test_tablero_*.py
-└── propiedades/          # test_tablero_propiedades.py
+├── propiedades/          # test_tablero_propiedades.py
+└── navegador/            # test_tablero_accesibilidad.py (marca `navegador`, plan 001)
 
 data/fixtures/
 └── 003-*.xlsx            # generados por M23, nunca a mano
@@ -390,7 +391,7 @@ implementador se detiene y resume.
 - [ ] T-003-43 [US-003-2] Implementar `coocurrencias(esquema, corpus, filtro)`: pares de intervenciones y de dimensiones
   con su `Conteo`, en el orden del archivo (PE-4, sin ninguna vista de red). Requisitos: FR-003-08, NFR-000-02.
   Pruebas: P-003-42. Módulos: M07. Archivos: `src/egm/conteo`.
-- [ ] T-003-44 [US-003-2] Implementar la conclusión 4 sobre `coocurrencias`, según la forma que fije NC-P003-3.
+- [ ] T-003-44 [US-003-2] Implementar la conclusión 4 sobre `coocurrencias`, según la forma decidida en NC-P003-3 (22-nov-2026).
   Requisitos: FR-003-08, FR-003-11. Pruebas: P-003-40, P-003-41. Módulos: M09 (consume M07). Archivos: `src/egm/conclusiones`.
 - [ ] T-003-45 [P] [US-003-2] Implementar la conclusión 5 sobre documentos: repartos por tipo de documento, tipo de
   fuente, metodología y año, con «sin diligenciar», «año no reconocido» y «Sin tipo de documento válido»; rango de
@@ -473,7 +474,7 @@ implementador se detiene y resume.
 | P-003-64 | integración (cliente de pruebas) | US-003-5.5, FR-002-19 | FX-003-06 | «Restablecer» o «Actualizar vista» desde el tablero dejan mapa y tablero con el mismo estado |
 | P-003-65 | integración (cliente de pruebas) | US-002-4.6 (parte del tablero), FR-002-18, FR-002-19 | FX-003-06 | con un filtro activo, «Restablecer» enviado desde el tablero devuelve de inmediato el tablero sin filtrar (4 estudios del mapa, sin «n de N»), sin pasar por «Actualizar vista»; ningún filtro queda activo y el mapa muestra lo mismo |
 | P-003-66 | integración (cliente de pruebas) | US-001-4.10 (parte del tablero), FR-001-29 | FX-003-06, luego FX-A | con un filtro aplicado, una carga nueva válida deja el tablero del archivo nuevo sin filtros, sin «n de N» y sin ningún filtro activo |
-| P-003-67 | integración (cliente de pruebas) | US-001-4.6 (completo), NFR-000-01, SC-000-01 | FX-A, con su huella SHA-256 tomada antes | tras cargarlo y pedir todas las vistas (resultado, mapa, cajón, ficha, definición, descargas SVG y `.xlsx`, tablero y la lista de cada cifra y de cada conclusión), la huella del archivo no cambia |
+| P-003-67 | integración (cliente de pruebas) | US-001-4.6 (completo), NFR-000-01, SC-000-01 | FX-A, con su huella SHA-256 tomada antes | tras cargarlo y pedir todas las vistas (mapa, que el plan 002 sirve en `GET /vista/resultado`; cajón; ficha; definición; descargas SVG y `.xlsx`; tablero; y la lista de cada cifra y de cada conclusión), la huella del archivo no cambia |
 
 - [ ] T-003-60 [US-003-5] Escribir P-003-60 a P-003-67 en `tests/integracion/test_tablero_recorrido.py`.
 
@@ -530,7 +531,7 @@ implementador se detiene y resume.
 
 - **Historia 1**: tras la fase 2; sin dependencias de otras historias.
 - **Historia 2 (A y B)**: tras la fase 2; se integra en la vista de la historia 1, pero sus pruebas del núcleo no la
-  necesitan. La parte B (T-003-44) espera NC-P003-3.
+  necesitan. La parte B (T-003-44) sigue la forma decidida en NC-P003-3 (22-nov-2026).
 - **Historia 4**: tras la fase 2; usa la vista de la historia 1 para las pruebas de integración.
 - **Historia 3**: tras la fase 2; necesita las funciones de las historias 1 y 2 para recalcular con filtro.
 - **Historia 5**: necesita el mapa del plan 002 terminado.
@@ -610,3 +611,8 @@ FR-003-16: T-003-54, 55 · FR-003-17: T-003-06, 36 · FR-003-18: T-003-32, 33 ·
 FR-003-20: T-003-34, 35 · FR-003-21: T-003-13, 14 · FR-003-22: T-003-23 · NFR-000-02: T-003-08, 13, 15, 33, 43 ·
 NFR-000-03: T-003-14, 25, 32, 47, 92 · NFR-000-04: T-003-16, 27, 35, 49, 57, 62, 90, 91 · NFR-000-05: T-003-90, 91 · NFR-000-07: T-003-06, 07, 36
 · NFR-000-08: T-003-25, 55 · NFR-000-13: T-003-16, 27, 49, 91.
+
+Requisitos de otros planes que este plan solo comprueba (ver el párrafo final de «Requisitos que cubre este plan»),
+con las tareas que los citan: FR-001-29: T-003-63 · FR-002-12: T-003-56 · FR-002-18: T-003-63 · FR-002-19: T-003-63 ·
+NFR-000-01: T-003-63. FR-002-15 no lo cita ninguna tarea de este plan; sus escenarios del tablero (US-003-3.4,
+US-003-5.1 y US-003-5.2) los comprueban P-003-56, P-003-60 y P-003-61.

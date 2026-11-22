@@ -1,6 +1,6 @@
 # Plan de implementación: 001-lectura-verificacion
 
-**Creado**: 2026-11-22 · **Estado**: borrador (pendiente de revisión de Jairo)
+**Creado**: 2026-11-22 · **Estado**: aprobado por Jairo el 2026-11-22 (COR-013 verificada)
 **Spec**: [`docs/specs/001-lectura-verificacion/spec.md`](../../specs/001-lectura-verificacion/spec.md)
 **Arquitectura**: `docs/arquitectura/arquitectura.md` §4, §5, §6 (M01 a M05, M07, M08, M10, M13 a M19, M21 a M23), §6.4, §9 · **ADR relacionados**: ADR-001, ADR-002, ADR-003, ADR-004, ADR-005
 **Ubicación de este plan**: `docs/planes/001-lectura-verificacion/plan.md`
@@ -200,7 +200,7 @@ Las URL no llevan texto de la matriz (M14). La ficha de sesión viaja en la cabe
 | `GET /` | Página base, sin datos. El guion lee la ficha de la pestaña: con ficha pide `GET /vista/resultado` (E9, «Recuperando su sesión»); sin ficha pide `GET /vista/inicio` | M14, M17, M18, M19 | US-001-4.2, US-001-5.2 |
 | `GET /vista/inicio` | Fragmento V0 (y E8 si la sesión acaba de terminar) | M14, M17, M18 | US-001-4.2, FR-001-28 |
 | `POST /carga` | Cuerpo crudo con el libro; responde con el fragmento de resultado o con el mensaje E2, E3, E4 o E10, y con la ficha nueva en la cabecera de la respuesta | M14, M16, M15 | FR-001-20, FR-001-29, NFR-000-19 |
-| `GET /vista/resultado` | Cabecera corrida, V2 y colofón de la sesión (ver NC-P001-1) | M14, M17, M18 | FR-001-18, FR-001-19, NFR-000-12 |
+| `GET /vista/resultado` | Cabecera corrida, V2 y colofón de la sesión (ver NC-P001-1); el plan 002 la convierte en la página del mapa (R-2; plan 002, T-002-16) | M14, M17, M18 | FR-001-18, FR-001-19, NFR-000-12 |
 | `POST /sesion/descartar` | Termina la sesión (E8) | M14, M15 | FR-001-28, NFR-000-17 |
 | `POST /sesion/latido` | Registra actividad | M14, M15 | NFR-000-17 |
 | `POST /sesion/cierre` | Aviso de cierre de pestaña; borra pasados 10 s salvo que la ficha vuelva | M14, M15 | NFR-000-17 (ADR-003 punto 9) |
@@ -787,7 +787,7 @@ Los escenarios de actividad sobre el mapa (US-001-5.4 a 5.6) van en el plan 002.
 - **Fase 8 (sesión)** · estado: pendiente. M15 con reloj inyectable, `INACTIVIDAD`, `GRACIA_CIERRE` y purga; M19 con registro de actividad, latido y aviso de cierre. Los usan P-002-19, P-002-38 y P-002-48; adelantar el plan 002 tras N1 no los incluye.
 - **Fixtures (M23)** · estado: pendiente (fase 1).
   - `MatrizSintetica` y `.a_bytes()`, estrategias de hypothesis, catálogo CB-01 a CB-41 (con CB-05 para FR-002-12,
-    CB-06 para FR-003-14 y CB-21 para la conclusión 2), `base_valida`, `sc000_06_*`, `marcadores`, `sesion_a`,
+    CB-06 para FR-003-14 y CB-21 para la conclusión 2), `base_valida`, FX-A (`instancia_ejemplo.xlsx`), `sc000_06_*`, `marcadores`, `sesion_a`,
     `sesion_b`. Los planes 002 y 003 amplían el constructor; no lo reescriben.
 - **Del plan 002 hacia este plan**: US-001-4.10 y US-001-5.4 a 5.6 se prueban allí con las piezas de este plan.
 - **Del plan 003 hacia este plan**: US-001-4.6 completo (huella tras usar todas las vistas; P-003-67 del plan 003).

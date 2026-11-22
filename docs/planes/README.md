@@ -24,5 +24,7 @@ Si hay que recortar, decide Jairo.
 
 ## Pendientes antes de empezar el plan 001
 
-- **Aprobación de los tres planes por Jairo**, después de aplicar COR-013 (decisión de Jairo, 22-nov-2026).
-- **NC-ARQ-1** se resuelve dentro del plan 001 (T-001-09).
+Estado al 22-nov-2026: Jairo aprobó los tres planes después de verificar COR-013 (`docs/informes/conformidad-cor-013-2026-11-22.md`) y decidió todos los NC de los planes (NC-P001-*, NC-P002-* y NC-P003-*), cada uno con la propuesta de su plan (decisiones de Jairo, 22-nov-2026).
+
+- **Auditoría única del `verificador`** sobre COR-014 y COR-015, al cerrar ese plan de corrección (protocolo de corrección, etapa 5).
+- **NC-ARQ-1** no es un pendiente previo: se resuelve dentro del plan 001, en su preparación (T-001-09, que fija P-001-02), y bloquea T-001-13 y T-001-15 hasta resolverse (plan 001, R-1 y «Dependencias entre fases»).

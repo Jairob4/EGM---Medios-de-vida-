@@ -1,31 +1,99 @@
-# Python
+# =============================================================================
+# EGM · Medios de vida: archivos que no se versionan
+# =============================================================================
+# No se ignoran, a propósito:
+#   data/raw/        matriz vigente del equipo (solo lectura; su huella se controla)
+#   data/fixtures/   matrices sintéticas de prueba
+#   docs/            specs, arquitectura, planes, informes y correcciones
+#   .claude/         agentes, skills y settings.json del proyecto
+# Por eso no hay ninguna regla genérica sobre *.xlsx: solo sus archivos temporales.
+
+# --- Grafo de conocimiento (graphify) ---------------------------------------
+# Contiene información interna (reglas de CLAUDE.md, hallazgos A/B de la matriz,
+# nota de la tabla 3). No debe compartirse con el equipo. Se regenera con /graphify.
+graphify-out/
+
+# --- Claude Code: estado local ------------------------------------------------
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+.claude/worktrees/
+CLAUDE.local.md
+
+# --- Python ------------------------------------------------------------------
 __pycache__/
 *.py[cod]
+*$py.class
 *.so
 .Python
 *.egg-info/
+*.egg
+.eggs/
 build/
 dist/
+pip-wheel-metadata/
+.python-version
 
-# Entornos
+# --- Entornos virtuales y secretos --------------------------------------------
 .venv/
 venv/
+env/
+ENV/
 .env
+.env.*
+!.env.example
+*.pem
+*.key
 
-# Pruebas y herramientas
+# --- Pruebas, cobertura y herramientas de calidad ------------------------------
 .pytest_cache/
 .hypothesis/
 .mypy_cache/
 .ruff_cache/
 .coverage
 .coverage.*
+coverage.xml
 htmlcov/
+.tox/
+.nox/
 
-# Sistema y editores
+# --- Pruebas en navegador (Playwright) ------------------------------------------
+test-results/
+playwright-report/
+playwright/.cache/
+.playwright/
+blob-report/
+
+# --- Node (solo si algún día hace falta herramienta de front; hoy no hay) -------
+node_modules/
+
+# --- Archivos generados y temporales de la aplicación ---------------------------
+# La herramienta guarda todo en memoria, sin disco (NFR-000-17); esto cubre
+# cualquier salida local de depuración.
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+tmp/
+temp/
+scratch/
+salidas/
+exports/
+
+# --- Excel: bloqueos y copias temporales (la matriz y los fixtures sí se versionan)
+~$*.xlsx
+~$*.xls
+.~lock.*#
+
+# --- Sistema operativo -----------------------------------------------------------
 .DS_Store
 Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# --- Editores e IDE ---------------------------------------------------------------
 .vscode/
 .idea/
-
-# Archivos temporales de Excel
-~$*.xlsx
+*.code-workspace

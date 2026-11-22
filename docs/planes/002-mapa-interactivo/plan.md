@@ -1,6 +1,6 @@
 # Plan de implementación: 002-mapa-interactivo
 
-**Creado**: 2026-11-22 · **Estado**: borrador (para revisión de Jairo)
+**Creado**: 2026-11-22 · **Estado**: aprobado por Jairo el 2026-11-22 (COR-013 verificada)
 **Spec**: [`docs/specs/002-mapa-interactivo/spec.md`](../../specs/002-mapa-interactivo/spec.md)
 **Arquitectura**: `docs/arquitectura/arquitectura.md` (aprobada el 22-nov-2026) §4, §5, §5.1, §6 (M01 a M23), §6.4, §8 · **ADR relacionados**: ADR-001, ADR-003 (puntos 2, 6, 7 y 8), ADR-004 (punto 4), ADR-005
 **Interfaz**: `docs/interfaz/flujos.md` (F-002-1 a F-002-5, estados E5 y E6, §7 y §9), `docs/interfaz/tokens.css`, bocetos `mapa.html`, `estudio.html`, `colofon.html`
@@ -283,7 +283,7 @@ lectura, navegable con teclado.
 - [ ] T-002-13 [US-002-1] [IMP] Implementar `vista_mapa` en M17: filas y columnas en el orden del esquema; por celda, una burbuja
   por nivel presente con su número, su clase de nivel por posición en la lista (derivada para un nivel nuevo, propia
   para «Sin nivel») y su radio como número con $r \propto \sqrt{n}$; número de dimensiones para el ancho; rótulos y
-  etiqueta accesible; avisos de lectura del plan 001 antes de la cajonera. Requisitos: FR-002-01 a FR-002-04,
+  etiqueta accesible; avisos de lectura del plan 001 antes de la cajonera. Reemplaza el modelo de vista provisional de resultado de T-001-66 (NC-P001-1), que se retira. Requisitos: FR-002-01 a FR-002-04,
   FR-002-17, NFR-000-06, NFR-000-10. Pruebas: P-002-04 a P-002-14, P-002-16. Módulos: M17. Archivos: `app/presentacion.py`.
 - [ ] T-002-14 [US-002-1] [DF] Escribir la plantilla de la página del mapa y el fragmento de la cajonera en M18, desde
   `mapa.html` y `tokens.css`: SVG con el radio como atributo, patrón `grid` de WAI-ARIA, contorno discontinuo del cajón
@@ -294,8 +294,12 @@ lectura, navegable con teclado.
 - [ ] T-002-15 [US-002-1] [DF] Implementar en M19 el teclado de la cajonera (foco itinerante, flechas, Inicio, Fin, Ctrl+Inicio,
   Ctrl+Fin, Intro y Espacio) con atributos `data-egm-*`. Requisitos: NFR-000-04, SC-002-04. Pruebas: P-002-17. Módulos: M19. Archivos:
   `app/cliente/`.
-- [ ] T-002-16 [US-002-1] [IMP] Agregar en M14 la ruta del mapa, que toma de la sesión el resultado y el filtro aplicado y
-  devuelve la página con la cabecera, los avisos y el colofón del plan 001. Requisitos: FR-002-01, FR-002-15, NFR-000-16. Pruebas:
+- [ ] T-002-16 [US-002-1] [IMP] Convertir en M14 la ruta `GET /vista/resultado` del plan 001 en la ruta del mapa (plan 001, R-2 y
+  NC-P001-1): toma de la sesión el resultado y el filtro aplicado y devuelve la página del mapa con la cabecera, los
+  avisos y el colofón del plan 001. Desde esta tarea, una carga aceptada (`POST /carga`), la recuperación de la sesión
+  al recargar (`GET /`, E9) y «Volver al mapa» de E2, E3 y E10 con matriz previa llevan al mapa; no queda ninguna vista
+  provisional ni otra ruta de resultado. P-001-72, P-001-87 y P-001-90 del plan 001 no cambian y siguen en verde.
+  Requisitos: FR-002-01, FR-002-15, NFR-000-16. Pruebas:
   P-002-04, P-002-09 a P-002-11, P-002-18, P-002-19. Módulos: M14. Archivos: `app/servidor.py`.
 
 **Punto de control**: la historia 1 funciona y se prueba de forma independiente. El implementador se detiene y resume.

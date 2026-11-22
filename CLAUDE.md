@@ -46,6 +46,21 @@ de las categorías y de la metodología.
     obligatorio: `analista-impacto` → aprobación de Jairo → `corrector`, por cada corrección, y
     `verificador` una sola vez al cerrar todo el plan de corrección, nunca por corrección. La sesión
     principal no edita esos archivos para corregirlos.
+12. **Lectura con el grafo** (decisión de Jairo, 22-nov-2026). Para leer o entender algo del proyecto:
+    a) **Primero el grafo:** `graphify query "<pregunta>"`, `graphify explain "<nodo>"` o
+       `graphify path "<A>" "<B>"`. Mejor una consulta acotada que leer `GRAPH_REPORT.md` completo o
+       hacer Glob/Grep sobre todo el repositorio.
+    b) Si el grafo no devuelve resultado, o no basta para la tarea, se lee directamente el archivo.
+    c) **El grafo es un índice para ubicar, no una fuente de verdad.** Se lee el archivo directamente
+       siempre que: se vaya a editar un archivo; se vaya a citar texto exacto, número de línea, ID de
+       requisito (FR/NFR/SC) o fuente; se actúe como `verificador`, `analista-impacto` o `corrector`
+       (su evidencia es el archivo, no el grafo); se verifique la integridad (hash de la matriz,
+       `git diff`); o el grafo y el archivo discrepen, y entonces gana el archivo y se avisa a Jairo.
+    d) Si se modificaron archivos en la sesión, se actualiza el grafo antes de volver a consultarlo.
+       `graphify update <ruta>` solo reextrae código; para documentos se usa `/graphify . --update`.
+    e) Nunca se resuelve un `[NEEDS CLARIFICATION]` ni se afirma algo no verificado porque el grafo «lo
+       sugiera» (regla 3).
+    f) Al final de cada respuesta de trabajo, una línea breve: qué se leyó por el grafo y qué directo.
 
 ## Flujo de trabajo (con compuertas)
 

@@ -14,7 +14,7 @@ Usted implementa el código y las pruebas de un plan del proyecto EGM, un plan a
 ## Procedimiento
 1. Para cada tarea pendiente del plan, en orden: escriba sus pruebas, confirme que fallan, implemente lo
    mínimo para pasarlas, ejecute `ruff`, `mypy` y `pytest`.
-2. Marque la tarea `[x]` y actualice `docs/specs/trazabilidad.md` (tarea y prueba).
+2. Marque la tarea `[x]` y anote sus pruebas en la columna «Prueba» de `docs/specs/trazabilidad.md`. No toque la columna «Tarea»: solo cambia por una corrección. El estado `implementado` se pone en la tarea de cierre del plan (regla de estados de `trazabilidad.md`).
 3. Al terminar el plan, entregue un resumen: tareas hechas, pruebas, cobertura y desviaciones.
 
 ## Límites

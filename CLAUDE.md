@@ -61,6 +61,14 @@ de las categorías y de la metodología.
     e) Nunca se resuelve un `[NEEDS CLARIFICATION]` ni se afirma algo no verificado porque el grafo «lo
        sugiera» (regla 3).
     f) Al final de cada respuesta de trabajo, una línea breve: qué se leyó por el grafo y qué directo.
+13. **Reparto de tareas por modelo** (decisión de Jairo, 24-nov-2026). Las tareas delegables se reparten con el
+    plugin `enrutador` (skill `enrutador:enrutar`): lectura y extracción, Haiku; código y pruebas, Sonnet;
+    auditoría y decisiones, Opus. El enrutador decide caso por caso modelo y esfuerzo, y puede variar el reparto.
+    Los roles del flujo con compuertas se despachan con sus agentes (`implementador`, `corrector`, `verificador`,
+    `analista-impacto`, `disenador-front`), a los que se pasa el modelo y el esfuerzo que el enrutador decida;
+    los ejecutores genéricos del enrutador se usan para lectura, búsqueda, inventarios y resúmenes. No sustituye la
+    regla 11 ni las compuertas del flujo. Cada respuesta que use el enrutador termina con la línea
+    `Ruta: <vía> → <destino>/<esfuerzo>`.
 
 ## Flujo de trabajo (con compuertas)
 

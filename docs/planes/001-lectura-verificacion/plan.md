@@ -290,46 +290,46 @@ salvo los indicados.
 **Propósito**: entorno, estructura conciliada con la arquitectura, constructor de fixtures y la comprobación previa
 NC-ARQ-1.
 
-- [ ] T-001-01 Conciliar el andamiaje de `src/egm/` con la lista cerrada (arquitectura §6, F2-10): retirar
+- [x] T-001-01 Conciliar el andamiaje de `src/egm/` con la lista cerrada (arquitectura §6, F2-10): retirar
   `src/egm/analisis/`, `src/egm/validacion/`, `src/egm/lectura/` y `src/egm/modelo/`; crear los archivos vacíos de
   M01 a M05, M07, M08, M10 y M13, `src/egm/__init__.py` y `py.typed`; crear el esqueleto de `app/` (M14 a M19, M21,
   M22) y `tests/__init__.py`. Resultado verificable: el árbol coincide con «Estructura del proyecto» y no queda ninguna
   carpeta sin módulo. Requisitos: NFR-000-14. Módulos: M01 a M05, M07, M08, M10, M13 a M19, M21, M22, M23. Archivos:
   `src/egm/*`, `app/*`, `tests/__init__.py`.
-- [ ] T-001-02 [P] Crear `pyproject.toml` (estructura `src/`, paquetes `egm` y `app`, extra `dev`) con dependencias
+- [x] T-001-02 [P] Crear `pyproject.toml` (estructura `src/`, paquetes `egm` y `app`, extra `dev`) con dependencias
   fijadas con rango compatible y confirmar el `.venv` con Python 3.13 (recrearlo con `py -3.13 -m venv .venv` si no lo
   es); el núcleo declara solo `openpyxl` (arquitectura §7, PE-7). Registrar la versión exacta de Python para el resumen
   de fase. Resultado verificable: `pip install -e ".[dev]"` termina sin errores y `python --version` da 3.13.x.
   Requisitos: NFR-000-14, NFR-000-15. Módulos: — (entorno). Archivos: `pyproject.toml`.
-- [ ] T-001-03 [P] Configurar `ruff`, `mypy --strict` sobre `src/egm/`, `pytest` (marcas `raw` para las pruebas que
+- [x] T-001-03 [P] Configurar `ruff`, `mypy --strict` sobre `src/egm/`, `pytest` (marcas `raw` para las pruebas que
   leen `data/raw/` y `navegador` para Playwright), `pytest-cov` con umbral de 90 % sobre `src/egm/` y `hypothesis`
   (perfil determinista). Resultado verificable: las cuatro herramientas corren sobre el árbol vacío sin errores.
   Requisitos: — (`calidad-python`). Módulos: —. Archivos: `pyproject.toml`.
-- [ ] T-001-04 Implementar el constructor base `MatrizSintetica` de M23: hojas en cualquier orden, encabezados en
+- [x] T-001-04 Implementar el constructor base `MatrizSintetica` de M23: hojas en cualquier orden, encabezados en
   cualquier posición, validaciones como lista escrita y como referencia a rango, filas con valores de cualquier tipo
   (número, texto, vacío, espacios), fechas internas fijas y `.a_bytes()`; nunca abre rutas de `data/raw/`. Resultado
   verificable: `base_valida` se genera y `openpyxl` la abre. Requisitos: NFR-000-06, SC-001-02 (soporte). Módulos: M23.
   Archivos: `tests/constructor.py`.
-- [ ] T-001-05 Ampliar M23 con la hoja EGM: títulos numerados, tablas en cualquier posición, fórmulas con rangos
+- [x] T-001-05 Ampliar M23 con la hoja EGM: títulos numerados, tablas en cualquier posición, fórmulas con rangos
   sobre la hoja de la matriz **y** valores guardados controlados (incluidos ausentes, texto y parciales), libro sin
   valores guardados, y validaciones guardadas como extensión `x14`. Resultado verificable: un libro generado expone, al
   leerlo, fórmula y valor guardado en la misma celda. Requisitos: FR-001-14, FR-001-05. Módulos: M23. Archivos:
   `tests/constructor.py`.
-- [ ] T-001-06 Ampliar M23 con los archivos de carga: otro tipo, extensión `.xlsx` con otro contenido, paquete dañado,
+- [x] T-001-06 Ampliar M23 con los archivos de carga: otro tipo, extensión `.xlsx` con otro contenido, paquete dañado,
   libro de exactamente 15 728 640 bytes y de un byte más, libro con contenido descomprimido declarado de exactamente
   268 435 456 bytes y de un byte más, y un libro con una parte que se descomprime a más de lo que declara su índice.
   Resultado verificable: los tamaños medidos coinciden al byte con lo pedido. Requisitos: NFR-000-19, SC-000-19.
   Módulos: M23. Archivos: `tests/constructor.py`.
-- [ ] T-001-07 Escribir P-001-01 y comprobar que falla; después, generar el catálogo de fixtures (tabla «Catálogo de
+- [x] T-001-07 Escribir P-001-01 y comprobar que falla; después, generar el catálogo de fixtures (tabla «Catálogo de
   fixtures»): CB-01 a CB-41, los de escenarios y FX-A, con el comando `python -m tests.constructor`. Resultado
   verificable: P-001-01 en verde. Requisitos:
   SC-001-02, SC-000-06, SC-000-12, SC-000-17, SC-000-18 (soporte). Pruebas: P-001-01. Módulos: M23. Archivos:
   `tests/constructor.py`, `data/fixtures/*.xlsx`, `tests/unit/test_constructor.py`.
-- [ ] T-001-08 [P] Escribir en M23 las estrategias de hypothesis que generan matrices válidas al azar (categorías,
+- [x] T-001-08 [P] Escribir en M23 las estrategias de hypothesis que generan matrices válidas al azar (categorías,
   dimensiones, filas con y sin $G_r = H_r$, niveles, vacíos) con su hoja EGM opcional. Resultado verificable: una
   corrida de 200 ejemplos produce libros que `openpyxl` abre. Requisitos: SC-001-03 (soporte). Módulos: M23. Archivos:
   `tests/constructor.py`.
-- [ ] T-001-09 Resolver NC-ARQ-1: con el libro `parte_mayor_que_lo_declarado` de T-001-06, comprobar, en memoria y sin
+- [x] T-001-09 Resolver NC-ARQ-1: con el libro `parte_mayor_que_lo_declarado` de T-001-06, comprobar, en memoria y sin
   escribir nada, qué hacen la biblioteca de paquetes de Python y `openpyxl` al abrir ese libro y leer esa parte: si leen
   más de lo declarado, si se detienen en lo declarado o si fallan, y con qué excepción. Fijar el comportamiento en
   P-001-02 y anotar el resultado en «Riesgos y decisiones abiertas» y en el resumen de fase. P-001-02 es una prueba de
@@ -807,7 +807,16 @@ el hito N1 y podría empezar antes de cerrar este plan; hoy la regla es un plan 
 - **R-1. NC-ARQ-1** (heredado de arquitectura §9 y §10): qué hace la biblioteca de lectura ante una parte que se
   descomprime a más de lo declarado. → T-001-09 lo comprueba en memoria con un fixture sintético y P-001-02 lo fija.
   Esperado por el spec: archivo dañado (`Rechazo("tipo")`). Si la biblioteca lee de más sin error, se detiene el plan y
-  va a `analista-impacto` (corrección nueva). `[NEEDS CLARIFICATION: NC-ARQ-1. Se resuelve en T-001-09; resultado pendiente.]`
+  va a `analista-impacto` (corrección nueva). **Resultado de T-001-09 (2026-11-24; Python 3.13.15, openpyxl 3.1.5;
+  fijado en P-001-02, `tests/unit/test_nc_arq_1.py`)**: la biblioteca **no lee de más**. `zipfile` acota la lectura de cada parte
+  al tamaño que declara el índice. Con el libro `parte_mayor_que_lo_declarado` (la parte descomprime a 1 048 576 bytes;
+  el índice declara 9 284), `testzip()` devuelve el nombre de la parte, `read()` y `open().read()` lanzan
+  `BadZipFile("Bad CRC-32 …")` sin entregar la parte, y `openpyxl.load_workbook` lanza `BadZipFile` en modo normal y
+  en `read_only=True`; es decir, el libro no se abre, como espera el spec (`Rechazo("tipo")`). Si el índice trajera además un CRC-32 coherente con lo declarado
+  (paquete armado a propósito), `zipfile` entrega exactamente los bytes declarados sin error y `openpyxl` falla con
+  `xml.etree.ElementTree.ParseError` (al abrir en modo normal; al leer la hoja en `read_only=True`) si el recorte parte el XML, o
+  lee el libro completo si el recorte cae tras el cierre de la hoja. **Efecto para T-001-13 y T-001-15**: no hace falta
+  detener el plan; M03 debe tratar `BadZipFile` y también `ParseError` como archivo dañado. NC-ARQ-1 resuelto.
 - **R-2. Vista tras una carga aceptada** mientras no exista el mapa del plan 002. `flujos.md` F-001-4 dice que la carga
   aceptada abre el mapa (V3), que crea el plan 002. → Propuesta: este plan crea `GET /vista/resultado` con la cabecera
   corrida, el bloque V2 y el colofón, y el plan 002 la convierte en la vista del mapa agregando la cajonera; no se crea
@@ -858,7 +867,7 @@ el hito N1 y podría empezar antes de cerrar este plan; hoy la regla es un plan 
 
 | ID | Tema | Dónde se resuelve | Estado |
 |---|---|---|---|
-| NC-ARQ-1 | Parte del libro que se descomprime a más de lo declarado | T-001-09, P-001-02 | Abierto (heredado; se resuelve en la preparación) |
+| NC-ARQ-1 | Parte del libro que se descomprime a más de lo declarado | T-001-09, P-001-02 | Resuelto en T-001-09, 2026-11-24 (R-1): no lee de más; falla con `BadZipFile` |
 | NC-P001-1 | Vista del resultado de una carga aceptada antes del plan 002 | Jairo, sobre la propuesta de R-2 | Decidido por Jairo, 22-nov-2026 (R-2) |
 | NC-P001-2 | Archivos de los logos para SC-000-11 | Jairo | Decidido por Jairo, 22-nov-2026 (R-3) |
 

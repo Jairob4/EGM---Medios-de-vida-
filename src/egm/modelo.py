@@ -21,7 +21,34 @@ from types import MappingProxyType
 from typing import Final, Literal, Protocol
 
 __all__ = [
+    "ANCLA_EMPIRICA_AUSENTE",
+    "ANIO_NO_RECONOCIDO",
+    "BLOQUE_SIN_DIMENSIONES",
+    "CODIGOS_ADVERTENCIA_ESTRUCTURA",
+    "CODIGOS_ADVERTENCIA_FILA",
+    "CODIGOS_ERROR_CONTRATO",
+    "CODIGOS_NOTA",
+    "COLUMNAS_NO_USADAS",
+    "COLUMNA_SIN_LISTA",
+    "DIMENSION_SIN_LISTA_1_0",
+    "DIMENSION_VALOR_INVALIDO",
+    "ENCABEZADO_AUSENTE",
+    "ENFOQUE_SIN_CLASIFICAR",
+    "ESPACIOS_EN_LOS_EXTREMOS",
+    "HOJA_AUSENTE",
+    "LISTA_1_0_FUERA_DEL_BLOQUE",
+    "LISTA_OBLIGATORIA_AUSENTE",
+    "LISTA_SIN_NO_APLICA",
+    "NO_EMPIRICO_CON_INTERVENCION",
+    "NUMERO_REPETIDO",
+    "NUMERO_VACIO",
+    "PRINCIPAL_IGUAL_SECUNDARIA",
+    "ROL_DENTRO_DEL_BLOQUE",
+    "SIN_ANCLA_EVALUACION_IMPACTO",
     "SIN_NIVEL",
+    "TIPO_DOCUMENTO_FUERA_DE_LISTA",
+    "VALOR_FUERA_DE_LISTA",
+    "VARIOS_EMPIRICOS",
     "Advertencia",
     "Anclas",
     "AnioNoReconocido",
@@ -144,6 +171,77 @@ class Rol(Enum):
 # Advertencias, notas y errores de contrato
 # --------------------------------------------------------------------------------------------
 
+# Lista cerrada de códigos (historia 2, decisión del 25-nov-2026). Viven aquí para que M04, M05 y
+# M10 los compartan. Cada código es el valor de su constante en minúsculas.
+
+# Advertencias de fila (ámbito «fila»; las emite M05).
+ENFOQUE_SIN_CLASIFICAR: Final = "enfoque_sin_clasificar"
+VALOR_FUERA_DE_LISTA: Final = "valor_fuera_de_lista"
+ESPACIOS_EN_LOS_EXTREMOS: Final = "espacios_en_los_extremos"
+DIMENSION_VALOR_INVALIDO: Final = "dimension_valor_invalido"
+ANIO_NO_RECONOCIDO: Final = "anio_no_reconocido"
+NUMERO_VACIO: Final = "numero_vacio"
+NUMERO_REPETIDO: Final = "numero_repetido"
+PRINCIPAL_IGUAL_SECUNDARIA: Final = "principal_igual_secundaria"
+NO_EMPIRICO_CON_INTERVENCION: Final = "no_empirico_con_intervencion"
+TIPO_DOCUMENTO_FUERA_DE_LISTA: Final = "tipo_documento_fuera_de_lista"
+
+# Advertencias de estructura (ámbitos «columna», «archivo» u «hoja»; las emite M04).
+BLOQUE_SIN_DIMENSIONES: Final = "bloque_sin_dimensiones"
+ROL_DENTRO_DEL_BLOQUE: Final = "rol_dentro_del_bloque"
+LISTA_1_0_FUERA_DEL_BLOQUE: Final = "lista_1_0_fuera_del_bloque"
+DIMENSION_SIN_LISTA_1_0: Final = "dimension_sin_lista_1_0"
+LISTA_SIN_NO_APLICA: Final = "lista_sin_no_aplica"
+VARIOS_EMPIRICOS: Final = "varios_empiricos"
+SIN_ANCLA_EVALUACION_IMPACTO: Final = "sin_ancla_evaluacion_impacto"
+COLUMNA_SIN_LISTA: Final = "columna_sin_lista"
+
+# Nota (la emite M04).
+COLUMNAS_NO_USADAS: Final = "columnas_no_usadas"
+
+# Errores de contrato (lista cerrada; los emite M04).
+HOJA_AUSENTE: Final = "hoja_ausente"
+ENCABEZADO_AUSENTE: Final = "encabezado_ausente"
+ANCLA_EMPIRICA_AUSENTE: Final = "ancla_empirica_ausente"
+LISTA_OBLIGATORIA_AUSENTE: Final = "lista_obligatoria_ausente"
+
+CODIGOS_ADVERTENCIA_FILA: Final = (
+    ENFOQUE_SIN_CLASIFICAR,
+    VALOR_FUERA_DE_LISTA,
+    ESPACIOS_EN_LOS_EXTREMOS,
+    DIMENSION_VALOR_INVALIDO,
+    ANIO_NO_RECONOCIDO,
+    NUMERO_VACIO,
+    NUMERO_REPETIDO,
+    PRINCIPAL_IGUAL_SECUNDARIA,
+    NO_EMPIRICO_CON_INTERVENCION,
+    TIPO_DOCUMENTO_FUERA_DE_LISTA,
+)
+"""Advertencias que emite M05, en el orden de la lista cerrada."""
+
+CODIGOS_ADVERTENCIA_ESTRUCTURA: Final = (
+    BLOQUE_SIN_DIMENSIONES,
+    ROL_DENTRO_DEL_BLOQUE,
+    LISTA_1_0_FUERA_DEL_BLOQUE,
+    DIMENSION_SIN_LISTA_1_0,
+    LISTA_SIN_NO_APLICA,
+    VARIOS_EMPIRICOS,
+    SIN_ANCLA_EVALUACION_IMPACTO,
+    COLUMNA_SIN_LISTA,
+)
+"""Advertencias que emite M04 (ámbitos «columna», «archivo» u «hoja»)."""
+
+CODIGOS_NOTA: Final = (COLUMNAS_NO_USADAS,)
+"""Notas que emite M04."""
+
+CODIGOS_ERROR_CONTRATO: Final = (
+    HOJA_AUSENTE,
+    ENCABEZADO_AUSENTE,
+    ANCLA_EMPIRICA_AUSENTE,
+    LISTA_OBLIGATORIA_AUSENTE,
+)
+"""Errores de contrato de la lista cerrada que emite M04."""
+
 
 @dataclass(frozen=True, slots=True)
 class Advertencia:
@@ -236,12 +334,27 @@ class Esquema:
 
 @dataclass(frozen=True, slots=True)
 class AnioNoReconocido:
-    """Año que no es un número entero (contrato §4 regla 12). T-001-24 completa sus datos."""
+    """Año que no es un número entero (contrato §4 regla 12)."""
+
+    texto: str
+    """El valor de la celda como texto (incluido un año escrito como texto, sin cambios)."""
 
 
 @dataclass(frozen=True, slots=True)
 class DatosCrudos:
-    """Lo necesario para explicar diferencias con la hoja EGM. T-001-24 completa sus campos."""
+    """Lo necesario para explicar diferencias con la hoja EGM (contrato §7, punto 4).
+
+    Sin particularidades, todos los campos van vacíos: `DatosCrudos()`.
+    """
+
+    dimensiones_como_texto: tuple[str, ...] = ()
+    """Dimensiones cuya celda es el texto «1» (no marca la dimensión; contrato §4 regla 10)."""
+    con_espacios: tuple[Rol, ...] = ()
+    """Roles cuyo valor traía espacios en los extremos que hubo que quitar (regla 6), en el orden
+    de la lectura: intervención principal, secundaria, tipo de documento, tipo de fuente,
+    metodología y nivel de evidencia."""
+    principal_igual_secundaria: bool = False
+    """Las intervenciones principal y secundaria son la misma categoría ($G_r = H_r$)."""
 
 
 @dataclass(frozen=True, slots=True)

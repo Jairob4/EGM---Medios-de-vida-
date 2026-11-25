@@ -7,12 +7,14 @@ la prueba.
 
 import dataclasses
 import inspect
+import re
 from datetime import UTC, datetime, timedelta, timezone
 from enum import Enum
 from typing import Any, get_args, get_type_hints
 
 import pytest
 
+from egm import modelo
 from egm.modelo import (
     SIN_NIVEL,
     Advertencia,
@@ -200,7 +202,7 @@ def _instancias() -> dict[str, Any]:
         ),
         "Lista": Lista(valores=("a", "b"), origen="validacion"),
         "Anclas": Anclas(empiricos=("a",), evaluacion_impacto="b"),
-        "AnioNoReconocido": AnioNoReconocido(),
+        "AnioNoReconocido": AnioNoReconocido(texto="s. f."),
         "DatosCrudos": DatosCrudos(),
         "Esquema": _esquema(),
         "Documento": _documento(),
@@ -401,3 +403,76 @@ def test_fallo_de_contrato_conserva_los_errores_en_orden() -> None:
     assert fallo.errores == (e1, e2)
     assert fallo.errores[1].esperado == ("Matriz bibliográfica",)
     assert fallo.errores[1].encontrado == ("Hoja1",)
+
+
+# --------------------------------------------------------------------------------------------
+# P-001-04 · FR-001-12, FR-001-02: lista cerrada de códigos de advertencia, nota y error
+# --------------------------------------------------------------------------------------------
+
+_NOMBRES_CODIGOS: tuple[str, ...] = (
+    # Advertencias de fila (M05).
+    "ENFOQUE_SIN_CLASIFICAR",
+    "VALOR_FUERA_DE_LISTA",
+    "ESPACIOS_EN_LOS_EXTREMOS",
+    "DIMENSION_VALOR_INVALIDO",
+    "ANIO_NO_RECONOCIDO",
+    "NUMERO_VACIO",
+    "NUMERO_REPETIDO",
+    "PRINCIPAL_IGUAL_SECUNDARIA",
+    "NO_EMPIRICO_CON_INTERVENCION",
+    "TIPO_DOCUMENTO_FUERA_DE_LISTA",
+    # Advertencias de estructura (M04).
+    "BLOQUE_SIN_DIMENSIONES",
+    "ROL_DENTRO_DEL_BLOQUE",
+    "LISTA_1_0_FUERA_DEL_BLOQUE",
+    "DIMENSION_SIN_LISTA_1_0",
+    "LISTA_SIN_NO_APLICA",
+    "VARIOS_EMPIRICOS",
+    "SIN_ANCLA_EVALUACION_IMPACTO",
+    "COLUMNA_SIN_LISTA",
+    # Nota (M04).
+    "COLUMNAS_NO_USADAS",
+    # Errores de contrato (M04).
+    "HOJA_AUSENTE",
+    "ENCABEZADO_AUSENTE",
+    "ANCLA_EMPIRICA_AUSENTE",
+    "LISTA_OBLIGATORIA_AUSENTE",
+)
+
+
+def _todos_los_codigos() -> tuple[str, ...]:
+    return (
+        *modelo.CODIGOS_ADVERTENCIA_FILA,
+        *modelo.CODIGOS_ADVERTENCIA_ESTRUCTURA,
+        *modelo.CODIGOS_NOTA,
+        *modelo.CODIGOS_ERROR_CONTRATO,
+    )
+
+
+def test_cada_codigo_es_una_cadena_en_snake_case() -> None:
+    """P-001-04 (FR-001-12): cada código es `str` y cumple `^[a-z][a-z0-9_]*$`."""
+    for codigo in _todos_los_codigos():
+        assert isinstance(codigo, str), codigo
+        assert re.fullmatch(r"[a-z][a-z0-9_]*", codigo), codigo
+
+
+def test_no_hay_codigos_repetidos_entre_las_cuatro_tuplas() -> None:
+    """P-001-04 (FR-001-12): los códigos de las cuatro tuplas son únicos."""
+    codigos = _todos_los_codigos()
+    assert len(codigos) == len(set(codigos))
+
+
+def test_el_numero_de_codigos_por_tupla_es_el_de_la_lista_cerrada() -> None:
+    """P-001-04 (FR-001-02): 10 advertencias de fila, 8 de estructura, 1 nota y 4 errores."""
+    assert len(modelo.CODIGOS_ADVERTENCIA_FILA) == 10
+    assert len(modelo.CODIGOS_ADVERTENCIA_ESTRUCTURA) == 8
+    assert len(modelo.CODIGOS_NOTA) == 1
+    assert len(modelo.CODIGOS_ERROR_CONTRATO) == 4
+
+
+def test_cada_constante_vale_su_nombre_en_minusculas() -> None:
+    """P-001-04 (FR-001-12): la constante `X` tiene el valor `"x"`, y las tuplas agrupan los 23."""
+    for nombre in _NOMBRES_CODIGOS:
+        assert getattr(modelo, nombre) == nombre.lower(), nombre
+    assert sorted(_todos_los_codigos()) == sorted(n.lower() for n in _NOMBRES_CODIGOS)
+    assert len(_NOMBRES_CODIGOS) == 23

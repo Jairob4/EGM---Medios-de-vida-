@@ -419,27 +419,27 @@ llega en la fase 6.
 | P-001-24 | unit | SC-001-02 (CB-01, 02, 03, 05, 28) | `cb01`, `cb02`, `cb03`, `cb05`, `cb28` | CB-01 y CB-28: sin tipo de documento válido, en $R$ y no en $E$; CB-02 y CB-03: en $E$ y en $P$; CB-05: nivel `SIN_NIVEL` para vacío y para «No aplica…» |
 | P-001-25 | propiedades | SC-001-03, NFR-000-02 | estrategias de M23 | $S^{IE} \le S \le T_1$, $T_2 \le T_1$, $\sum_\ell T_4(\ell) \le \lvert E\rvert$, $\sum_{i,j} S(i,j) = \sum_{r \in M} \lvert I_r\rvert\,\lvert J_r\rvert \ge N$, y todo `Conteo.valor == len(filas)`; esperados de un oráculo escrito en la prueba desde las fórmulas del contrato §5. $S_\varphi$ queda para el plan 002 y $S_\kappa$ para el 003 |
 
-- [ ] T-001-20 [US-001-1] Escribir P-001-11 a P-001-15 en `tests/integracion/test_v4_lectura.py` (marca `raw`; apertura
+- [x] T-001-20 [US-001-1] Escribir P-001-11 a P-001-15 en `tests/integracion/test_v4_lectura.py` (marca `raw`; apertura
   en modo binario de lectura).
-- [ ] T-001-21 [P] [US-001-1] Escribir P-001-16 a P-001-24 en `tests/unit/test_lectura_conteo.py`.
-- [ ] T-001-22 [P] [US-001-1] Escribir P-001-25 en `tests/propiedades/test_invariantes_conteo.py`.
+- [x] T-001-21 [P] [US-001-1] Escribir P-001-16 a P-001-24 en `tests/unit/test_lectura_conteo.py`.
+- [x] T-001-22 [P] [US-001-1] Escribir P-001-25 en `tests/propiedades/test_invariantes_conteo.py`.
 
 ### Implementación de la historia 1
 
-- [ ] T-001-23 [US-001-1] Implementar el camino válido de M04 `egm.esquema.descubrir`: hoja por nombre, roles por
+- [x] T-001-23 [US-001-1] Implementar el camino válido de M04 `egm.esquema.descubrir`: hoja por nombre, roles por
   encabezado (contrato §3), bloque entre delimitadores en el orden de las columnas (§3.1), listas desde la validación o
   los valores presentes (`Lista.origen`), valores «No aplica» por prefijo fuera de las categorías, anclas $v_{emp}$ y
   $v_{IE}$ (§4.1), intervenciones en el orden de la lista principal y luego las de solo secundaria (§4 regla 3). Deja
   listo el orden que consume FR-002-01 y el ancla que consume FR-003-22. Requisitos: FR-001-01, FR-001-03, FR-001-05,
   FR-001-22 (camino con lista), NFR-000-06. Pruebas: P-001-14, P-001-17, P-001-18, P-001-21, P-001-23. Módulos: M04,
   M01. Archivos: `src/egm/esquema.py`, `src/egm/modelo.py`.
-- [ ] T-001-24 [US-001-1] Implementar el camino válido de M05 `egm.lectura.leer` y `clasificar_enfoque`: todas las filas
+- [x] T-001-24 [US-001-1] Implementar el camino válido de M05 `egm.lectura.leer` y `clasificar_enfoque`: todas las filas
   no vacías sin límite (§4 reglas 4 y 5), comparación tras quitar espacios en los extremos, dimensiones marcadas solo por
   el 1 numérico, $I_r$ en el orden de la lista, nivel o `SIN_NIVEL`, año entero, textos tal cual, `DatosCrudos` (texto
   «1», espacios, $G_r = H_r$) y estado de cada documento (§4). Depende de T-001-23. Requisitos: FR-001-06, FR-001-10,
   FR-001-13, NFR-000-06. Pruebas: P-001-13, P-001-14, P-001-19, P-001-20, P-001-22, P-001-24. Módulos: M05, M01.
   Archivos: `src/egm/lectura.py`, `src/egm/modelo.py`.
-- [ ] T-001-25 [US-001-1] Implementar la parte del plan 001 de M07 `egm.conteo`: `conjuntos` ($R$, $E$, $M$, $P$),
+- [x] T-001-25 [US-001-1] Implementar la parte del plan 001 de M07 `egm.conteo`: `conjuntos` ($R$, $E$, $M$, $P$),
   `mapa` sin filtro (`Celda` con su `Conteo`; estudios $n$ y total $N$ distintos, nunca suma de celdas),
   `evaluacion_impacto` ($S^{IE}$, `None` sin ancla), `por_intervencion` ($u$, $u^{IE}$), `por_nivel` ($T_4$) y
   `semantica_hoja` ($T_1$, $T_2$, $t$, $t^{IE}$ sobre un rango de filas, variante estándar). Sin parámetro `filtro`
@@ -481,24 +481,24 @@ no usadas, con textos legibles; nada se corrige.
 | P-001-42 | unit | SC-001-02 (CB-08, 09, 13, 22, 23, 38, 39, 40, 41 y espacios en los extremos) | fixtures de esos CB | Cada caso con el tratamiento del contrato §9: advertencia y seguir; la trazabilidad de CB-13 usa el número de fila; CB-38 deja el bloque sin dimensiones y los empíricos pendientes; CB-39 toma la columna con su rol; ningún valor corregido |
 | P-001-43 | unit | SC-001-04, FR-001-12, FR-001-29 (texto) | `marcadores` y los de P-001-26 a P-001-42 | Todo texto de advertencia de fila contiene N.º o número de fila, columna y valor; los de archivo, hoja, columna o tabla nombran cuál; el texto de error de contrato dice lo esperado y lo encontrado, sin el nombre del archivo ni marcadores de celdas |
 
-- [ ] T-001-30 [US-001-2] Escribir P-001-28 y P-001-39 en `tests/integracion/test_v4_advertencias.py` (marca `raw`).
-- [ ] T-001-31 [P] [US-001-2] Escribir P-001-26, P-001-27, P-001-29 a P-001-38 y P-001-40 a P-001-43 en
+- [x] T-001-30 [US-001-2] Escribir P-001-28 y P-001-39 en `tests/integracion/test_v4_advertencias.py` (marca `raw`).
+- [x] T-001-31 [P] [US-001-2] Escribir P-001-26, P-001-27, P-001-29 a P-001-38 y P-001-40 a P-001-43 en
   `tests/unit/test_advertencias.py`.
 
 ### Implementación de la historia 2
 
-- [ ] T-001-32 [US-001-2] Completar M04 con la lista cerrada de errores de contrato (hoja, encabezado de rol,
+- [x] T-001-32 [US-001-2] Completar M04 con la lista cerrada de errores de contrato (hoja, encabezado de rol,
   delimitador, ancla empírica, intervenciones o nivel sin lista; invariantes, 2-nov-2026), que devuelve `FalloContrato`
   sin esquema parcial, y con las advertencias y notas de estructura (bloque degenerado, rol dentro del bloque, `1,0`
   fuera del bloque, columna del bloque sin `1,0`, lista sin «No aplica», varias anclas empíricas, columnas categóricas
   sin lista, columnas no usadas). Requisitos: FR-001-02, FR-001-03, FR-001-04, FR-001-12, FR-001-21, FR-001-22,
   FR-001-23. Pruebas: P-001-29 a P-001-37, P-001-40, P-001-42. Módulos: M04. Archivos: `src/egm/esquema.py`.
-- [ ] T-001-33 [US-001-2] Completar M05 con las advertencias por fila: valor fuera de lista en todas las filas, espacios
+- [x] T-001-33 [US-001-2] Completar M05 con las advertencias por fila: valor fuera de lista en todas las filas, espacios
   en los extremos, dimensión fuera de $\{0,1,\varnothing\}$ o escrita como texto, año no reconocido, `N°` vacío o
   repetido, $G_r = H_r$, no empírico con intervención, tipo de documento fuera de lista, enfoque sin prefijo. Ninguna
   corrige el valor. Requisitos: FR-001-10, FR-001-12, FR-001-13, FR-001-24. Pruebas: P-001-26 a P-001-28, P-001-38,
   P-001-39, P-001-41, P-001-42. Módulos: M05. Archivos: `src/egm/lectura.py`.
-- [ ] T-001-34 [US-001-2] Ampliar M10 con `advertencia()`, `nota()` y `error_contrato()` (lo esperado y lo encontrado,
+- [x] T-001-34 [US-001-2] Ampliar M10 con `advertencia()`, `nota()` y `error_contrato()` (lo esperado y lo encontrado,
   sin nombre de archivo ni filas de datos; textos E4 de `flujos.md` §2 y el ejemplo de F-001-2). Los textos que
   `flujos.md` no fija se redactan con sus mismas reglas y Jairo los revisa en T-001-93. Requisitos: FR-001-02,
   FR-001-10, FR-001-12, FR-001-21, FR-001-23, NFR-000-03. Pruebas: P-001-39, P-001-43, P-001-09. Módulos: M10.

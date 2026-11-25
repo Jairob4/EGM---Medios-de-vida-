@@ -68,6 +68,11 @@ strict = true
 warn_unreachable = true
 pretty = true
 
+# openpyxl no trae tipos; solo egm.libro lo importa (arquitectura §4.1, regla 3).
+[[tool.mypy.overrides]]
+module = ["openpyxl", "openpyxl.*"]
+ignore_missing_imports = true
+
 # --- pytest ------------------------------------------------------------------------------------
 [tool.pytest.ini_options]
 minversion = "9.0"

@@ -42,8 +42,8 @@ Tokens completos: `references/tokens.md`. Pie de página: `references/pie-de-pag
 1. **Cabecera corrida** (como la de una revista): a la izquierda, el título corto de la herramienta, «Evidencias sobre medios de vida», sin la palabra «brechas» (decisión de Jairo, 21-nov-2026, NC-INT-3); a la derecha el corte de datos con el texto de NFR-000-12 («Matriz: <nombre del archivo tal como llegó>, leída el <fecha de la carga>, <n> documentos»), tomado en tiempo de ejecución y siempre visible, sin deducir ninguna versión de la matriz.
 2. **Cajonera (mapa)**: filas = intervenciones, columnas = dimensiones, leídas de la matriz.
    Dentro de cada cajón, una burbuja por nivel de evidencia presente, ordenadas por jerarquía;
-   **área** proporcional al número de estudios: $r \propto \sqrt{n}$. El número siempre visible junto a
-   la burbuja (no solo en el tooltip).
+   **área** proporcional al número de estudios, $r \propto \sqrt{n}$, hasta un tope del 35 % del lado menor del cajón; por encima, la burbuja no crece y el número escrito da el valor exacto (COR-017). El número siempre visible junto a
+   la burbuja o debajo de ella si no cabe (no solo en el tooltip).
 3. **Ficha** (panel de detalle): fondo con el rayado de ficha de catálogo; por estudio: N.º en la matriz,
    referencia APA, año, nivel de evidencia, tipo de fuente.
 4. **Notas al margen**: en pantallas anchas, columna derecha con la procedencia de cada cifra

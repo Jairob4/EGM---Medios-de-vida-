@@ -1,15 +1,16 @@
 """M01 `egm.modelo`: tipos inmutables del dominio (arquitectura §6.1, M01).
 
-Reglas del módulo (arquitectura §4.1, regla 2; las vigila P-001-10): solo biblioteca estándar, ningún
-otro módulo de `egm`, sin estado global y sin entrada ni salida.
+Reglas del módulo (arquitectura §4.1, regla 2; las vigila P-001-10): solo biblioteca estándar,
+ningún otro módulo de `egm`, sin estado global y sin entrada ni salida.
 
-Garantía de trazabilidad (NFR-000-02, FR-001-11): un número del sistema es un `Conteo`, cuyo único dato
-es la lista de filas que lo producen. El valor se calcula como la longitud de esa lista; no se puede
-pasar ni asignar de otro modo.
+Garantía de trazabilidad (NFR-000-02, FR-001-11): un número del sistema es un `Conteo`, cuyo único
+dato es la lista de filas que lo producen. El valor se calcula como la longitud de esa lista; no se
+puede pasar ni asignar de otro modo.
 
-`Esquema`, `Documento` y `Corpus` se declaran aquí con los campos de la arquitectura (M04 y M05). Los
-tipos auxiliares que usan (`Rol`, `Lista`, `Anclas`, `AnioNoReconocido`, `DatosCrudos`) también viven
-aquí para que M01 no dependa de otro módulo. T-001-23 y T-001-24 completan lo que falte.
+`Esquema`, `Documento` y `Corpus` se declaran aquí con los campos de la arquitectura (M04 y M05).
+Los tipos auxiliares que usan (`Rol`, `Lista`, `Anclas`, `AnioNoReconocido`, `DatosCrudos`)
+también viven aquí para que M01 no dependa de otro módulo. T-001-23 y T-001-24 completan lo que
+falte.
 """
 
 from collections.abc import Mapping

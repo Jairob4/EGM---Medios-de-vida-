@@ -155,8 +155,8 @@ rechazo y de estructura usan `role="alert"`; los de estado, `role="status"`. El 
   (≥ 1200 px); en pantallas angostas, una columna y la cajonera con desplazamiento lateral dentro de su recuadro y la
   columna de intervenciones fija.
 - **Cajonera**: filas = intervenciones en el orden de la lista; columnas = dimensiones en el orden de la matriz. En cada
-  cajón, una burbuja por nivel presente, ordenadas por la jerarquía, con radio $r \propto \sqrt{n}$ y el número escrito
-  al lado. El radio llega como atributo del SVG desde M17 (no como estilo en línea, que la política de contenido de
+  cajón, una burbuja por nivel presente, ordenadas por la jerarquía, con radio $r \propto \sqrt{n}$ hasta un tope del 35 % del lado menor del cajón, y el número escrito
+  al lado; si no cabe al lado, va debajo de la burbuja. Cuando alguna burbuja de la vista llega al tope, la leyenda dice: «Desde cierto número de estudios, las burbujas ya no crecen. El número escrito al lado de cada burbuja siempre indica cuántos estudios hay.» El radio llega como atributo del SVG desde M17 (no como estilo en línea, que la política de contenido de
   ADR-003 bloquea). Cajón vacío: contorno discontinuo y el texto «ningún estudio registrado». Con la v4: 6 filas, 8
   columnas, 6 cajones con 1 estudio de evaluación de impacto ({Transferencia de activos, Acompañamiento técnico} ×
   {Vulnerabilidad, Humano, Financiero}) y 42 con el rótulo.
@@ -333,6 +333,7 @@ rechazo y de estructura usan `role="alert"`; los de estado, `role="status"`. El 
 7. **Burbujas en SVG**: el radio va como atributo, porque la política de contenido sin estilos en línea (ADR-003) impide
    pasar el tamaño por `style`. La hoja definitiva tampoco puede fijar «8 columnas» a mano (los bocetos lo hacen): el
    ancho mínimo de la cajonera debe derivarse del número de dimensiones que entrega M17, por clase o por SVG.
+   El tope del radio y la marca de saturación los calcula M17 (COR-017). La hoja de estilo no fija el tamaño del SVG de la burbuja: lo dan sus atributos.
 8. **Ficha extensa**: en el detalle del estudio, el rayado de ficha se limita a la banda de cabecera, para que las líneas
    no crucen textos largos.
 9. **Tipografías**: los bocetos no cargan Alegreya ni Alegreya Sans (ningún recurso externo); se ven con alternativas del

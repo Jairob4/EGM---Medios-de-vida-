@@ -24,8 +24,8 @@ from egm.modelo import (
     Documento,
     Enfoque,
     ErrorContrato,
-    EstadoDocumento,
     Esquema,
+    EstadoDocumento,
     FalloContrato,
     Identificacion,
     Lista,
@@ -102,7 +102,7 @@ def test_un_conteo_toma_una_copia_inmutable_de_las_filas() -> None:
 
 
 def test_no_hay_otro_modo_de_crear_un_numero() -> None:
-    """P-001-03 (NFR-000-02): el único dato que entra es `filas`; `valor` no se pasa ni se asigna."""
+    """P-001-03 (NFR-000-02): solo entra `filas`; `valor` no se pasa ni se asigna."""
     parametros = list(inspect.signature(Conteo).parameters)
     assert parametros == ["filas"]
     assert [campo.name for campo in dataclasses.fields(Conteo)] == ["filas"]

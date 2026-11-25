@@ -12,7 +12,7 @@ Documento interno, para Jairo y los subagentes. No es texto de interfaz. No cont
 
 El spec 002 pide el mapa de evidencias y brechas: intervenciones en filas y dimensiones en columnas, en el orden del
 archivo; en cada cajón, una burbuja por nivel de evidencia con área proporcional al número de estudios
-($r \propto \sqrt{n}$) y el número escrito; el detalle trazable de cada cajón hasta sus N.º y la ficha de cada estudio;
+($r \propto \sqrt{n}$, con un tope del 35 % del lado menor del cajón) y el número escrito; el detalle trazable de cada cajón hasta sus N.º y la ficha de cada estudio;
 las definiciones de filas y columnas; cuatro filtros que se aplican solo con «Actualizar vista» y se quitan de
 inmediato con «Restablecer», con estado compartido con el tablero; y la exportación del mapa visible.
 
@@ -200,6 +200,7 @@ carga y sesión (ver «Dependencias con otros planes»).
   | FX-15 `002_dos_intervenciones.xlsx` | Un estudio con intervención principal y secundaria distintas | caso borde «estudio con dos intervenciones» |
   | FX-16 `002_nivel_nuevo.xlsx` | Un quinto nivel agregado a la lista | caso borde «nivel nuevo», NFR-000-06 |
   | FX-17 `002_definiciones.txt` | Archivo de definiciones sintético en el formato de ADR-004, punto 4, con una intervención y una dimensión definidas y otras sin definición | US-002-3.1, 3.2 |
+  | FX-18 `002_burbujas_grandes.xlsx` | Una celda con 1 000 estudios de evaluación de impacto y 12 de estudio de caso, otra con 1 y otra con 5 | FR-002-02 (tope del radio), NFR-000-05 |
 
 - [ ] T-002-03 [P] [IMP] Ampliar las estrategias de propiedades de M23: matrices al azar con categorías conocidas
   (tipos de fuente, metodologías, niveles con y sin «Sin nivel», años con extremos y no reconocidos, campos vacíos) y
@@ -268,11 +269,14 @@ lectura, navegable con teclado.
 | P-002-17 | navegador | SC-002-04 (cajonera), NFR-000-04 | FX-03 | Un solo Tab entra a la cajonera; las flechas mueven el foco; Inicio y Fin van al extremo de la fila; Ctrl+Inicio y Ctrl+Fin, al de la tabla; Intro o Espacio abren el cajón |
 | P-002-18 | integración | NFR-000-12, NFR-000-16, SC-000-16, ADR-005, NC-INT-3 | FX-06 | La página muestra la cabecera «Evidencias sobre medios de vida» con la línea de datos del plan 001, el título de vista «Mapa de evidencias», y con la configuración por defecto el colofón solo con «Datos» y la referencia a 3ie; ningún dato ni marca de 3ie en la cajonera |
 | P-002-19 | navegador | US-001-5.4 (NC-P002-1) | FX-06 | Con el reloj de sesión del plan 001 a 44 minutos sin interacción, pasar el cursor sobre una burbuja reinicia la cuenta y la sesión no termina a los 45 |
+| P-002-69 | unit | FR-002-02, NFR-000-10 | ninguno (función del radio con valores de $n$) | Para $n$ = 1, 5, 7, 8, 10, 1 000 y 100 000, el radio es 10, $10\sqrt5$, $10\sqrt7$, 28, 28, 28 y 28 px. Nunca supera 28 y nunca disminuye al crecer $n$. Solo desde 8 queda marcado como saturado. El tope es el 35 % del menor de `--cajon-ancho` y `--cajon-alto` que declara la hoja de estilo de `app/estaticos/` |
+| P-002-70 | unit | FR-002-02, NFR-000-10, FR-002-16 | FX-18, FX-01 | Con FX-18, las burbujas de 1 000 y de 12 están marcadas como saturadas y las de 1 y 5 no. La leyenda lleva la nota de tamaño máximo del catálogo, y el SVG de `imagen_mapa` usa los mismos radios y la misma nota. Con FX-01, ninguna burbuja está saturada y la nota no aparece |
+| P-002-71 | navegador | FR-002-02, FR-002-03, NFR-000-05 | FX-18 | A 360 px y a 1440 px, ninguna burbuja ni ningún número se sale de su cajón y las burbujas de un mismo cajón no se solapan |
 
 - [ ] T-002-09 [P] [US-002-1] [IMP] Escribir P-002-04, P-002-07, P-002-09 a P-002-11 y P-002-18 en `tests/integracion/test_mapa.py`.
-- [ ] T-002-10 [P] [US-002-1] [IMP] Escribir P-002-05, P-002-06, P-002-08, P-002-12, P-002-13, P-002-15 y P-002-16 en
+- [ ] T-002-10 [P] [US-002-1] [IMP] Escribir P-002-05, P-002-06, P-002-08, P-002-12, P-002-13, P-002-15, P-002-16, P-002-69 y P-002-70 en
   `tests/unit/test_vista_mapa.py`, y P-002-14 en `tests/propiedades/test_vista_mapa.py`.
-- [ ] T-002-11 [P] [US-002-1] [IMP] Escribir P-002-17 y P-002-19 en `tests/navegador/test_mapa_teclado.py`.
+- [ ] T-002-11 [P] [US-002-1] [IMP] Escribir P-002-17 y P-002-19 en `tests/navegador/test_mapa_teclado.py`, y P-002-71 en `tests/navegador/test_mapa_burbujas.py`.
 
 ### Implementación de la historia 1
 
@@ -282,15 +286,15 @@ lectura, navegable con teclado.
   Requisitos: FR-002-04, FR-002-14, NFR-000-08. Pruebas: P-002-11, P-002-15. Módulos: M10. Archivos: `src/egm/textos.py`.
 - [ ] T-002-13 [US-002-1] [IMP] Implementar `vista_mapa` en M17: filas y columnas en el orden del esquema; por celda, una burbuja
   por nivel presente con su número, su clase de nivel por posición en la lista (derivada para un nivel nuevo, propia
-  para «Sin nivel») y su radio como número con $r \propto \sqrt{n}$; número de dimensiones para el ancho; rótulos y
+  para «Sin nivel») y su radio como número con $r = \min(r_{\text{base}}\sqrt{n},\ r_{\max})$, $r_{\max}$ = 35 % del lado menor del cajón (COR-017), con el tamaño del SVG derivado del mismo radio y la marca de saturación; la nota de la leyenda cuando alguna burbuja está saturada, con su texto en M10; número de dimensiones para el ancho; rótulos y
   etiqueta accesible; avisos de lectura del plan 001 antes de la cajonera. Reemplaza el modelo de vista provisional de resultado de T-001-66 (NC-P001-1), que se retira. Requisitos: FR-002-01 a FR-002-04,
-  FR-002-17, NFR-000-06, NFR-000-10. Pruebas: P-002-04 a P-002-14, P-002-16. Módulos: M17. Archivos: `app/presentacion.py`.
+  FR-002-17, NFR-000-06, NFR-000-10. Pruebas: P-002-04 a P-002-14, P-002-16, P-002-69, P-002-70. Módulos: M17. Archivos: `app/presentacion.py`, `src/egm/textos.py` (solo la nota de la leyenda).
 - [ ] T-002-14 [US-002-1] [DF] Escribir la plantilla de la página del mapa y el fragmento de la cajonera en M18, desde
-  `mapa.html` y `tokens.css`: SVG con el radio como atributo, patrón `grid` de WAI-ARIA, contorno discontinuo del cajón
+  `mapa.html` y `tokens.css`: SVG con el radio y su tamaño como atributos (la hoja de estilo no fija el tamaño de la burbuja), número debajo de la burbuja cuando no cabe al lado, nota de tamaño máximo en la leyenda, patrón `grid` de WAI-ARIA, contorno discontinuo del cajón
   vacío (`--contorno-vacio`), «Sin nivel» con borde doble, nivel nuevo con la trama derivada, columna de intervenciones
   fija y desplazamiento lateral dentro del recuadro a 360 px, modo claro y oscuro; sin estilos en línea y sin número fijo
   de columnas: el ancho sale del número de dimensiones. Requisitos: FR-002-02, FR-002-03, NFR-000-05, NFR-000-10,
-  NFR-000-13. Pruebas: P-002-06, P-002-07, P-002-16. Módulos: M18. Archivos: `app/plantillas/`, `app/estaticos/`.
+  NFR-000-13. Pruebas: P-002-06, P-002-07, P-002-16, P-002-71. Módulos: M18. Archivos: `app/plantillas/`, `app/estaticos/`.
 - [ ] T-002-15 [US-002-1] [DF] Implementar en M19 el teclado de la cajonera (foco itinerante, flechas, Inicio, Fin, Ctrl+Inicio,
   Ctrl+Fin, Intro y Espacio) con atributos `data-egm-*`. Requisitos: NFR-000-04, SC-002-04. Pruebas: P-002-17. Módulos: M19. Archivos:
   `app/cliente/`.
@@ -613,9 +617,7 @@ Con el **plan 003** (depende de este):
   si la política lo impide, detenerse y reportarlo (ADR-003, punto 7).
 - **R-4. Determinismo del `.xlsx`.** Las bibliotecas de hojas de cálculo suelen escribir la hora del reloj en los
   metadatos del libro. Mitigación: tomar los metadatos de la fecha de lectura (P-002-55; NFR-000-09).
-- **R-5. Escala del radio.** $r \propto \sqrt{n}$ exige una constante de escala que quepa en el cajón. Propuesta: el
-  `disenador-front` fija el radio máximo del cajón y M17 entrega $r = r_{\max} \sqrt{n / n_{\max}}$, con $n_{\max}$ el
-  mayor conteo por nivel de la vista; se respeta la proporción entre burbujas de la misma vista (P-002-05).
+- **R-5. Escala del radio. Decidido por Jairo el 24-nov-2026 (COR-017)**: $r = \min(r_{\text{base}}\sqrt{n},\ r_{\max})$, con $r_{\text{base}}$ = 10 px (`--burbuja-base`) y $r_{\max}$ = 35 % del lado menor del cajón = 28 px (`--burbuja-max`). El tamaño no depende del resto de la vista ni de los filtros. Por encima del tope, el número escrito da el valor exacto y la leyenda lo explica. Se descartó normalizar por el mayor conteo de la vista.
 - **R-6. Nombre del archivo del constructor.** Resuelto por COR-013: `tests/constructor.py` (M23 `tests.constructor`) en todos los documentos.
 - **R-7. Plazo del 6-dic-2026.** Si el tiempo no alcanza, se entrega hasta la fase 5 con su accesibilidad (P-002-17 y
   la parte de la fase 8 que toca esas vistas) y la exportación queda para después, con aviso a Jairo.

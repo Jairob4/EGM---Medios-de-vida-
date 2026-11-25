@@ -596,9 +596,9 @@ Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `Advertencia`, `Nota`, `Er
 #### M17 `app.presentacion`
 - **Responsabilidad**: convertir resultados del núcleo en **modelos de vista** sin lógica de datos propia: cabecera
   corrida (texto de NFR-000-12), avisos (verificación y advertencias antes de los resultados), cajonera (orden del
-  archivo, radio $r \propto \sqrt{n}$, número escrito, desglose por nivel con tono y borde, etiquetas accesibles,
+  archivo, radio $r = \min(r_{\text{base}}\sqrt{n},\ r_{\max})$, con $r_{\text{base}}$ el radio de un estudio y $r_{\max}$ el 35 % del lado menor del cajón (decisión de Jairo, 24-nov-2026, COR-017), igual para todo el mapa, con cualquier filtro, en el tablero y en la exportación; cada burbuja que llega a $r_{\max}$ se marca como saturada y la vista indica si alguna lo está; número escrito, desglose por nivel con tono y borde, etiquetas accesibles,
   rótulos de cajón vacío con y sin filtros; el radio de cada burbuja se entrega como número para el atributo `r` del
-  SVG y el número de dimensiones leídas se entrega para que las plantillas deriven de él el ancho y las columnas de la
+  SVG, junto con el tamaño del SVG (`width`, `height`, `viewBox`) derivado del mismo radio, y el número de dimensiones leídas se entrega para que las plantillas deriven de él el ancho y las columnas de la
   cajonera, nunca fijados en 8 (NFR-000-06; ADR-003, punto 6) [Fuente: decisión de Jairo, 21-nov-2026]), ficha de estudio (textos tal cual; enlace si la referencia contiene un DOI
   o una URL), definiciones, filtros (controles con lo aplicado, resumen legible, «n de N»), tablero (cifras clave, mapa y
   conclusiones juntos, notas al margen con sus N.º), listas de N.º, colofón.

@@ -89,7 +89,10 @@
   --rotulos-ancho: 176px;   /* columna fija de intervenciones */
   --burbuja-base: 10px;     /* radio para n = 1; el radio crece con la raíz
                                cuadrada de n y lo entrega app.presentacion */
-  --burbuja-max: 30px;
+  --burbuja-max: 28px;      /* tope del radio: 35 % del lado menor del cajón
+                               (--cajon-alto); por encima, la burbuja ya no
+                               crece (M17, COR-017). Referencia: M17 lleva el
+                               mismo valor y P-002-69 comprueba que coinciden */
 
   /* --- Movimiento: uno solo (la ficha entra desde el margen) -------------- */
   --entrada-ficha: 220ms cubic-bezier(.2, .7, .2, 1);

@@ -91,7 +91,7 @@ Concreción:
    funciona sin internet y ningún tercero recibe peticiones. Política de seguridad de contenido restrictiva, sin
    estilos en línea. Consecuencias para las plantillas, señaladas por el `disenador-front` en `docs/interfaz/flujos.md`
    §7, punto 7 [Fuente: decisión de Jairo, 21-nov-2026]:
-   - El radio de cada burbuja ($r \propto \sqrt{n}$) va como atributo del SVG (`r`), no por `style`.
+   - El radio de cada burbuja ($r \propto \sqrt{n}$ hasta el tope que fija M17, COR-017) va como atributo del SVG (`r`), no por `style`.
    - El ancho de la cajonera y su número de columnas salen del número de dimensiones leídas del archivo, que entrega el
      modelo de vista del mapa (M17); nunca se fijan en 8 ni en otro número escrito en la hoja de estilo (NFR-000-06).
      Se expresan sin estilos en línea: por atributos o `viewBox` del SVG, o por reglas de CSS que no fijen el número de

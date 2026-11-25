@@ -365,24 +365,24 @@ importación del núcleo.
 | P-001-09 | unit | NFR-000-03, NFR-000-19 (mensaje propio) | — | `fecha()` da «21 de noviembre de 2026» para esa fecha; `rechazo()` da los textos E2, E3 y E10 de `flujos.md` §2, el de E10 sin cifras; ningún texto del catálogo contiene «¿», tuteo, fórmulas, «error de contrato», «validación» ni «fixture», ni nombra una tabla no comparable de la hoja EGM |
 | P-001-10 | unit | SC-000-14, NFR-000-14 | — | Ningún módulo de `src/egm/` importa `app`, FastAPI, Starlette, Jinja2 ni Uvicorn; `egm.modelo` no importa otro módulo de `egm`; solo `egm.libro` importa `openpyxl` (arquitectura §4.1) |
 
-- [ ] T-001-10 [P] Escribir P-001-03 y P-001-04 en `tests/unit/test_modelo.py`.
-- [ ] T-001-11 Implementar M01 `egm.modelo` con los tipos de arquitectura §6 (M01) y los comunes (`RefFila`, `Conteo`,
+- [x] T-001-10 [P] Escribir P-001-03 y P-001-04 en `tests/unit/test_modelo.py`.
+- [x] T-001-11 Implementar M01 `egm.modelo` con los tipos de arquitectura §6 (M01) y los comunes (`RefFila`, `Conteo`,
   `EstadoDocumento`, `Enfoque`, `SIN_NIVEL`, `Advertencia`, `Nota`, `ErrorContrato`, `Identificacion`,
   `ResultadoLectura`, `Rechazo`, `FalloContrato`); `Esquema`, `Documento` y `Corpus` se declaran aquí y se completan
   con T-001-23 y T-001-24. Requisitos: NFR-000-02, FR-001-11, NFR-000-09. Pruebas: P-001-03, P-001-04. Módulos: M01.
   Archivos: `src/egm/modelo.py`.
-- [ ] T-001-12 [P] Escribir P-001-05 y P-001-06 en `tests/unit/test_libro.py`.
-- [ ] T-001-13 Implementar M03 `egm.libro`: `abrir(bytes)` en memoria, `Libro`, `Hoja`, `Celda` y `ListaValidacion`
+- [x] T-001-12 [P] Escribir P-001-05 y P-001-06 en `tests/unit/test_libro.py`.
+- [x] T-001-13 Implementar M03 `egm.libro`: `abrir(bytes)` en memoria, `Libro`, `Hoja`, `Celda` y `ListaValidacion`
   (lectura normal L1 y, si el paquete trae validaciones de extensión, lectura de su XML L2; ADR-001 punto 6). Comprobar
   qué modo de carga de `openpyxl` entrega las validaciones (ver riesgo R-5) y abrir dos veces si hace falta para tener
   fórmula y valor guardado. Requisitos: NFR-000-01, FR-001-01, FR-001-05, FR-001-17. Pruebas: P-001-05, P-001-06.
   Módulos: M03. Archivos: `src/egm/libro.py`.
-- [ ] T-001-14 [P] Escribir P-001-07 y P-001-08 en `tests/unit/test_archivo.py`.
-- [ ] T-001-15 Implementar M02 `egm.archivo`: `LIMITE_BYTES`, `LIMITE_DESCOMPRIMIDO` y `validar_archivo` (tamaño, paquete
+- [x] T-001-14 [P] Escribir P-001-07 y P-001-08 en `tests/unit/test_archivo.py`.
+- [x] T-001-15 Implementar M02 `egm.archivo`: `LIMITE_BYTES`, `LIMITE_DESCOMPRIMIDO` y `validar_archivo` (tamaño, paquete
   con las partes de un libro `.xlsx`, suma de tamaños declarados en el índice sin descomprimir). Requisitos: NFR-000-19,
   FR-001-20, FR-001-29. Pruebas: P-001-07, P-001-08. Módulos: M02. Archivos: `src/egm/archivo.py`.
-- [ ] T-001-16 [P] Escribir P-001-09 en `tests/unit/test_textos.py` y P-001-10 en `tests/unit/test_importaciones.py`.
-- [ ] T-001-17 Implementar la base de M10 `egm.textos`: estructura del catálogo único, `fecha()`, `rechazo()` con los
+- [x] T-001-16 [P] Escribir P-001-09 en `tests/unit/test_textos.py` y P-001-10 en `tests/unit/test_importaciones.py`.
+- [x] T-001-17 Implementar la base de M10 `egm.textos`: estructura del catálogo único, `fecha()`, `rechazo()` con los
   textos E2, E3 y E10 de `flujos.md` §2 y `ROTULOS` vacío para que 002 y 003 lo amplíen. Requisitos: NFR-000-03,
   NFR-000-19, FR-001-29. Pruebas: P-001-09, P-001-10. Módulos: M10. Archivos: `src/egm/textos.py`.
 

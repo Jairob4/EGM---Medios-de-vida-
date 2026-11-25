@@ -138,11 +138,8 @@ legend { font-weight: 700; padding: 0; }
 .cajon[aria-selected="true"], [aria-selected="true"] > .cajon {
   border: 1px solid var(--tinta); box-shadow: inset 0 4px 0 var(--cabecera); /* línea roja de cabecera */
 }
-.burbuja-grupo { display: inline-flex; align-items: center; gap: 4px; }
-.burbuja {
-  display: inline-block; border-radius: 50%;
-  width: calc(var(--r, var(--burbuja-base)) * 2); height: calc(var(--r, var(--burbuja-base)) * 2);
-}
+.burbuja-grupo { display: inline-flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px; max-width: 100%; }
+/* El tamaño de la burbuja lo dan los atributos del SVG (r, width, height); la hoja de estilo no lo fija (COR-017). */
 .cifra { font-weight: 700; font-size: var(--t-texto); font-variant-numeric: var(--cifras); }
 
 /* --- Ficha (FR-002-05 a FR-002-07): rayado de ficha de catálogo ----------- */

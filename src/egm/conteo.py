@@ -2,7 +2,8 @@
 
 Parte del plan 001 (T-001-25): `conjuntos` ($R$, $E$, $M$, $P$), `mapa` ($S$, $n$ y $N$),
 `evaluacion_impacto` ($S^{IE}$), `por_intervencion` ($u$, $u^{IE}$), `por_nivel` ($T_4$) y
-`semantica_hoja` ($T_1$, $T_2$, $t$, $t^{IE}$ de la hoja `EGM`, solo para la verificación). El
+`semantica_hoja` ($T_1$, $T_2$, $t$, $t^{IE}$ y $T_4$ de la hoja `EGM`, solo para la
+verificación; T-001-45 le agrega las variantes que explican las diferencias, ADR-002 punto 3). El
 parámetro `filtro` y el desglose por nivel de cada celda llegan con el plan 002; las
 coocurrencias, con el 003.
 
@@ -22,15 +23,26 @@ Reglas del núcleo (arquitectura §4.1): importa solo `egm.modelo`; no importa l
 lectura de libros ni la capa web; sin entrada ni salida y sin estado global.
 """
 
+from collections import Counter
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from types import MappingProxyType
 
-from egm.modelo import Conteo, Corpus, Documento, Esquema, EstadoDocumento, RefFila
+from egm.modelo import (
+    ESPACIOS_EN_LOS_EXTREMOS,
+    Conteo,
+    Corpus,
+    Documento,
+    Esquema,
+    EstadoDocumento,
+    RefFila,
+    Rol,
+)
 
 __all__ = [
     "Celda",
+    "Clave",
     "Conjuntos",
     "ConteosHoja",
     "Mapa",
@@ -95,12 +107,18 @@ class Mapa:
 class VarianteHoja(Enum):
     """Cómo se lee una fila para reproducir la semántica de la hoja `EGM`.
 
-    El plan 001 (T-001-25) solo trae la variante estándar, la que lee como la herramienta: solo
-    el 1 numérico marca una dimensión y los valores van sin espacios en los extremos. T-001-45
-    agrega las variantes «texto 1 como marca» y «sin quitar espacios» (ADR-002, punto 3).
+    Las variantes son **acumulativas** y siguen el orden de la explicación de diferencias (ADR-002,
+    punto 3): cada una conserva lo de la anterior y agrega una particularidad de la hoja.
     """
 
     ESTANDAR = auto()
+    """Como la herramienta: solo el 1 numérico marca una dimensión y los valores van sin espacios
+    en los extremos. La hoja cuenta dos veces una fila con $G_r = H_r$."""
+    TEXTO_1_COMO_MARCA = auto()
+    """Además, el texto «1» marca la dimensión, como lo hace `COUNTIFS(..., 1)` en la hoja."""
+    SIN_QUITAR_ESPACIOS = auto()
+    """Además, los valores no pierden los espacios en los extremos: la hoja compara el texto exacto,
+    de modo que un valor con espacios no coincide con su categoría."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -109,7 +127,8 @@ class ConteosHoja:
 
     Son enteros porque la hoja suma dos conteos (principal y secundaria) y cuenta dos veces una
     fila con $G_r = H_r$: no son estudios distintos ni llevan lista de filas. Solo sirven para
-    compararlos con los valores guardados en la hoja.
+    compararlos con los valores guardados en la hoja. $T_4$ cuenta una vez cada fila, pero con la
+    variante de espacios deja fuera una fila cuyo nivel o tipo de documento traiga espacios.
     """
 
     t1: Mapping[Clave, int] = field(hash=False)
@@ -120,10 +139,13 @@ class ConteosHoja:
     """$t(i)$, columna «Total estudios», para cada intervención del esquema."""
     t_ie: Mapping[str, int] | None = field(hash=False)
     """$t^{IE}(i)$; `None` si el esquema no tiene ancla de evaluación de impacto."""
+    t4: Mapping[str, int] = field(hash=False, default_factory=dict)
+    """$T_4(\\ell)$ de la hoja para cada nivel del esquema (la tabla por nivel)."""
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "t1", MappingProxyType(dict(self.t1)))
         object.__setattr__(self, "t", MappingProxyType(dict(self.t)))
+        object.__setattr__(self, "t4", MappingProxyType(dict(self.t4)))
         if self.t2 is not None:
             object.__setattr__(self, "t2", MappingProxyType(dict(self.t2)))
         if self.t_ie is not None:
@@ -284,10 +306,67 @@ def _veces(documento: Documento) -> int:
     return 2 if documento.crudos.principal_igual_secundaria else 1
 
 
+@dataclass(frozen=True, slots=True)
+class _FilaHoja:
+    """Lo que la hoja `EGM` ve de un estudio empírico, según la variante."""
+
+    veces: Mapping[str, int]
+    """Sumandos (principal y secundaria) que aporta cada intervención del documento."""
+    dimensiones: frozenset[str]
+    """Dimensiones que la hoja cuenta como marcadas."""
+    nivel: str | None
+    """Nivel de evidencia tal como lo compara la hoja; `None` si no coincide con ninguno."""
+
+
+def _espaciadas(corpus: Corpus, filas: range) -> Mapping[RefFila, Counter[str]]:
+    """Por documento, cuántas celdas con espacios en los extremos traen cada valor (sin espacios).
+
+    Salen de las advertencias de lectura, que guardan el texto de la celda tal como está: así se
+    sabe cuál de las dos celdas de intervención traía los espacios sin guardar más datos por fila.
+    """
+    encontradas: dict[RefFila, Counter[str]] = {}
+    for advertencia in corpus.advertencias:
+        if (
+            advertencia.codigo == ESPACIOS_EN_LOS_EXTREMOS
+            and advertencia.ref is not None
+            and advertencia.valor is not None
+            and advertencia.ref.fila in filas
+        ):
+            encontradas.setdefault(advertencia.ref, Counter())[advertencia.valor.strip()] += 1
+    return encontradas
+
+
+def _fila_hoja(
+    documento: Documento,
+    variante: VarianteHoja,
+    espaciadas: Mapping[RefFila, Counter[str]],
+) -> _FilaHoja | None:
+    """La fila como la lee la hoja con esa variante; `None` si no la cuenta como empírica."""
+    veces = dict.fromkeys(documento.intervenciones, _veces(documento))
+    dimensiones = set(documento.dimensiones)
+    nivel: str | None = documento.nivel
+    if variante is not VarianteHoja.ESTANDAR:
+        dimensiones |= set(documento.crudos.dimensiones_como_texto)
+    if variante is VarianteHoja.SIN_QUITAR_ESPACIOS:
+        con_espacios = documento.crudos.con_espacios
+        if Rol.TIPO_DOCUMENTO in con_espacios:
+            return None  # el tipo de documento con espacios no es igual al valor que pide la hoja
+        if Rol.NIVEL_EVIDENCIA in con_espacios:
+            nivel = None
+        if (
+            Rol.INTERVENCION_PRINCIPAL in con_espacios
+            or Rol.INTERVENCION_SECUNDARIA in con_espacios
+        ):
+            for valor, cuantas in espaciadas.get(documento.ref, Counter()).items():
+                if valor in veces:
+                    veces[valor] = max(0, veces[valor] - cuantas)
+    return _FilaHoja(veces, frozenset(dimensiones), nivel)
+
+
 def semantica_hoja(
     esquema: Esquema, corpus: Corpus, filas: range, variante: VarianteHoja
 ) -> ConteosHoja:
-    """$T_1$, $T_2$, $t$ y $t^{IE}$ de la hoja `EGM` sobre las `filas` del archivo (FR-001-14).
+    """$T_1$, $T_2$, $t$, $t^{IE}$ y $T_4$ de la hoja `EGM` sobre las `filas` (FR-001-14).
 
     `filas` son números de fila de la hoja de la matriz (`RefFila.fila`): solo cuentan los
     estudios empíricos que están en ese rango, para comparar con las celdas cuyas fórmulas abarcan
@@ -296,26 +375,35 @@ def semantica_hoja(
     dimensión marcada; $t$ y $t^{IE}$, no. Sin ancla de evaluación de impacto, `t2` y `t_ie` son
     `None`.
 
-    Con `VarianteHoja.ESTANDAR` la fila se lee como la herramienta la leyó.
+    Con `VarianteHoja.ESTANDAR` la fila se lee como la herramienta la leyó. Con
+    `TEXTO_1_COMO_MARCA` el texto «1» también marca la dimensión, y con `SIN_QUITAR_ESPACIOS`,
+    además, un valor con espacios en los extremos no coincide con su categoría, con el tipo de
+    documento ni con el nivel (T-001-45; ADR-002, punto 3). $T_4$ cuenta, por nivel, los estudios
+    empíricos de ese nivel.
     """
-    if variante is not VarianteHoja.ESTANDAR:  # pragma: no cover - las demás llegan con T-001-45
-        raise NotImplementedError(variante)
     ancla = esquema.anclas.evaluacion_impacto
-    estudios = [d for d in corpus.documentos if _es_empirico(d) and d.ref.fila in filas]
+    espaciadas = _espaciadas(corpus, filas) if variante is VarianteHoja.SIN_QUITAR_ESPACIOS else {}
 
     t1 = dict.fromkeys(_claves(esquema), 0)
     t2 = dict.fromkeys(t1, 0)
     t = dict.fromkeys(esquema.intervenciones, 0)
     t_ie = dict.fromkeys(t, 0)
-    for documento in estudios:
-        de_impacto = _es_de_impacto(documento, ancla)
-        veces = _veces(documento)
-        for i in documento.intervenciones:
+    t4 = dict.fromkeys(esquema.niveles, 0)
+    for documento in corpus.documentos:
+        if not _es_empirico(documento) or documento.ref.fila not in filas:
+            continue
+        lectura = _fila_hoja(documento, variante, espaciadas)
+        if lectura is None:
+            continue
+        de_impacto = ancla is not None and lectura.nivel == ancla
+        if lectura.nivel in t4:
+            t4[lectura.nivel] += 1
+        for i, veces in lectura.veces.items():
             if i not in t:
                 continue
             t[i] += veces
             t_ie[i] += veces if de_impacto else 0
-            for j in documento.dimensiones:
+            for j in lectura.dimensiones:
                 if (i, j) in t1:
                     t1[(i, j)] += veces
                     t2[(i, j)] += veces if de_impacto else 0
@@ -324,4 +412,5 @@ def semantica_hoja(
         t2=None if ancla is None else t2,
         t=t,
         t_ie=None if ancla is None else t_ie,
+        t4=t4,
     )

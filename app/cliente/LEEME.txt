@@ -1,0 +1,19 @@
+Cliente de la herramienta (M19, plan 001, T-001-68)
+
+Todo se sirve desde la propia aplicación (/estaticos/cliente/...). Ningún recurso externo.
+
+htmx.min.js
+  Biblioteca htmx, versión 2.0.11 (sin modificar).
+  Fuente: https://unpkg.com/htmx.org@2.0.11/dist/htmx.min.js (paquete npm «htmx.org»;
+  proyecto https://github.com/bigskysoftware/htmx).
+  Licencia: Zero-Clause BSD (0BSD), sin obligación de conservar el aviso de derechos.
+  SHA-256: d6fdc75f204e6bdefa99b69bf1e6d4ac69b8a364f77929f45c13476b4000f717
+  Descargado el 25-nov-2026.
+  La configuración de seguridad (sin estilos en línea, sin evaluación de texto, sin guiones
+  dentro de las respuestas, sin historial, solo peticiones al propio origen) está en la
+  etiqueta <meta name="htmx-config"> de plantillas/base.html.
+
+egm.js
+  Guion propio de la herramienta. Sin dependencias salvo htmx, sin compilación, sin código en
+  línea. Fase 7 del plan 001: carga del archivo, ficha de sesión en la pestaña, estados E1 y E9,
+  foco y anuncios. El latido de actividad, el aviso de cierre y el descarte son de la Fase 8.

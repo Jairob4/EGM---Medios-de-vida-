@@ -1,0 +1,45 @@
+{#-
+  Mensaje de carga y de sesión (V1): E2, E3, E10 y E4, con y sin matriz previa, y también E8. M18, T-001-67.
+  Cubre: US-001-4.3, 4.4, 4.7, 4.11, 4.12, 4.13; US-001-5.1, 5.3; FR-001-29; NFR-000-17, NFR-000-19; flujos.md §2.
+
+  Se incluye dentro de <div id="mensajes"> (inicio.html) y también se devuelve solo, como fragmento, cuando
+  POST /carga rechaza el archivo sin cambiar de vista (el guion lo coloca en #mensajes). Los textos
+  los entrega M10 en tiempo de ejecución; esta plantilla solo los dibuja y no repite ninguno.
+
+  Campos del contexto:
+    mensaje : VistaMensaje
+      mensaje.rol      : "alert" | "status"   «alert» para E2, E3, E10 y E4 (rechazos y estructura inesperada);
+                                              «status» para E8 y otros estados (flujos.md §2)
+      mensaje.titulo   : str | None           E2/E3/E10: «No se pudo cargar el archivo»; E4: «No se pudo leer la
+                                              matriz» o, con matriz previa, «No se pudo leer la matriz y la sesión
+                                              terminó»; E8: ninguno
+      mensaje.parrafos : tuple[str, ...]      texto del mensaje, un párrafo por elemento, sin el título. E2/E3/E10
+                                              con matriz previa: el último párrafo es «La matriz que tenía cargada
+                                              sigue disponible con sus resultados: Matriz: …». Nunca el nombre del
+                                              archivo rechazado ni cifras que el flujo no pida (E10 no lleva cifras)
+      mensaje.enlace   : VistaEnlace | None   solo con matriz previa conservada: texto «Volver al mapa» (en el plan
+                                              001, hacia el resultado) y destino de su GET. VistaEnlace tiene
+                                              rotulo y destino, como en cabecera.html
+
+  E8 Sesión terminada (T-001-85; US-001-5.1, 5.3; FR-001-28): no necesita plantilla propia. Es un mensaje con
+  rol «status», sin título, sin enlace y con un solo párrafo que entrega M10: «Descartó el archivo. La sesión terminó y
+  la herramienta no guarda ninguna copia del archivo ni de sus resultados.» (descarte) o «La sesión terminó porque
+  pasaron 45 minutos sin actividad. La herramienta no guarda ninguna copia del archivo. Para seguir, cargue de nuevo
+  la matriz.» (inactividad). Va dentro de la vista de carga (inicio.html, #mensajes), sin cifras, y el foco pasa a
+  su párrafo. Los dos usan la misma presentación: el estado se distingue por el texto, no por un color.
+
+  Foco (flujos.md §2: «el foco pasa al título del mensaje»): el título lleva tabindex="-1" y data-egm-foco; si el
+  mensaje no tiene título (E8), lo lleva su primer párrafo. El guion (M19) pasa el foco a [data-egm-foco] tras
+  cada respuesta. El título es un h2: el h1 es el de la vista que contiene el mensaje.
+-#}
+<div class="mensaje" role="{{ mensaje.rol }}">
+{%- if mensaje.titulo %}
+  <h2 tabindex="-1" data-egm-foco>{{ mensaje.titulo }}</h2>
+{%- endif %}
+{%- for parrafo in mensaje.parrafos %}
+  <p{% if loop.first and not mensaje.titulo %} tabindex="-1" data-egm-foco{% endif %}>{{ parrafo }}</p>
+{%- endfor %}
+{%- if mensaje.enlace %}
+  <p><a href="/" hx-get="{{ mensaje.enlace.destino }}" hx-target="#contenido" hx-swap="innerHTML">{{ mensaje.enlace.rotulo }}</a></p>
+{%- endif %}
+</div>

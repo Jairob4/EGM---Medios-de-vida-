@@ -1,0 +1,59 @@
+{#-
+  V0 Inicio sin matriz: la carga del archivo. M18, T-001-67. Cubre: US-001-4.1, 4.2, 4.3, 4.4, 4.7, 4.11, 4.13; US-001-5.1, 5.3;
+  FR-001-20, FR-001-28, FR-001-29; NFR-000-01, NFR-000-17, NFR-000-19; flujos.md §2 (E1, E8) y §3 (F-001-4).
+
+  Fragmento de GET /vista/inicio: htmx lo coloca en #contenido. Sin cifras de la matriz (US-001-4.2). Lo devuelven
+  también POST /sesion/descartar (E8) y POST /carga cuando una estructura inesperada termina la sesión (E4 con
+  matriz previa). Además actualiza la cabecera y el colofón por intercambio fuera de banda (oob.html).
+
+  Campos del contexto:
+    mensaje : VistaMensaje | None  -> ver mensaje.html; None si no hay nada que avisar (primera visita, recarga
+                                      fuera del plazo)
+    limite  : VistaLimite          límite de tamaño ya formateado por M17 a partir de LIMITE_BYTES; no se escribe a mano
+      limite.mb    : str   «15»                  (para «hasta 15 MB»)
+      limite.bytes : str   «15 728 640»          (para «El límite exacto es 15 728 640 bytes.»)
+    volver  : VistaEnlace | None   solo cuando hay una sesión abierta («Cargar otro archivo» desde la cabecera):
+                                   rotulo y destino del GET que regresa a la vista de resultado (plan 001) o al mapa
+                                   (plan 002); None sin sesión
+    cabecera, colofon              -> ver cabecera.html y colofon.html; sin matriz: cabecera None y colofon «Datos.
+                                      Aún no se ha cargado ninguna matriz.»
+
+  E8 (sesión terminada por descarte o por inactividad): llega como `mensaje` con rol «status» y sin título (ver
+  mensaje.html); la cabecera y el colofón de la respuesta ya vienen sin matriz, de modo que ni «Descartar el
+  archivo» ni el aviso E7 siguen en pantalla.
+
+  Textos fijos de esta plantilla (flujos.md §3, F-001-4): título, explicación, etiqueta, botón y el aviso E1.
+
+  Ganchos para M19 (carga con cuerpo crudo; ADR-003, punto 3):
+    form[data-egm-carga]        formulario; el guion intercepta el envío y manda el archivo como cuerpo crudo de
+                                POST /carga con el nombre en X-EGM-Nombre. El input no lleva «name» a propósito:
+                                si el guion no actuara, el envío nativo no incluiría el archivo ni su nombre
+    input[data-egm-archivo]     selector de archivo (accept .xlsx)
+    button[data-egm-cargar]     botón; el guion lo desactiva (disabled) durante E1
+    #estado-carga               región de estado (role="status") vacía; el guion escribe en ella el texto de su
+                                atributo data-egm-texto-leyendo (E1) y la vacía al terminar
+    #mensajes                   contenedor donde el guion coloca el fragmento mensaje.html de un rechazo
+    [data-egm-foco]             el h1 solo cuando no hay mensaje; con mensaje, lo lleva el título del mensaje
+-#}
+<title>Cargar la matriz. Evidencias sobre medios de vida</title>
+<h1{% if not mensaje %} tabindex="-1" data-egm-foco{% endif %}>Cargue la matriz bibliográfica</h1>
+<div class="prosa">
+<p>La herramienta lee la matriz del estado del arte y muestra el mapa de evidencias y el tablero de conclusiones. Cada cifra lleva a los N.º de la matriz que la producen.</p>
+<p>El archivo solo se lee: no se modifica ni se guarda. Vive en esta pestaña mientras dure la sesión, y la sesión termina cuando usted descarta el archivo, cierra la pestaña o pasan 45 minutos sin actividad.</p>
+</div>
+<div id="mensajes">
+{%- if mensaje %}
+{% include "mensaje.html" %}
+{%- endif %}
+</div>
+<form class="carga" id="cargar" action="/carga" method="post" data-egm-carga>
+  <label for="archivo">Archivo de la matriz (Excel .xlsx, hasta {{ limite.mb }} MB)</label>
+  <input id="archivo" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" aria-describedby="archivo-ayuda" data-egm-archivo>
+  <p id="archivo-ayuda" class="ayuda">El límite exacto es {{ limite.bytes }} bytes.</p>
+  <button class="boton boton--principal" type="submit" data-egm-cargar>Cargar la matriz</button>
+  <div id="estado-carga" class="estado-carga" role="status" data-egm-texto-leyendo="Leyendo la matriz. Esto puede tardar unos segundos."></div>
+</form>
+{%- if volver %}
+<p class="volver"><a href="/" hx-get="{{ volver.destino }}" hx-target="#contenido" hx-swap="innerHTML">{{ volver.rotulo }}</a></p>
+{%- endif %}
+{% include "oob.html" %}

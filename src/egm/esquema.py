@@ -49,7 +49,7 @@ from egm.modelo import (
     Rol,
 )
 
-__all__ = ["columnas_del_bloque", "descubrir"]
+__all__ = ["HOJA_MATRIZ", "columnas_del_bloque", "descubrir"]
 
 HOJA_MATRIZ: Final = "Matriz bibliográfica"
 

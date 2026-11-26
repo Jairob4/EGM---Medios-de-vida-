@@ -1,0 +1,58 @@
+{#-
+  Plantilla base de la página (GET /). M18, T-001-67. Cubre: NFR-000-04, NFR-000-05, NFR-000-11, NFR-000-13.
+
+  Es la única plantilla que dibuja un documento completo; las demás son fragmentos que htmx coloca
+  dentro de <main id="contenido"> (y, por intercambio fuera de banda, en #cabecera-corrida y #colofon).
+
+  Campos del contexto (modelos de vista inmutables de M17 y M21; esta plantilla no calcula nada):
+    cabecera : VistaCabecera | None   -> ver cabecera.html (None en GET /: solo el título de la herramienta)
+    colofon  : VistaColofon           -> ver colofon.html (en GET / sin matriz: «Datos. Aún no se ha cargado
+                                         ninguna matriz.» y la referencia a 3ie)
+
+  Recursos (todos locales, sin estilos ni guiones en línea; ADR-003, punto 6):
+    /estaticos/tokens.css, /estaticos/egm.css, /estaticos/fuentes/*.woff2   (app/estaticos)
+    /estaticos/cliente/htmx.min.js, /estaticos/cliente/egm.js               (app/cliente, M19)
+
+  Ganchos para M19 (guion propio):
+    #estado-pagina[data-egm-texto-recuperando]  E9 «Recuperando su sesión.». Región de estado (role="status") vacía
+                                                 y sin borde mientras no tenga texto; si hay ficha en la pestaña, el
+                                                 guion escribe en ella el texto de su atributo (textContent) y el
+                                                 intercambio de #contenido la reemplaza al llegar la respuesta (con
+                                                 sesión: resultado; sin ella: vista de carga sin mensaje). Con texto
+                                                 se dibuja como un mensaje (egm.css, «.estado-pagina:not(:empty)»)
+    #aviso-inactividad                           E7: vive dentro de #cabecera-corrida, no aquí (cabecera.html)
+    #contenido                                   destino de todos los intercambios de htmx
+    #anuncio                                     región de anuncios (aria-live) para el guion
+    [data-egm-foco]                              elemento al que el guion pasa el foco tras cada respuesta
+-#}
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="htmx-config" content='{"includeIndicatorStyles":false,"allowEval":false,"allowScriptTags":false,"historyEnabled":false,"selfRequestsOnly":true}'>
+<title>{% block titulo %}Evidencias sobre medios de vida{% endblock %}</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/estaticos/tokens.css">
+<link rel="stylesheet" href="/estaticos/egm.css">
+<script src="/estaticos/cliente/htmx.min.js" defer></script>
+<script src="/estaticos/cliente/egm.js" defer></script>
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+{% include "cabecera.html" %}
+<main id="contenido">
+{% block contenido %}
+<p id="estado-pagina" class="estado-pagina" role="status" data-egm-texto-recuperando="Recuperando su sesión."></p>
+<noscript>
+<div class="mensaje">
+<h1>Se necesita activar los guiones del navegador</h1>
+<p>Esta herramienta necesita que su navegador permita ejecutar guiones (JavaScript). Actívelos y recargue la página.</p>
+</div>
+</noscript>
+{% endblock %}
+</main>
+{% include "colofon.html" %}
+<p id="anuncio" class="visualmente-oculto" aria-live="polite"></p>
+</body>
+</html>

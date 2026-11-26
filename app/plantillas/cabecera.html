@@ -1,0 +1,50 @@
+{#-
+  Cabecera corrida (como la de una revista). M18, T-001-67. Cubre: NFR-000-12, FR-001-19, FR-001-28; flujos.md §3 (F-001-4, F-001-5).
+
+  Se incluye en base.html y, por intercambio fuera de banda, en los fragmentos que cambian de estado
+  (inicio.html y resultado.html). El título de la herramienta no lleva la palabra «brechas» (NC-INT-3).
+
+  Campos del contexto:
+    oob      : bool, opcional (por defecto falso)  -> con verdadero agrega hx-swap-oob="true"
+    cabecera : VistaCabecera | None                -> None: sin matriz, solo el título de la herramienta
+      cabecera.corte   : str   texto de NFR-000-12, ya armado por M10/M17 en tiempo de ejecución:
+                               «Matriz: <nombre tal como llegó>, leída el <fecha>, <n> documentos»
+      cabecera.vistas  : tuple[VistaEnlace, ...]   enlaces de la navegación «Mapa | Tablero»; vacía en el plan 001
+                         (la navegación no se dibuja) y la llenan los planes 002 y 003
+        VistaEnlace.rotulo  : str     texto del enlace
+        VistaEnlace.destino : str     ruta del fragmento (GET) que htmx coloca en #contenido
+        VistaEnlace.actual  : bool    marca la vista en curso con aria-current="page"
+
+      cabecera.aviso   : VistaAvisoInactividad | None   opcional; ver aviso-inactividad.html (E7). Sin este campo
+                         (o con None) el aviso no se dibuja y el resto de la cabecera no cambia
+
+  Textos fijos de esta plantilla: título de la herramienta, «Cargar otro archivo», «Descartar el archivo» y la
+  frase de la sesión (con los 45 minutos de NFR-000-17, que es un valor fijo del código). Con matriz abierta, la
+  cabecera es lo único que lleva «Descartar el archivo» y la frase de F-001-5; sin matriz no se dibujan.
+  Ganchos para M19:
+    [data-egm-descartar]   botón «Descartar el archivo»: hx-post a /sesion/descartar, sin confirmación (F-001-5). La
+                           respuesta es la vista de carga con E8 («Descartó el archivo…»); el guion borra la ficha de
+                           la pestaña al terminar la sesión
+    #aviso-inactividad     E7, dentro de esta cabecera; ver aviso-inactividad.html para sus ganchos
+-#}
+<header id="cabecera-corrida" class="cabecera-corrida"{% if oob is defined and oob %} hx-swap-oob="true"{% endif %}>
+  <p class="titulo-herramienta">Evidencias sobre medios de vida</p>
+{%- if cabecera %}
+{%- include "aviso-inactividad.html" %}
+{%- if cabecera.vistas %}
+  <nav aria-label="Vistas">
+    <ul>
+{%- for vista in cabecera.vistas %}
+      <li><a href="/" hx-get="{{ vista.destino }}" hx-target="#contenido" hx-swap="innerHTML"{% if vista.actual %} aria-current="page"{% endif %}>{{ vista.rotulo }}</a></li>
+{%- endfor %}
+    </ul>
+  </nav>
+{%- endif %}
+  <div class="corte-datos">
+    <p class="corte">{{ cabecera.corte }}</p>
+    <a class="boton boton--discreto" href="/" hx-get="/vista/inicio" hx-target="#contenido" hx-swap="innerHTML">Cargar otro archivo</a>
+    <button class="boton boton--discreto" type="button" hx-post="/sesion/descartar" hx-target="#contenido" hx-swap="innerHTML" data-egm-descartar>Descartar el archivo</button>
+  </div>
+  <p class="sesion-estado">La sesión se cierra sola tras 45 minutos sin actividad. El archivo solo se lee: no se modifica ni se guarda.</p>
+{%- endif %}
+</header>

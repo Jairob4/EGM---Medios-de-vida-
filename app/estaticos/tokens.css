@@ -1,0 +1,185 @@
+/* COPIA SIN CAMBIOS de docs/interfaz/tokens.css (T-001-67). Si los tokens cambian allí,
+   se vuelve a copiar aquí; no se editan en este archivo. */
+/* =============================================================================
+   Tokens del sistema de diseño «Fichero»: EGM · Medios de vida
+   -----------------------------------------------------------------------------
+   Fuente: .claude/skills/sistema-diseno-egm/references/tokens.md (valores
+   iniciales), ajustados aquí solo donde el contraste lo exigía, sin cambiar el
+   concepto. Requisitos: NFR-000-03 (textos), NFR-000-04 (WCAG 2.2 AA),
+   NFR-000-05 (360 px), NFR-000-10 y SC-000-10 (nada solo por color),
+   NFR-000-13 (diseño no genérico). Contrastes calculados con la fórmula de
+   luminancia relativa de WCAG 2.2 (ver la tabla al final de este archivo).
+
+   Reglas de uso
+   - Texto: solo --tinta, --tinta-media o --cabecera (todas >= 4.5:1 sobre
+     --papel y --cajon, en los dos modos).
+   - --rayado es solo línea decorativa (rayado de ficha, retícula, divisores);
+     nunca texto ni único indicador de un estado.
+   - --cabecera es el único acento y marca solo la selección actual (cajón
+     seleccionado, ficha abierta). Nunca marca errores ni brechas.
+   - Niveles de evidencia: escala ordinal de un solo tono; cada nivel combina
+     relleno y estilo de borde, y siempre va con su número escrito y su leyenda.
+   ========================================================================== */
+
+:root {
+  color-scheme: light dark;
+
+  /* --- Color, modo claro ------------------------------------------------- */
+  --papel:          #FCFCFA; /* fondo general, blanco de ficha (no crema) */
+  --tinta:          #1E2A44; /* texto principal; nivel 1 */
+  --tinta-media:    #45628F; /* texto secundario, bordes; nivel 2 */
+  --rayado:         #A9C1DC; /* solo líneas decorativas */
+  --cajon:          #F2F5F9; /* fondo de cada cajón */
+  --cabecera:       #B3262E; /* único acento: selección actual */
+  --contorno-vacio: #6F8BB0; /* AJUSTE: contorno discontinuo del cajón vacío
+                                (el --rayado daba 1.69:1; este da 3.20:1) */
+  --foco:           var(--tinta); /* anillo de foco */
+
+  /* --- Niveles de evidencia (jerarquía del equipo, hoja Instrucciones) --- */
+  --nivel-1-relleno: var(--tinta);        /* Evaluación de impacto */
+  --nivel-1-borde:   2px solid var(--tinta);
+  --nivel-2-relleno: var(--tinta-media);  /* Estudio de caso */
+  --nivel-2-borde:   2px solid var(--tinta-media);
+  --nivel-3-relleno: #8AA3C4;             /* Informe de proyecto */
+  --nivel-3-borde:   2px solid var(--tinta-media);
+  --nivel-4-relleno: transparent;         /* Informe descriptivo/opinión */
+  --nivel-4-borde:   2px dotted var(--tinta-media);
+  --sin-nivel-relleno: transparent;       /* «Sin nivel» (FR-002-12) */
+  --sin-nivel-borde:   3px double var(--tinta-media);
+  /* Nivel nuevo que aparezca en la lista del archivo (NFR-000-06): estilo
+     derivado con trama; la capa web registra una advertencia de diseño. */
+  --nivel-derivado-relleno: repeating-linear-gradient(45deg,
+      var(--tinta-media) 0 2px, transparent 2px 5px);
+  --nivel-derivado-borde:   2px solid var(--tinta-media);
+
+  /* --- Tipografía ------------------------------------------------------- */
+  /* Alegreya y Alegreya Sans (Huerta Tipográfica, licencia SIL OFL), servidas
+     desde la propia aplicación (ADR-003, punto 6). Sin red de terceros. */
+  --familia-texto:    "Alegreya", "Iowan Old Style", Georgia, serif;
+  --familia-interfaz: "Alegreya Sans", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --cifras: lining-nums tabular-nums;
+
+  /* Escala de razón 1.25: 15 -> 18 -> 22.5 -> 28 -> 35 -> 44 px */
+  --t-interfaz: 0.9375rem;  /* 15 px, Alegreya Sans 500, interlineado 1.4 */
+  --t-texto:    1.125rem;   /* 18 px, Alegreya 400, interlineado 1.55 */
+  --t-3:        1.40625rem; /* 22.5 px */
+  --t-4:        1.75rem;    /* 28 px */
+  --t-seccion:  2.1875rem;  /* 35 px, Alegreya 600, interlineado 1.15 */
+  --t-pagina:   2.75rem;    /* 44 px, Alegreya 700, interlineado 1.1 */
+  --peso-interfaz: 500;
+  --medida: 68ch;           /* largo máximo de línea del texto corrido */
+  --interlineado-texto: 1.55;
+  --interlineado-interfaz: 1.4;
+
+  /* --- Espaciado y retícula ---------------------------------------------- */
+  --u: 8px;                 /* unidad base; todo espacio es múltiplo de --u */
+  --e-1: calc(var(--u) * 1);
+  --e-2: calc(var(--u) * 2);
+  --e-3: calc(var(--u) * 3);
+  --e-4: calc(var(--u) * 4);
+  --e-6: calc(var(--u) * 6);
+  --e-8: calc(var(--u) * 8);
+  --ancho-maximo: 1360px;
+  --columnas: 12;           /* escritorio: cajonera en 9, notas al margen en 3 */
+  --radio-papel: 2px;       /* cajones y fichas; 0 en divisores */
+  --sombra-ficha: 0 2px 8px rgb(30 42 68 / 0.14); /* solo la ficha abierta */
+  --linea-ficha: 28px;      /* paso del rayado de ficha */
+
+  /* --- Cajonera ---------------------------------------------------------- */
+  --cajon-ancho: 92px;      /* ancho mínimo de cada cajón; crece hasta llenar la retícula */
+  --cajon-alto: 80px;
+  --rotulos-ancho: 176px;   /* columna fija de intervenciones */
+  --burbuja-base: 10px;     /* radio para n = 1; el radio crece con la raíz
+                               cuadrada de n y lo entrega app.presentacion */
+  --burbuja-max: 28px;      /* tope del radio: 35 % del lado menor del cajón
+                               (--cajon-alto); por encima, la burbuja ya no
+                               crece (M17, COR-017). Referencia: M17 lleva el
+                               mismo valor y P-002-69 comprueba que coinciden */
+
+  /* --- Movimiento: uno solo (la ficha entra desde el margen) -------------- */
+  --entrada-ficha: 220ms cubic-bezier(.2, .7, .2, 1);
+}
+
+/* --- Modo oscuro: sigue la preferencia del sistema ------------------------ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) {
+    --papel:          #17202E;
+    --tinta:          #E6ECF4;
+    --tinta-media:    #A9BCD6;
+    --rayado:         #33445E;
+    --cajon:          #1E293A;
+    --cabecera:       #EA6A70; /* AJUSTE: #E0565D daba 4.41:1 y 3.95:1 */
+    --contorno-vacio: #7189AD; /* AJUSTE: el --rayado daba 1.49:1 */
+    --nivel-2-relleno: #8AA0C2; /* AJUSTE: separa el nivel 2 del 1 (2.24:1) */
+    --nivel-3-relleno: #4A5F82; /* escala invertida: más contraste = mayor nivel */
+    --sombra-ficha: 0 2px 10px rgb(0 0 0 / 0.45);
+  }
+}
+/* Selección manual del tema (para revisiones y para quien lo prefiera) */
+:root[data-tema="oscuro"] {
+  --papel:          #17202E;
+  --tinta:          #E6ECF4;
+  --tinta-media:    #A9BCD6;
+  --rayado:         #33445E;
+  --cajon:          #1E293A;
+  --cabecera:       #EA6A70;
+  --contorno-vacio: #7189AD;
+  --nivel-2-relleno: #8AA0C2;
+  --nivel-3-relleno: #4A5F82;
+  --sombra-ficha: 0 2px 10px rgb(0 0 0 / 0.45);
+}
+
+/* --- Pantallas angostas (desde 360 px): títulos un paso abajo en la escala - */
+@media (max-width: 599px) {
+  :root {
+    --t-pagina:  2.1875rem; /* 35 px */
+    --t-seccion: 1.75rem;   /* 28 px */
+    --cajon-ancho: 96px;
+    --rotulos-ancho: 132px;
+  }
+}
+
+/* --- Movimiento reducido -------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  :root { --entrada-ficha: 0ms; }
+}
+
+/* =============================================================================
+   Contrastes verificados (WCAG 2.2: texto >= 4.5:1, 1.4.3; elementos gráficos
+   y de interfaz >= 3:1, 1.4.11). Razón = (L1 + 0.05) / (L2 + 0.05).
+
+   MODO CLARO                                    razón   uso permitido
+   --tinta         #1E2A44 / --papel  #FCFCFA    13.91   texto
+   --tinta         #1E2A44 / --cajon  #F2F5F9    13.07   texto, nivel 1
+   --tinta-media   #45628F / --papel             6.02    texto secundario
+   --tinta-media   #45628F / --cajon             5.65    texto, bordes, nivel 2
+   --cabecera      #B3262E / --papel             6.32    línea de selección, texto
+   --cabecera      #B3262E / --cajon             5.94    línea de selección
+   --contorno-vacio #6F8BB0 / --cajon            3.20    contorno del cajón vacío
+   --contorno-vacio #6F8BB0 / --papel            3.41
+   --rayado        #A9C1DC / --papel             1.80    solo decorativo
+   nivel 3 relleno #8AA3C4 / --cajon             2.37    lo sostiene su borde
+     borde nivel 3 (--tinta-media) / --cajon     5.65    contorno de la burbuja
+
+   MODO OSCURO
+   --tinta         #E6ECF4 / --papel  #17202E    13.78   texto
+   --tinta         #E6ECF4 / --cajon  #1E293A    12.33   texto, nivel 1
+   --tinta-media   #A9BCD6 / --papel             8.46    texto secundario
+   --tinta-media   #A9BCD6 / --cajon             7.57    texto, bordes
+   --cabecera      #EA6A70 / --papel             5.30    (antes #E0565D: 4.41)
+   --cabecera      #EA6A70 / --cajon             4.74    (antes 3.95)
+   --contorno-vacio #7189AD / --cajon            4.10
+   --contorno-vacio #7189AD / --papel            4.59
+   --rayado        #33445E / --papel             1.66    solo decorativo
+   nivel 2 relleno #8AA0C2 / --cajon             5.50
+   nivel 1 / nivel 2 (#E6ECF4 / #8AA0C2)         2.24    (antes #A9BCD6: 1.63)
+   nivel 3 relleno #4A5F82 / --cajon             2.27    lo sostiene su borde
+     borde nivel 3 (--tinta-media) / --cajon     7.57
+
+   Por qué basta: ningún nivel se reconoce solo por su relleno. Cada burbuja
+   tiene su número escrito al lado (NFR-000-10), un estilo de borde propio
+   (continuo, continuo sobre relleno claro, punteado, doble) y su entrada en la
+   leyenda; la etiqueta accesible del cajón dice el conteo por nivel. Así se
+   leen conteo y nivel en escala de grises (SC-000-10). El cajón vacío se
+   reconoce por su texto «ningún estudio registrado», no por el contorno.
+   ========================================================================== */

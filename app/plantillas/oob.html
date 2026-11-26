@@ -1,0 +1,11 @@
+{#-
+  Cabecera corrida y colofón por intercambio fuera de banda. M18, T-001-67.
+  Lo incluyen inicio.html y resultado.html al final, para que una sola respuesta de htmx actualice la cabecera
+  (ya con matriz, o de nuevo sin ella) y el colofón junto con el contenido de #contenido.
+
+  Campos del contexto: los de cabecera.html (cabecera) y colofon.html (colofon).
+-#}
+{% with oob = true %}
+{% include "cabecera.html" %}
+{% include "colofon.html" %}
+{% endwith %}

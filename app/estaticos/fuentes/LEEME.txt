@@ -1,0 +1,24 @@
+Tipografías de la herramienta (T-001-67; ADR-003, punto 6)
+
+Alegreya y Alegreya Sans, de Huerta Tipográfica (Argentina), con licencia SIL Open Font License 1.1.
+El texto completo de cada licencia está en OFL-Alegreya.txt y OFL-AlegreyaSans.txt; el registro de
+cambios de cada familia, en FONTLOG-Alegreya.txt y FONTLOG-AlegreyaSans.txt. Estos cuatro archivos
+deben seguir junto a las fuentes.
+
+Procedencia
+- Familia Alegreya: https://github.com/google/fonts/tree/main/ofl/alegreya
+  (Alegreya[wght].ttf y Alegreya-Italic[wght].ttf, fuentes variables de peso 400 a 900).
+- Familia Alegreya Sans: https://github.com/google/fonts/tree/main/ofl/alegreyasans
+  (AlegreyaSans-Medium.ttf y AlegreyaSans-Bold.ttf).
+- Proyecto de origen: https://github.com/huertatipografica/Alegreya y
+  https://github.com/huertatipografica/Alegreya-Sans
+- Descargadas el 25 de noviembre de 2026.
+
+Transformación
+Los cuatro archivos .woff2 son los .ttf originales comprimidos al formato WOFF2 con fontTools, sin
+recortar glifos ni cambiar contornos, métricas ni nombres. No son una versión modificada de las
+fuentes.
+
+Uso en la hoja de estilo (egm.css)
+- Alegreya, texto y títulos: pesos 400 a 900, redonda y cursiva.
+- Alegreya Sans, interfaz: pesos 500 (Medium) y 700 (Bold).

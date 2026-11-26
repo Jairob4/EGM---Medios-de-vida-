@@ -542,29 +542,29 @@ clasificar cada tabla y explicar las diferencias de causa conocida.
 | P-001-63 | propiedades | SC-001-03, FR-001-14 | estrategias de M23 con hoja EGM | Con valores guardados escritos por un oráculo de la prueba con la semántica de la hoja, sin $G_r = H_r$, sin texto «1» y sin espacios: las tres tablas «coincide»; los invariantes del §5 se cumplen sobre las filas que abarcan las fórmulas |
 | P-001-64 | unit | FR-001-25, FR-001-18, NFR-000-03 | `esc_3_1_coincide`, `esc_3_2_difiere_g_igual_h`, `cb30_sin_valores_guardados` | Textos de F-001-3: «Tablas verificadas: 1, 2 y 4»; «no verificable» sin lista; «difiere» con su causa; ningún texto nombra otra tabla de la hoja |
 
-- [ ] T-001-40 [US-001-3] Escribir P-001-46 en `tests/integracion/test_v4_verificacion.py` (marca `raw`).
-- [ ] T-001-41 [P] [US-001-3] Escribir P-001-44, P-001-45, P-001-47 a P-001-62 y P-001-64 en
+- [x] T-001-40 [US-001-3] Escribir P-001-46 en `tests/integracion/test_v4_verificacion.py` (marca `raw`).
+- [x] T-001-41 [P] [US-001-3] Escribir P-001-44, P-001-45, P-001-47 a P-001-62 y P-001-64 en
   `tests/unit/test_verificacion.py`.
-- [ ] T-001-42 [P] [US-001-3] Escribir P-001-63 en `tests/propiedades/test_verificacion_propiedades.py`.
+- [x] T-001-42 [P] [US-001-3] Escribir P-001-63 en `tests/propiedades/test_verificacion_propiedades.py`.
 
 ### Implementación de la historia 3
 
-- [ ] T-001-43 [US-001-3] Implementar en M08 la localización y el alcance: hoja EGM, títulos con número y punto más su
+- [x] T-001-43 [US-001-3] Implementar en M08 la localización y el alcance: hoja EGM, títulos con número y punto más su
   frase (contrato §7.2; ninguno o más de uno ⇒ no reconocida), alcance de cada tabla (§7.7) y emparejamiento de filas y
   columnas dentro de ella, incluida «Total estudios» (§7.8). No localiza ni lee ninguna tabla que no sea comparable.
   Requisitos: FR-001-15, FR-001-26. Pruebas: P-001-48, P-001-49, P-001-50, P-001-52, P-001-53, P-001-58, P-001-59.
   Módulos: M08, M03. Archivos: `src/egm/verificacion.py`.
-- [ ] T-001-44 [US-001-3] Implementar en M08 la comparación: valor comparable solo numérico (ADR-002 punto 1), filas
+- [x] T-001-44 [US-001-3] Implementar en M08 la comparación: valor comparable solo numérico (ADR-002 punto 1), filas
   que abarcan las fórmulas (punto 2) con su advertencia, $D_k$ y $V_k$, clasificación y lista de verificadas
   (contrato §7.9; ADR-002 punto 4), casos «no verificable» del §7.5 y sin ancla de evaluación de impacto, advertencias
   de lo no comparado. Depende de T-001-43. Requisitos: FR-001-12, FR-001-14, FR-001-16, FR-001-17, FR-001-25,
   FR-001-27. Pruebas: P-001-44, P-001-46, P-001-47, P-001-54 a P-001-57, P-001-61, P-001-62, P-001-63. Módulos: M08,
   M07. Archivos: `src/egm/verificacion.py`.
-- [ ] T-001-45 [US-001-3] Implementar la explicación de diferencias en el orden de ADR-002 punto 3: ampliar
+- [x] T-001-45 [US-001-3] Implementar la explicación de diferencias en el orden de ADR-002 punto 3: ampliar
   `semantica_hoja` de M07 con las variantes «texto 1 como marca» y «sin quitar espacios», y en M08 listar las filas de
   cada causa. Depende de T-001-44. Requisitos: FR-001-18. Pruebas: P-001-45, P-001-51, P-001-60. Módulos: M07, M08.
   Archivos: `src/egm/conteo.py`, `src/egm/verificacion.py`.
-- [ ] T-001-46 [US-001-3] Ampliar M10 con `verificacion()` y los textos de F-001-3. Requisitos: FR-001-18, FR-001-25,
+- [x] T-001-46 [US-001-3] Ampliar M10 con `verificacion()` y los textos de F-001-3. Requisitos: FR-001-18, FR-001-25,
   NFR-000-03. Pruebas: P-001-64. Módulos: M10. Archivos: `src/egm/textos.py`.
 
 **Punto de control**: las historias 1, 2 y 3 funcionan cada una por separado. El implementador se detiene y resume.
@@ -585,14 +585,14 @@ parciales, y deja congelada la interfaz que consumen los planes 002 y 003.
 | P-001-69 | unit | FR-001-18 (orden) | `esc_3_2_difiere_g_igual_h` | En `ResultadoLectura.advertencias` las de verificación van primero (ADR-002 punto 5) |
 | P-001-70 | unit | SC-000-14, NFR-000-14 | `base_valida` | En un proceso aparte, `procesar` y los conteos corren sin que `app`, FastAPI, Starlette, Jinja2 ni Uvicorn queden cargados |
 
-- [ ] T-001-50 Escribir P-001-65 en `tests/integracion/test_v4_procesar.py` (marca `raw`) y P-001-66 a P-001-70 en
+- [x] T-001-50 Escribir P-001-65 en `tests/integracion/test_v4_procesar.py` (marca `raw`) y P-001-66 a P-001-70 en
   `tests/unit/test_procesamiento.py`.
-- [ ] T-001-51 Implementar M13 `egm.procesamiento.procesar(contenido, nombre_archivo, fecha_lectura)`: M02; M03 (toda
+- [x] T-001-51 Implementar M13 `egm.procesamiento.procesar(contenido, nombre_archivo, fecha_lectura)`: M02; M03 (toda
   excepción al abrir ⇒ `Rechazo("tipo")`, el trato de archivo dañado); M04 (`FalloContrato` ⇒ fin); M05; M08; arma
   `ResultadoLectura` con identificación, advertencias de verificación primero y notas. Requisitos: FR-001-02,
   FR-001-18, FR-001-19, FR-001-29, NFR-000-09, NFR-000-14, NFR-000-19. Pruebas: P-001-65 a P-001-70. Módulos: M13.
   Archivos: `src/egm/procesamiento.py`.
-- [ ] T-001-52 Congelar la interfaz pública del núcleo del plan 001 (`__all__`, docstrings en español, `mypy --strict`
+- [x] T-001-52 Congelar la interfaz pública del núcleo del plan 001 (`__all__`, docstrings en español, `mypy --strict`
   sin errores) y resumir para Jairo lo que queda disponible para 002 y 003 (ver «Dependencias con otros módulos o
   specs»). Requisitos: NFR-000-14. Pruebas: P-001-10, P-001-70. Módulos: M01, M04, M05, M07, M08, M10, M13. Archivos:
   `src/egm/*`.
@@ -631,49 +631,49 @@ implementador se detiene y resume.
 | P-001-87 | integración | FR-001-18, FR-001-25, FR-001-12 (presentación) | `esc_3_2_difiere_g_igual_h`, `esc_3_1_coincide` | En `GET /vista/resultado` el bloque «Antes de leer los resultados» va antes de cualquier cifra: primero la verificación, luego las advertencias, luego las notas |
 | P-001-88 | integración | SC-000-18 (resultados), NFR-000-18 | `sesion_a`, `sesion_b` | Dos fichas, cada una ve solo sus resultados; una ficha no abre la otra sesión |
 
-- [ ] T-001-60 [US-001-4] Escribir P-001-71 a P-001-84, P-001-87 y P-001-88 en `tests/integracion/test_carga_web.py`.
-- [ ] T-001-61 [P] [US-001-4] Escribir P-001-85 y P-001-86 en `tests/navegador/test_carga_navegador.py` (marca
+- [x] T-001-60 [US-001-4] Escribir P-001-71 a P-001-84, P-001-87 y P-001-88 en `tests/integracion/test_carga_web.py`.
+- [x] T-001-61 [P] [US-001-4] Escribir P-001-85 y P-001-86 en `tests/navegador/test_carga_navegador.py` (marca
   `navegador`).
 
 ### Implementación de la historia 4
 
-- [ ] T-001-62 [P] [US-001-4] Implementar M22 `app.configuracion.cargar_configuracion`: archivo de texto opcional junto
+- [x] T-001-62 [P] [US-001-4] Implementar M22 `app.configuracion.cargar_configuracion`: archivo de texto opcional junto
   a la instalación (TOML, leído con la biblioteca estándar), bloques del colofón todos apagados por defecto, puerto
   por defecto 8000; sin límite de tamaño ni inactividad, que son fijos en el código. Requisitos: NFR-000-11. Pruebas:
   P-001-83. Módulos: M22. Archivos: `app/configuracion.py`.
-- [ ] T-001-63 [US-001-4] Implementar M21 `app.colofon.componer` con los bloques y reglas de ADR-005 (bloque «Datos»
+- [x] T-001-63 [US-001-4] Implementar M21 `app.colofon.componer` con los bloques y reglas de ADR-005 (bloque «Datos»
   con el texto de NFR-000-12 en tiempo de ejecución o «Aún no se ha cargado ninguna matriz.»; «Referencia de diseño»
   siempre presente; bloque con marca de pendiente o logo inexistente omitido completo). Depende de T-001-62.
   Requisitos: NFR-000-11, NFR-000-12. Pruebas: P-001-71, P-001-82, P-001-83. Módulos: M21. Archivos:
   `app/colofon.py`.
-- [ ] T-001-64 [US-001-4] Implementar M15 `app.sesiones.AlmacenSesiones` (parte de la carga): ficha aleatoria de
+- [x] T-001-64 [US-001-4] Implementar M15 `app.sesiones.AlmacenSesiones` (parte de la carga): ficha aleatoria de
   256 bits, `crear`, `reemplazar` (deja vacío el filtro aplicado; el tipo `Filtro` llega con el plan 002), `obtener`,
   `terminar` con su causa; ninguna sesión ve otra. Requisitos: NFR-000-17, NFR-000-18, FR-001-20, FR-001-29.
   Pruebas: P-001-76, P-001-77, P-001-88. Módulos: M15. Archivos: `app/sesiones.py`.
-- [ ] T-001-65 [US-001-4] Implementar M16 `app.carga.recibir`: cuerpo crudo leído en flujo con corte al pasar
+- [x] T-001-65 [US-001-4] Implementar M16 `app.carga.recibir`: cuerpo crudo leído en flujo con corte al pasar
   `LIMITE_BYTES`, nombre desde `X-EGM-Nombre`, llamada a `procesar` con la fecha de lectura, reglas de FR-001-29
   (rechazo ⇒ conserva; error de contrato ⇒ termina y limpia; aceptada ⇒ crea o reemplaza), bytes soltados al terminar.
   Depende de T-001-64. Requisitos: FR-001-20, FR-001-29, NFR-000-01, NFR-000-17, NFR-000-19. Pruebas: P-001-72 a
   P-001-81, P-001-84. Módulos: M16. Archivos: `app/carga.py`.
-- [ ] T-001-66 [US-001-4] Implementar en M17 `vista_inicio`, la cabecera corrida, el bloque de avisos V2 (verificación,
+- [x] T-001-66 [US-001-4] Implementar en M17 `vista_inicio`, la cabecera corrida, el bloque de avisos V2 (verificación,
   advertencias y notas, en ese orden, antes de cualquier cifra) y el colofón como modelos de vista inmutables, más la
   vista de resultado de NC-P001-1. Requisitos: FR-001-12, FR-001-18, FR-001-19, FR-001-25, NFR-000-12. Pruebas:
   P-001-71, P-001-72, P-001-82, P-001-87. Módulos: M17. Archivos: `app/presentacion.py`.
-- [ ] T-001-67 [P] [US-001-4] (`disenador-front`) Escribir en M18 las plantillas base, V0, mensajes E1 a E4 y E10,
+- [x] T-001-67 [P] [US-001-4] (`disenador-front`) Escribir en M18 las plantillas base, V0, mensajes E1 a E4 y E10,
   avisos V2, cabecera corrida y colofón, y la hoja de estilo «Fichero» base con modo claro y oscuro, a partir de
   `docs/interfaz/bocetos/carga.html` y `colofon.html`; tipografías Alegreya y Alegreya Sans servidas localmente con su
   licencia; sin estilos en línea. El `implementador` las conecta. Requisitos: NFR-000-03, NFR-000-04, NFR-000-05,
   NFR-000-11, NFR-000-13. Pruebas: P-001-86. Módulos: M18. Archivos: `app/plantillas/*`, `app/estaticos/*`.
-- [ ] T-001-68 [US-001-4] Implementar en M19 la carga: enviar el archivo como cuerpo crudo con el nombre en
+- [x] T-001-68 [US-001-4] Implementar en M19 la carga: enviar el archivo como cuerpo crudo con el nombre en
   `X-EGM-Nombre`, guardar la ficha en el almacenamiento de la pestaña y enviarla en `X-EGM-Sesion` en toda petición de
   htmx, estado E1, foco y anuncios accesibles; htmx servido localmente sin estilos en línea. Requisitos: FR-001-20,
   NFR-000-04, NFR-000-17. Pruebas: P-001-85, P-001-86. Módulos: M19. Archivos: `app/cliente/*`.
-- [ ] T-001-69 [US-001-4] Implementar M14 `app.servidor.crear_app`: rutas de la tabla «Rutas de la capa web» (las de
+- [x] T-001-69 [US-001-4] Implementar M14 `app.servidor.crear_app`: rutas de la tabla «Rutas de la capa web» (las de
   carga, inicio y resultado), cabeceras de seguridad con política de contenido sin recursos externos, política de
   registros (sin accesos, sin cuerpos ni cabeceras, errores solo por tipo y módulo) y el arranque
   `python -m app.servidor` en `127.0.0.1`. Requisitos: NFR-000-15, NFR-000-17. Pruebas: P-001-71, P-001-84, P-001-85.
   Módulos: M14. Archivos: `app/servidor.py`.
-- [ ] T-001-70 [US-001-4] Ampliar M10 con los textos de carga con y sin matriz previa (E2, E3, E10 y E4 con matriz
+- [x] T-001-70 [US-001-4] Ampliar M10 con los textos de carga con y sin matriz previa (E2, E3, E10 y E4 con matriz
   previa) y la cabecera corrida, tal como los fija `flujos.md` §2 y §3. Requisitos: FR-001-29, NFR-000-03. Pruebas:
   P-001-77, P-001-80, P-001-81. Módulos: M10. Archivos: `src/egm/textos.py`.
 
@@ -702,25 +702,25 @@ Los escenarios de actividad sobre el mapa (US-001-5.4 a 5.6) van en el plan 002.
 | P-001-94 | navegador | NFR-000-17 (actividad), ADR-003 punto 5 | `base_valida` (reloj simulado) | Puntero, teclado, toque, foco y desplazamiento cuentan; como máximo un latido por minuto; el primero tras un silencio sale de inmediato |
 | P-001-95 | integración | NFR-000-18, SC-000-18 (fin) | `sesion_a`, `sesion_b` | Terminar una sesión no afecta a la otra |
 
-- [ ] T-001-80 [US-001-5] Escribir P-001-89, P-001-91, P-001-95 y la parte de cliente de pruebas de P-001-92 en
+- [x] T-001-80 [US-001-5] Escribir P-001-89, P-001-91, P-001-95 y la parte de cliente de pruebas de P-001-92 en
   `tests/integracion/test_sesion.py`.
-- [ ] T-001-81 [P] [US-001-5] Escribir P-001-90, P-001-93, P-001-94 y la parte de navegador de P-001-92 en
+- [x] T-001-81 [P] [US-001-5] Escribir P-001-90, P-001-93, P-001-94 y la parte de navegador de P-001-92 en
   `tests/navegador/test_sesion_navegador.py`.
 
 ### Implementación de la historia 5
 
-- [ ] T-001-82 [US-001-5] Completar M15: `INACTIVIDAD` (45 min, fijo), `GRACIA_CIERRE` (10 s, fijo),
+- [x] T-001-82 [US-001-5] Completar M15: `INACTIVIDAD` (45 min, fijo), `GRACIA_CIERRE` (10 s, fijo),
   `registrar_actividad`, `purgar_vencidas(ahora)` con reloj inyectable, tarea periódica de purga atada al ciclo de vida
   de la aplicación y borrado por aviso de cierre salvo que la ficha vuelva. Requisitos: FR-001-28, NFR-000-17,
   NFR-000-18. Pruebas: P-001-89, P-001-90, P-001-91, P-001-95. Módulos: M15. Archivos: `app/sesiones.py`.
-- [ ] T-001-83 [US-001-5] Agregar en M14 las rutas `POST /sesion/descartar`, `POST /sesion/latido` y
+- [x] T-001-83 [US-001-5] Agregar en M14 las rutas `POST /sesion/descartar`, `POST /sesion/latido` y
   `POST /sesion/cierre`. Depende de T-001-82. Requisitos: FR-001-28, NFR-000-17. Pruebas: P-001-89, P-001-92.
   Módulos: M14. Archivos: `app/servidor.py`.
-- [ ] T-001-84 [US-001-5] Completar M19: registro de actividad, latido como máximo una vez por minuto, aviso de cierre
+- [x] T-001-84 [US-001-5] Completar M19: registro de actividad, latido como máximo una vez por minuto, aviso de cierre
   al ocultarse la página (con la ficha en la petición), temporizador visible E7, E8 y E9, botón «Descartar el archivo».
   Requisitos: FR-001-28, NFR-000-04, NFR-000-17. Pruebas: P-001-90, P-001-92, P-001-93, P-001-94. Módulos: M19.
   Archivos: `app/cliente/*`.
-- [ ] T-001-85 [P] [US-001-5] Ampliar M10 y M18 con los textos y plantillas de E7, E8 y E9 de `flujos.md` §2 y el
+- [x] T-001-85 [P] [US-001-5] Ampliar M10 y M18 con los textos y plantillas de E7, E8 y E9 de `flujos.md` §2 y el
   texto fijo de la cabecera de F-001-5 (`disenador-front` en las plantillas). Requisitos: NFR-000-03, NFR-000-04,
   FR-001-28. Pruebas: P-001-89, P-001-93. Módulos: M10, M18. Archivos: `src/egm/textos.py`, `app/plantillas/*`.
 
@@ -730,11 +730,11 @@ Los escenarios de actividad sobre el mapa (US-001-5.4 a 5.6) van en el plan 002.
 
 ## Fase 9: Cierre y aspectos transversales
 
-- [ ] T-001-90 Actualizar `docs/specs/trazabilidad.md`: columna «Prueba» de cada requisito del plan y estado `implementado` de los requisitos
+- [x] T-001-90 Actualizar `docs/specs/trazabilidad.md`: columna «Prueba» de cada requisito del plan y estado `implementado` de los requisitos
   cuyas tareas, en todos los planes, estén terminadas (regla de estados de `trazabilidad.md`). La columna «Tarea» ya
   está llena desde la Fase 3. Requisitos: todos los del plan.
-- [ ] T-001-91 Limpieza y refactorización sin cambiar comportamiento (pruebas en verde). Requisitos: —.
-- [ ] T-001-92 [P] Cobertura ≥ 90 % de líneas en `src/egm/`, `ruff` y `mypy --strict` sin errores. Requisitos: —
+- [x] T-001-91 Limpieza y refactorización sin cambiar comportamiento (pruebas en verde). Requisitos: —.
+- [x] T-001-92 [P] Cobertura ≥ 90 % de líneas en `src/egm/`, `ruff` y `mypy --strict` sin errores. Requisitos: —
   (`calidad-python`).
 - [ ] T-001-93 Revisión de Jairo del catálogo de textos M10 de este plan (SC-000-03) y de la legibilidad de las
   advertencias (SC-001-04): de usted, sin jerga, sin fórmulas, sin preguntas, sin mención de la tabla no comparable.

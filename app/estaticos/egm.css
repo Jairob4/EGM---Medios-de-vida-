@@ -1,0 +1,209 @@
+/* =============================================================================
+   Hoja de estilo «Fichero»: EGM · Medios de vida (M18, plan 001, T-001-67)
+   -----------------------------------------------------------------------------
+   Base de la capa web: tipografías locales, página, cabecera corrida, botones,
+   formulario de carga, mensajes y estados de sesión (E7 a E9), avisos de lectura y colofón. Se carga después de
+   tokens.css, que trae los colores (modo claro y oscuro), la escala y el espaciado.
+   No contiene ningún color escrito a mano, salvo la placa blanca de los logos.
+
+   Requisitos: NFR-000-03, NFR-000-04 (WCAG 2.2 AA), NFR-000-05 (360 px),
+   NFR-000-11, NFR-000-13. Política de contenido (ADR-003, punto 6): ningún
+   recurso externo y ningún estilo en línea; todo vive aquí.
+
+   Lo que agregan los planes siguientes (basta con ir sumando secciones):
+   plan 002: filtros, leyenda, cajonera, ficha, notas al margen;
+   plan 003: cifras clave, conclusiones, tablas de composición.
+   El ancho de la cajonera nunca fija un número de columnas (NFR-000-06).
+   ========================================================================== */
+
+/* --- Tipografías (SIL OFL; ver fuentes/LEEME.txt) ---------------------------- */
+@font-face {
+  font-family: "Alegreya";
+  src: url("fuentes/Alegreya.woff2") format("woff2");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Alegreya";
+  src: url("fuentes/Alegreya-Italic.woff2") format("woff2");
+  font-weight: 400 900;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Alegreya Sans";
+  src: url("fuentes/AlegreyaSans-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Alegreya Sans";
+  src: url("fuentes/AlegreyaSans-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Placa clara para los logos del colofón (ADR-005, punto 3): los logos no se recolorean ni
+   llevan filtros; en modo oscuro se apoyan sobre esta placa. */
+:root { --placa-logo: #FFFFFF; }
+
+/* Margen lateral de cabecera y colofón: alinea su borde izquierdo con el de <main>, que se centra
+   con un ancho máximo. Es un espaciado derivado de --e-4 y --ancho-maximo, no un valor nuevo. */
+:root { --margen-pagina: max(var(--e-4), calc((100% - var(--ancho-maximo)) / 2 + var(--e-4))); }
+
+/* --- Página ---------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--papel); color: var(--tinta); -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--familia-interfaz);
+  font-size: var(--t-interfaz);
+  font-weight: var(--peso-interfaz);
+  line-height: var(--interlineado-interfaz);
+}
+a { color: var(--tinta); text-underline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
+
+.visualmente-oculto {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+.saltar {
+  position: absolute; left: var(--e-2); top: -100px;
+  background: var(--papel); padding: var(--e-1); z-index: 10;
+}
+.saltar:focus { top: var(--e-1); }
+
+main {
+  flex: 1 0 auto;
+  width: 100%; max-width: var(--ancho-maximo); margin: 0 auto;
+  padding: var(--e-3) var(--e-4) var(--e-8);
+}
+h1 { font-family: var(--familia-texto); font-weight: 700; font-size: var(--t-pagina); line-height: 1.1; margin: var(--e-2) 0; }
+h2 { font-family: var(--familia-texto); font-weight: 600; font-size: var(--t-seccion); line-height: 1.15; margin: var(--e-4) 0 var(--e-2); }
+h3 { font-family: var(--familia-texto); font-weight: 600; font-size: var(--t-3); margin: var(--e-3) 0 var(--e-1); }
+.prosa p {
+  font-family: var(--familia-texto); font-size: var(--t-texto); font-weight: 400;
+  line-height: var(--interlineado-texto); max-width: var(--medida);
+}
+/* El título al que pasa el foco tras una respuesta (data-egm-foco) no dibuja anillo
+   cuando el foco llega por programa; con el teclado sigue valiendo :focus-visible. */
+[data-egm-foco]:focus:not(:focus-visible) { outline: none; }
+
+/* --- Cabecera corrida (NFR-000-12, FR-001-19, FR-001-28) ------------------- */
+.cabecera-corrida {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: var(--e-1) var(--e-4); padding: var(--e-2) var(--margen-pagina);
+  border-bottom: 1px solid var(--tinta);
+}
+.cabecera-corrida .titulo-herramienta {
+  font-family: var(--familia-texto); font-weight: 700; font-size: var(--t-3); line-height: 1.2; margin: 0;
+}
+.cabecera-corrida nav ul { display: flex; flex-wrap: wrap; gap: var(--e-3); list-style: none; margin: 0; padding: 0; }
+.cabecera-corrida nav a[aria-current="page"] { text-decoration-thickness: 3px; text-decoration-color: var(--cabecera); }
+.corte-datos { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--e-1) var(--e-2); min-width: 0; }
+.corte-datos .corte { margin: 0; overflow-wrap: anywhere; font-variant-numeric: var(--cifras); }
+.sesion-estado { flex-basis: 100%; margin: 0; color: var(--tinta-media); font-size: 0.875rem; }
+
+/* --- Botones y controles --------------------------------------------------- */
+button, input { font: inherit; color: inherit; }
+.boton {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--e-2);
+  border: 1px solid var(--tinta); border-radius: var(--radio-papel);
+  background: var(--papel); color: var(--tinta); text-decoration: none; cursor: pointer;
+}
+.boton--principal { background: var(--tinta); color: var(--papel); font-weight: 700; }
+.boton--discreto { border-color: var(--tinta-media); color: var(--tinta-media); min-height: 36px; }
+.boton:disabled {
+  cursor: not-allowed; border-style: dashed;
+  background: var(--cajon); border-color: var(--tinta-media); color: var(--tinta-media);
+}
+
+/* --- Carga de la matriz (FR-001-20, NFR-000-19) -------------------------- */
+.carga {
+  border: 1px solid var(--tinta-media); border-radius: var(--radio-papel);
+  padding: var(--e-3); max-width: 720px; margin: var(--e-3) 0;
+}
+.carga label { display: block; font-weight: 700; margin-bottom: var(--e-1); }
+.carga input[type="file"] { display: block; max-width: 100%; margin-bottom: var(--e-1); }
+.carga input[type="file"]::file-selector-button {
+  font: inherit; min-height: 44px; margin-right: var(--e-2); padding: 0 var(--e-2);
+  border: 1px solid var(--tinta); border-radius: var(--radio-papel);
+  background: var(--papel); color: var(--tinta); cursor: pointer;
+}
+.carga .ayuda { margin: 0 0 var(--e-2); color: var(--tinta-media); font-variant-numeric: var(--cifras); overflow-wrap: anywhere; }
+.volver { margin: var(--e-2) 0 0; }
+
+/* --- Mensajes y estados (flujos.md §2) ------------------------------------- */
+.mensaje, .estado-carga:not(:empty), .estado-pagina:not(:empty) {
+  border-left: 4px solid var(--tinta); padding: var(--e-1) var(--e-2);
+  margin: var(--e-2) 0; max-width: var(--medida); overflow-wrap: anywhere;
+}
+.mensaje h2 { margin: 0 0 var(--e-1); font-size: var(--t-3); line-height: 1.2; }
+.mensaje p, .estado-carga p { margin: 0 0 var(--e-1); }
+.mensaje p:last-child { margin-bottom: 0; }
+/* La región de estado de la carga (E1) existe siempre vacía para que se anuncie lo que se
+   escriba en ella; vacía no ocupa espacio ni dibuja borde. */
+.estado-carga:empty { margin: 0; padding: 0; border: 0; }
+#estado-pagina:empty { margin: 0; }
+
+/* --- E7 Aviso de inactividad (NFR-000-04, WCAG 2.2.1; plan 001, T-001-85) -------
+   Va dentro de la cabecera corrida, fijo en la parte baja de la ventana (no tapa la cabecera) para que se vea desde
+   cualquier punto de la página. Fondo opaco (--cajon) para que ningún texto se transparente.
+   El guion lo muestra y oculta con el atributo hidden. Sin rojo: no es un error ni una brecha
+   (el acento --cabecera marca solo la selección actual). Se distingue por el recuadro grueso,
+   no por el color. */
+.aviso-inactividad {
+  position: fixed; z-index: 20; bottom: var(--e-2); left: var(--e-2); right: var(--e-2);
+  width: min(36rem, calc(100% - var(--e-4))); margin: 0 auto;
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--e-1) var(--e-2);
+  padding: var(--e-2); background: var(--cajon); color: var(--tinta);
+  border: 2px solid var(--tinta); border-left-width: 6px; border-radius: var(--radio-papel);
+  overflow-wrap: anywhere;
+}
+.aviso-inactividad[hidden] { display: none; }
+.aviso-inactividad p { margin: 0; }
+.aviso-inactividad__texto { flex-basis: 100%; }
+.aviso-inactividad__tiempo { flex: 1 1 auto; }
+.aviso-inactividad__reloj { font-size: var(--t-3); font-weight: 700; font-variant-numeric: var(--cifras); }
+
+/* --- Avisos de lectura (FR-001-18, FR-001-12, FR-001-25; V2) ----------- */
+.avisos {
+  border-top: 1px solid var(--tinta-media); border-bottom: 1px solid var(--tinta-media);
+  padding: var(--e-2) 0; margin: var(--e-3) 0;
+}
+.avisos h2 { font-size: var(--t-3); margin: 0 0 var(--e-1); }
+.avisos p, .avisos li { max-width: var(--medida); overflow-wrap: anywhere; }
+.avisos ul { margin: var(--e-1) 0 0; padding-left: var(--e-3); }
+.avisos li + li { margin-top: var(--e-1); }
+.avisos details { margin: var(--e-1) 0; }
+.avisos summary { cursor: pointer; min-height: 32px; display: list-item; }
+.aviso-verificacion { font-weight: 700; margin: 0 0 var(--e-1); }
+
+/* --- Colofón (NFR-000-11, NFR-000-12, NFR-000-16; ADR-005) ------------------ */
+.colofon { border-top: 1px solid var(--tinta); margin-top: var(--e-8); padding: var(--e-4) var(--margen-pagina) var(--e-6); }
+.colofon .prosa p { margin: 0 0 var(--e-2); text-align: left; overflow-wrap: anywhere; }
+.colofon .prosa b { font-weight: 700; }
+.colofon-logo { margin: 0 0 var(--e-2); }
+.colofon-logo img { display: block; height: 56px; width: auto; max-width: 100%; }
+.colofon-logo--placa { display: inline-block; padding: var(--e-1); background: var(--placa-logo); border-radius: var(--radio-papel); }
+
+/* --- Pantallas angostas (desde 360 px): la página nunca se desplaza en horizontal -- */
+@media (max-width: 599px) {
+  main { padding: var(--e-2) var(--e-2) var(--e-6); }
+  .cabecera-corrida, .colofon { padding-left: var(--e-2); padding-right: var(--e-2); }
+  .carga { padding: var(--e-2); }
+}
+
+/* --- Colores forzados del sistema (alto contraste de Windows) ------------- */
+@media (forced-colors: active) {
+  .boton--principal { border: 2px solid ButtonText; }
+  .mensaje, .estado-carga:not(:empty), .estado-pagina:not(:empty) { border-left-color: CanvasText; }
+  .aviso-inactividad { border-color: CanvasText; background: Canvas; color: CanvasText; }
+}

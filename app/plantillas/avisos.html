@@ -1,0 +1,42 @@
+{#-
+  V2 Avisos de lectura: «Antes de leer los resultados». M18, T-001-67. Cubre: FR-001-12, FR-001-18, FR-001-21, FR-001-25,
+  FR-001-24; US-001-2.1 a 2.16, US-001-3.1 a 3.17; flujos.md §3 (F-001-2, F-001-3).
+
+  Va antes de cualquier cifra, en este orden fijo: primero el resultado de la verificación (en negrita), luego las
+  advertencias en un desplegable y por último las notas. Los textos los arma M10 (verificacion, advertencia y nota);
+  esta plantilla no los escribe ni los cuenta. Con las advertencias vacías no se dibuja el desplegable; con las notas
+  vacías no se dibuja la lista. Nunca nombra una tabla no comparable de la hoja EGM.
+
+  Campos del contexto:
+    avisos : VistaAvisos
+      avisos.verificacion.resultado : "coincide" | "difiere" | "no verificable"   (TextoVerificacion.resultado)
+      avisos.verificacion.mensaje   : str   frase completa de F-001-3 (TextoVerificacion.mensaje)
+      avisos.rotulo_advertencias    : str   texto del desplegable con su cuenta ya escrita por M17: «3 advertencias de
+                                            lectura» o «1 advertencia de lectura»; solo se lee si hay advertencias
+      avisos.advertencias           : tuple[str, ...]   una advertencia legible por elemento (egm.textos.advertencia),
+                                            en el orden que entrega el núcleo
+      avisos.notas                  : tuple[str, ...]   una nota por elemento (egm.textos.nota)
+
+  Ganchos de prueba: p.aviso-verificacion[data-resultado], details.avisos-advertencias, ul.avisos-notas.
+-#}
+<section class="avisos" id="avisos" aria-labelledby="avisos-titulo">
+  <h2 id="avisos-titulo">Antes de leer los resultados</h2>
+  <p class="aviso-verificacion" data-resultado="{{ avisos.verificacion.resultado }}">{{ avisos.verificacion.mensaje }}</p>
+{%- if avisos.advertencias %}
+  <details class="avisos-advertencias">
+    <summary>{{ avisos.rotulo_advertencias }}</summary>
+    <ul>
+{%- for texto in avisos.advertencias %}
+      <li>{{ texto }}</li>
+{%- endfor %}
+    </ul>
+  </details>
+{%- endif %}
+{%- if avisos.notas %}
+  <ul class="avisos-notas">
+{%- for texto in avisos.notas %}
+    <li>{{ texto }}</li>
+{%- endfor %}
+  </ul>
+{%- endif %}
+</section>

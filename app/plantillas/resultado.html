@@ -1,0 +1,29 @@
+{#-
+  Vista provisional del resultado de una carga aceptada (NC-P001-1, decidido el 22-nov-2026). M18, T-001-67.
+  Cubre: US-001-4.1, 4.5, 4.8, 4.9; FR-001-12, FR-001-18, FR-001-19, FR-001-25; NFR-000-12.
+
+  Fragmento de GET /vista/resultado y de la respuesta aceptada de POST /carga. Mientras no exista el mapa
+  muestra la cabecera corrida (que lleva las cifras básicas: nombre, fecha y número de documentos), el título
+  y los avisos de lectura, y nada más. El plan 002 convierte esta vista en la página del mapa (plan 002,
+  T-002-16): la plantilla del mapa reutiliza avisos.html tal cual.
+
+  Campos del contexto:
+    resultado : VistaResultado
+      resultado.titulo       : str        título de la vista (h1); propuesta: «Resultado de la lectura»
+      resultado.introduccion : str | None  párrafo opcional bajo el título
+      resultado.avisos       : VistaAvisos  ver avisos.html (también disponible como «avisos» en el contexto)
+    avisos, cabecera, colofon             -> ver avisos.html, cabecera.html y colofon.html. La cabecera lleva el
+                                             texto de NFR-000-12; el colofón, su bloque «Datos» con el mismo texto
+
+  Ganchos para M19: [data-egm-foco] en el h1 (el foco pasa al título de la vista tras una carga aceptada).
+-#}
+<title>{{ resultado.titulo }}. Evidencias sobre medios de vida</title>
+<h1 tabindex="-1" data-egm-foco>{{ resultado.titulo }}</h1>
+{%- if resultado.introduccion %}
+<div class="prosa">
+<p>{{ resultado.introduccion }}</p>
+</div>
+{%- endif %}
+{% set avisos = resultado.avisos %}
+{% include "avisos.html" %}
+{% include "oob.html" %}

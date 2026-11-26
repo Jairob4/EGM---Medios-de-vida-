@@ -1,0 +1,46 @@
+{#-
+  E7 Aviso de inactividad. M18, T-001-85. Cubre: NFR-000-04 (WCAG 2.2.1, límites de tiempo), NFR-000-17, FR-001-28;
+  US-001-5.3 a 5.6; flujos.md §2 (E7) y §7, punto 4; P-001-93.
+
+  No es una página ni un fragmento de htmx: lo incluye cabecera.html y, por lo tanto, existe solo mientras hay una
+  matriz abierta (sin matriz la cabecera no lo dibuja). Llega oculto (atributo hidden) y es M19 quien lo muestra a los
+  43 minutos sin actividad y lo oculta con cualquier interacción. La plantilla no cuenta ni calcula el tiempo.
+
+  Campos del contexto (extienden VistaCabecera; el campo es opcional: sin él, el aviso no se dibuja y nada más cambia):
+    cabecera.aviso : VistaAvisoInactividad | None
+      cabecera.aviso.texto  : str   frase completa de E7, de M10: «Su sesión se cerrará en 2 minutos por falta de
+                                    actividad. Al cerrarse, la matriz deja de estar disponible.»
+      cabecera.aviso.tiempo : str   rótulo del temporizador, de M10: «Tiempo restante:»
+      cabecera.aviso.boton  : str   rótulo del botón, de M10: «Seguir con la sesión»
+  Ninguno de los tres textos vive en esta plantilla.
+
+  Accesibilidad (NFR-000-04, WCAG 2.2.1):
+    - role="alert" (anuncio inmediato y completo, sin mover el foco). Se anuncia cuando M19 quita el atributo hidden.
+    - El temporizador es role="timer": no se anuncia cada segundo (aria-live apagado). Solo se anuncia el aviso.
+    - El aviso queda fijo en la parte baja de la ventana (ver egm.css), visible aunque la persona esté más abajo en la
+      página. Cualquier tecla, toque o movimiento cuenta como actividad (ADR-003, punto 5) y lo oculta, de modo que no
+      tapa el elemento que recibe el foco por teclado.
+    - El botón es el primer control que alcanza el teclado dentro de la cabecera, a 44 px de alto como mínimo.
+    - Nunca estilos ni guiones en línea; mostrar y ocultar se hace solo con el atributo hidden.
+
+  Ganchos para M19 (guion propio):
+    #aviso-inactividad[data-egm-aviso]   contenedor; hidden de forma predeterminada. Mostrar: .hidden = false.
+                                         Ocultar: .hidden = true. No cambie role ni aria-*.
+    [data-egm-temporizador]              <span role="timer"> vacío: M19 escribe aquí el tiempo restante como m:ss
+                                         («2:00», «1:59», …) con textContent, una vez por segundo mientras el aviso
+                                         está visible. Solo dígitos y «:»; el rótulo ya lo trae la plantilla.
+    [data-egm-seguir]                    botón «Seguir con la sesión»: M19 reinicia la cuenta, envía el latido de
+                                         inmediato y oculta el aviso.
+  Recomendaciones para M19:
+    - No pase el foco al botón por programa: el evento de foco cuenta como actividad (ADR-003, punto 5) y cerraría el
+      aviso al instante. El anuncio de role="alert" basta.
+    - Si el aviso se oculta mientras contiene el foco (por ejemplo, tras pulsar el botón), pase el foco a
+      [data-egm-foco] de la vista en curso (la función enfocar() existente), para que no se pierda en <body>.
+-#}
+{%- if cabecera.aviso is defined and cabecera.aviso %}
+  <div id="aviso-inactividad" class="aviso-inactividad" role="alert" data-egm-aviso hidden>
+    <p class="aviso-inactividad__texto">{{ cabecera.aviso.texto }}</p>
+    <p class="aviso-inactividad__tiempo"><span id="aviso-inactividad-rotulo">{{ cabecera.aviso.tiempo }}</span> <span class="aviso-inactividad__reloj" role="timer" aria-labelledby="aviso-inactividad-rotulo" data-egm-temporizador></span></p>
+    <button class="boton boton--principal" type="button" data-egm-seguir>{{ cabecera.aviso.boton }}</button>
+  </div>
+{%- endif %}

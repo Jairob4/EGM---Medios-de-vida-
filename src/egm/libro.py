@@ -29,6 +29,8 @@ from xml.etree import ElementTree
 import openpyxl
 from openpyxl.utils.cell import range_boundaries
 
+__all__ = ["Celda", "Hoja", "Libro", "LibroNoAbrible", "ListaValidacion", "Valor", "abrir"]
+
 type Valor = str | int | float | bool | datetime | date | time | timedelta | None
 """Lo que puede traer una celda: texto, número, fecha, lógico o vacío (`None`)."""
 

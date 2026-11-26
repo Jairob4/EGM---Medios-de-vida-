@@ -2,14 +2,16 @@
 
 Todo texto de la interfaz vive aquí y en ningún otro módulo: en español, de usted, sin jerga
 técnica, sin fórmulas y sin preguntas (NFR-000-03). Este módulo no calcula: recibe datos ya
-calculados y devuelve cadenas (arquitectura §4.1, regla 4). Solo importa la biblioteca estándar y
-`egm.modelo`.
+calculados y devuelve cadenas (arquitectura §4.1, regla 4). Solo importa la biblioteca estándar,
+`egm.modelo` y los tipos de resultado de `egm.verificacion` (M08), que no importa este módulo.
 
 Base (plan 001, T-001-17): los textos de rechazo (estados E2, E3 y E10 de `docs/interfaz/flujos.md`
 §2), `fecha()` y `ROTULOS` vacío. Historia 2 (T-001-34): `advertencia()`, `nota()` y
 `error_contrato()`, cuyos textos viven también en el catálogo con las claves `advertencia.<codigo>`,
-`nota.<codigo>` y `error.<codigo>`. Los planes siguientes agregan al catálogo la verificación, las
-conclusiones y los rótulos.
+`nota.<codigo>` y `error.<codigo>`. Historia 3 (T-001-46): `verificacion()` con los textos de
+F-001-3 (claves `verificacion.*`) y los cuerpos de las advertencias propias de M08
+(`advertencia.<codigo>`). Los planes siguientes agregan al catálogo las conclusiones y los
+rótulos.
 
 Las plantillas del catálogo marcan los datos con `%(nombre)s` (nombres sin guion bajo) y no con
 llaves, para que la revisión de estilo, que rechaza símbolos de fórmula, siga vigilando todo el
@@ -18,9 +20,10 @@ el N.º (o la fila), la columna y el valor señalado (FR-001-12, FR-001-29).
 """
 
 from collections.abc import Callable, Mapping, Sequence
+from dataclasses import dataclass
 from datetime import datetime
 from types import MappingProxyType
-from typing import Final
+from typing import Final, Literal
 
 from egm.modelo import (
     ANIO_NO_RECONOCIDO,
@@ -45,11 +48,43 @@ from egm.modelo import (
     Advertencia,
     ErrorContrato,
     FalloContrato,
+    Identificacion,
     Nota,
     Rechazo,
+    RefFila,
+)
+from egm.verificacion import (
+    COMPARACION_INCOMPLETA,
+    HOJA_ABARCA_MENOS_FILAS,
+    HOJA_EGM,
+    HOJA_EGM_AUSENTE,
+    TABLA_DIFIERE,
+    TABLA_NO_RECONOCIDA,
+    CausaDiferencia,
+    Diferencia,
+    EstadoTabla,
+    ResultadoTabla,
+    Verificacion,
 )
 
-__all__ = ["CATALOGO", "ROTULOS", "advertencia", "error_contrato", "fecha", "nota", "rechazo"]
+__all__ = [
+    "CATALOGO",
+    "ROTULOS",
+    "TextoMensaje",
+    "TextoVerificacion",
+    "advertencia",
+    "aviso_inactividad",
+    "cabecera_corrida",
+    "error_contrato",
+    "fecha",
+    "fijo",
+    "mensaje_error_contrato",
+    "mensaje_rechazo",
+    "nota",
+    "rechazo",
+    "rotulo_advertencias",
+    "verificacion",
+]
 
 CATALOGO: Final[Mapping[str, str]] = MappingProxyType(
     {
@@ -192,6 +227,161 @@ CATALOGO: Final[Mapping[str, str]] = MappingProxyType(
         "error.cierre": (
             "No se muestra ninguna cifra. Revise que el archivo sea la matriz bibliográfica del "
             "proyecto y vuelva a cargarlo."
+        ),
+        # --- Advertencias propias de la verificación (M08): sin fila; dicen la hoja y la tabla.
+        "advertencia.hoja_egm_ausente": (
+            "El archivo no trae la hoja «%(hoja)s». Los conteos no se pueden contrastar con ella; "
+            "el mapa se calcula igual desde la hoja «Matriz bibliográfica»."
+        ),
+        "advertencia.tabla_no_reconocida": (
+            "En la hoja «%(hoja)s» no se reconoció una única tabla cuyo título tenga un número "
+            "y la frase «%(frase)s». Esa tabla no se contrasta con los conteos."
+        ),
+        "advertencia.comparacion_incompleta.sin_pareja": (
+            "Tabla %(tabla)s de la hoja «%(hoja)s»: no se pudieron comparar %(faltantes)s valores. "
+            "Sin pareja: %(nombres)s. Un valor que falta no se toma como cero."
+        ),
+        "advertencia.comparacion_incompleta.sin_numero.uno": (
+            "Tabla %(tabla)s de la hoja «%(hoja)s»: no se pudo comparar 1 valor, porque la hoja no "
+            "trae un número guardado en esa celda. Un valor que falta no se toma como cero."
+        ),
+        "advertencia.comparacion_incompleta.sin_numero.varios": (
+            "Tabla %(tabla)s de la hoja «%(hoja)s»: no se pudieron comparar %(faltantes)s valores, "
+            "porque la hoja no trae un número guardado en esas celdas. Un valor que falta no se "
+            "toma como cero."
+        ),
+        "advertencia.tabla_difiere.uno": (
+            "Tabla %(tabla)s de la hoja «%(hoja)s»: 1 valor difiere del conteo de esta herramienta."
+        ),
+        "advertencia.tabla_difiere.varios": (
+            "Tabla %(tabla)s de la hoja «%(hoja)s»: %(celdas)s valores difieren de los conteos de "
+            "esta herramienta."
+        ),
+        "advertencia.hoja_abarca_menos_filas": (
+            "Las fórmulas de la hoja «%(hoja)s» abarcan de la fila %(desde)s a la fila "
+            "%(hasta)s de la hoja «Matriz bibliográfica», y la herramienta leyó hasta la fila "
+            "%(leida)s. La comparación se hace solo con las filas que abarca la hoja."
+        ),
+        # --- Resultado de la verificación (F-001-3, FR-001-18, FR-001-25).
+        "verificacion.coincide": "Los conteos coinciden con la hoja EGM del archivo.",
+        "verificacion.difiere": (
+            "Los conteos difieren de la hoja EGM en la tabla %(tabla)s: %(celdas)s."
+        ),
+        "verificacion.sin_causa": "No se identificó la causa de la diferencia en %(celdas)s.",
+        "verificacion.celda": "«%(fila)s» con «%(columna)s»",
+        "verificacion.mas_celdas": "%(celdas)s y otras %(cuantas)s celdas",
+        "verificacion.causa.principal_igual_secundaria.una": (
+            "Causa conocida: %(sujeto)s tiene la misma intervención como principal y como "
+            "secundaria; la hoja lo cuenta dos veces y esta herramienta, una."
+        ),
+        "verificacion.causa.principal_igual_secundaria.varias": (
+            "Causa conocida: %(sujeto)s tienen la misma intervención como principal y como "
+            "secundaria; la hoja los cuenta dos veces y esta herramienta, una."
+        ),
+        "verificacion.causa.dimension_valor_invalido.una": (
+            "Causa conocida: %(sujeto)s tiene una dimensión con el número 1 escrito como texto; "
+            "la hoja lo cuenta y esta herramienta, no."
+        ),
+        "verificacion.causa.dimension_valor_invalido.varias": (
+            "Causa conocida: %(sujeto)s tienen una dimensión con el número 1 escrito como texto; "
+            "la hoja los cuenta y esta herramienta, no."
+        ),
+        "verificacion.causa.espacios_en_los_extremos.una": (
+            "Causa conocida: %(sujeto)s tiene espacios al comienzo o al final de un valor; la "
+            "hoja los toma en cuenta y esta herramienta los ignora."
+        ),
+        "verificacion.causa.espacios_en_los_extremos.varias": (
+            "Causa conocida: %(sujeto)s tienen espacios al comienzo o al final de un valor; la "
+            "hoja los toma en cuenta y esta herramienta los ignora."
+        ),
+        "verificacion.sujeto.numero": "el N.º %(numero)s",
+        "verificacion.sujeto.fila": "el documento de la fila %(fila)s",
+        "verificacion.sujeto.varios": "los documentos %(filas)s",
+        "verificacion.referencia.numero": "N.º %(numero)s",
+        "verificacion.referencia.fila": "fila %(fila)s",
+        "verificacion.tablas_verificadas": "Tablas verificadas: %(tablas)s.",
+        "verificacion.parcial": (
+            "Una o más tablas no se pudieron contrastar por completo; las advertencias de lectura "
+            "dicen por qué."
+        ),
+        # F-001-3, «No verificable» (v4): sin lista de tablas verificadas.
+        "verificacion.no_verificable.sin_valores": (
+            "No se pudieron contrastar los conteos con la hoja EGM del archivo, porque el archivo "
+            "no trae guardados los resultados de esa hoja. Los conteos de esta herramienta se "
+            "calculan directamente de la hoja «Matriz bibliográfica»."
+        ),
+        "verificacion.no_verificable.sin_hoja": (
+            "No se pudieron contrastar los conteos con la hoja EGM del archivo, porque el archivo "
+            "no trae esa hoja. Los conteos de esta herramienta se calculan directamente de la hoja "
+            "«Matriz bibliográfica»."
+        ),
+        "verificacion.no_verificable.sin_tablas": (
+            "No se pudieron contrastar los conteos con la hoja EGM del archivo, porque en esa hoja "
+            "no se reconocieron las tablas que se contrastan. Los conteos de esta herramienta se "
+            "calculan directamente de la hoja «Matriz bibliográfica»."
+        ),
+        "verificacion.no_verificable.incompleta": (
+            "No se pudieron contrastar los conteos con la hoja EGM del archivo, porque en sus "
+            "tablas faltan valores o categorías. Los conteos de esta herramienta se calculan "
+            "directamente de la hoja «Matriz bibliográfica»."
+        ),
+        # --- Carga (historia 4, flujos.md §2 y §3): título y párrafos de cada mensaje por separado.
+        "mensaje.rechazo.titulo": "No se pudo cargar el archivo",
+        "mensaje.e4.titulo": "No se pudo leer la matriz",
+        "mensaje.e4.titulo.previa": "No se pudo leer la matriz y la sesión terminó",
+        "mensaje.e4.borro_todo": (
+            "La herramienta borró todo: la matriz que tenía cargada y sus resultados ya no están "
+            "disponibles. Para volver a verlos, cárguela otra vez."
+        ),
+        "mensaje.sigue_disponible": (
+            "La matriz que tenía cargada sigue disponible con sus resultados: %(cabecera)s."
+        ),
+        "mensaje.volver": "Volver al mapa",
+        # [NEEDS CLARIFICATION: nombre que se muestra si la carga llega sin nombre de archivo;
+        # flujos.md no lo fija.]
+        "carga.sin_nombre": "archivo sin nombre",
+        # [NEEDS CLARIFICATION: texto propuesto para un fallo interno; flujos.md no lo fija.
+        # Lo revisa Jairo en T-001-93.]
+        "mensaje.problema": (
+            "No se pudo completar la operación. No se muestra ningún resultado nuevo. Vuelva a "
+            "intentarlo."
+        ),
+        # --- Terminar la sesión (historia 5, flujos.md §2 y §3): E7, E8, E9 y el texto fijo de la
+        # cabecera. Los «45 minutos» y los «2 minutos» son los valores fijos de NFR-000-17 y de
+        # WCAG 2.2.1; los 2 minutos del aviso salen de la capa web (45 menos 43).
+        "sesion.e7.aviso": (
+            "Su sesión se cerrará en %(minutos)s minutos por falta de actividad. Al cerrarse, la "
+            "matriz deja de estar disponible."
+        ),
+        "sesion.e7.tiempo": "Tiempo restante:",
+        "sesion.e7.boton": "Seguir con la sesión",
+        "sesion.e8.descarte": (
+            "Descartó el archivo. La sesión terminó y la herramienta no guarda ninguna copia del "
+            "archivo ni de sus resultados."
+        ),
+        "sesion.e8.inactividad": (
+            "La sesión terminó porque pasaron 45 minutos sin actividad. La herramienta no guarda "
+            "ninguna copia del archivo. Para seguir, cargue de nuevo la matriz."
+        ),
+        "sesion.e9.recuperando": "Recuperando su sesión.",
+        "cabecera.sesion": (
+            "La sesión se cierra sola tras 45 minutos sin actividad. El archivo solo se lee: no "
+            "se modifica ni se guarda."
+        ),
+        # --- Cabecera corrida (NFR-000-12): «Matriz: <nombre>, leída el <fecha>, <n> documentos».
+        "cabecera.corte": "Matriz: %(nombre)s, leída el %(fecha)s, %(n)s documentos",
+        # --- Vista del resultado y avisos de lectura (V2; NC-P001-1).
+        "resultado.titulo": "Resultado de la lectura",
+        "avisos.advertencias.una": "1 advertencia de lectura",
+        "avisos.advertencias.varias": "%(n)s advertencias de lectura",
+        # --- Colofón (flujos.md §6; ADR-005): los dos bloques siempre presentes.
+        "colofon.datos.rotulo": "Datos",
+        "colofon.datos.sin_matriz": "Aún no se ha cargado ninguna matriz.",
+        "colofon.referencia.rotulo": "Referencia de diseño",
+        "colofon.referencia.texto": (
+            "International Initiative for Impact Evaluation (3ie). Building Peaceful Societies "
+            "Evidence Gap Map (2019). Licencia CC BY-NC-SA 4.0. Se toma solo como referencia de "
+            "diseño; no se reproduce su contenido."
         ),
     }
 )
@@ -339,6 +529,54 @@ def _fijo(codigo: str) -> Callable[[Advertencia], str]:
     return lambda _a: CATALOGO[f"advertencia.{codigo}"]
 
 
+def _plural(a: Advertencia, clave: str, dato: str) -> str:
+    """La clave con «.uno» o «.varios» según el entero que traiga el dato de la advertencia."""
+    return f"{clave}.{'uno' if a.datos.get(dato) == 1 else 'varios'}"
+
+
+def _hoja_egm_ausente(_a: Advertencia) -> str:
+    return _armar("advertencia.hoja_egm_ausente", hoja=HOJA_EGM)
+
+
+def _tabla_no_reconocida(a: Advertencia) -> str:
+    return _armar("advertencia.tabla_no_reconocida", hoja=HOJA_EGM, frase=a.datos.get("frase", ""))
+
+
+def _comparacion_incompleta(a: Advertencia) -> str:
+    sin_pareja = _como_tupla(a.datos.get("sin_pareja"))
+    tabla = a.datos.get("tabla", "")
+    faltantes = a.datos.get("faltantes", "")
+    if sin_pareja:
+        return _armar(
+            "advertencia.comparacion_incompleta.sin_pareja",
+            tabla=tabla,
+            hoja=HOJA_EGM,
+            faltantes=faltantes,
+            nombres=_citar(sin_pareja),
+        )
+    clave = _plural(a, "advertencia.comparacion_incompleta.sin_numero", "faltantes")
+    return _armar(clave, tabla=tabla, hoja=HOJA_EGM, faltantes=faltantes)
+
+
+def _tabla_difiere(a: Advertencia) -> str:
+    return _armar(
+        _plural(a, "advertencia.tabla_difiere", "celdas"),
+        tabla=a.datos.get("tabla", ""),
+        hoja=HOJA_EGM,
+        celdas=a.datos.get("celdas", ""),
+    )
+
+
+def _hoja_abarca_menos_filas(a: Advertencia) -> str:
+    return _armar(
+        "advertencia.hoja_abarca_menos_filas",
+        hoja=HOJA_EGM,
+        desde=a.datos.get("desde", ""),
+        hasta=a.datos.get("hasta", ""),
+        leida=a.datos.get("leida", ""),
+    )
+
+
 _CUERPOS: Final[Mapping[str, Callable[[Advertencia], str]]] = MappingProxyType(
     {
         ENFOQUE_SIN_CLASIFICAR: _fijo(ENFOQUE_SIN_CLASIFICAR),
@@ -359,9 +597,14 @@ _CUERPOS: Final[Mapping[str, Callable[[Advertencia], str]]] = MappingProxyType(
         VARIOS_EMPIRICOS: _varios_empiricos,
         SIN_ANCLA_EVALUACION_IMPACTO: _sin_ancla_evaluacion_impacto,
         COLUMNA_SIN_LISTA: _columna_sin_lista,
+        HOJA_EGM_AUSENTE: _hoja_egm_ausente,
+        TABLA_NO_RECONOCIDA: _tabla_no_reconocida,
+        COMPARACION_INCOMPLETA: _comparacion_incompleta,
+        TABLA_DIFIERE: _tabla_difiere,
+        HOJA_ABARCA_MENOS_FILAS: _hoja_abarca_menos_filas,
     }
 )
-"""Cuerpo del texto de cada advertencia de la lista cerrada, por código."""
+"""Cuerpo del texto de cada advertencia, por código: las de lectura y las de verificación."""
 
 
 def advertencia(a: Advertencia) -> str:
@@ -369,8 +612,8 @@ def advertencia(a: Advertencia) -> str:
 
     Las de fila empiezan por «N.º <n>, columna «…», valor «…»: » (o «Fila <n>» si el N.º está
     vacío); el valor se muestra sin los espacios de los extremos y sin corregir. Las de estructura
-    nombran la hoja, la columna o el valor. Un código fuera de la lista cerrada es un error de
-    programación y levanta `KeyError`.
+    nombran la hoja, la columna o el valor; las de verificación, la hoja y la tabla. Un código
+    desconocido es un error de programación y levanta `KeyError`.
     """
     return _prefijo_de_fila(a) + _CUERPOS[a.codigo](a)
 
@@ -411,3 +654,207 @@ def error_contrato(f: FalloContrato) -> str:
     """
     frases = [_frase_de_error(e) for e in f.errores]
     return " ".join([CATALOGO["error.inicio"], *frases, CATALOGO["error.cierre"]])
+
+
+# --------------------------------------------------------------------------------------------
+# Carga de la matriz (historia 4, flujos.md §2 y §3)
+# --------------------------------------------------------------------------------------------
+
+
+@dataclass(frozen=True, slots=True)
+class TextoMensaje:
+    """Un mensaje de carga: el título y sus párrafos por separado (E2, E3, E10 y E4)."""
+
+    titulo: str
+    parrafos: tuple[str, ...]
+
+
+def fijo(clave: str) -> str:
+    """Un texto fijo del catálogo, sin datos (por ejemplo, `mensaje.volver` o `colofon.*`)."""
+    return CATALOGO[clave]
+
+
+def cabecera_corrida(ident: Identificacion, n_documentos: int) -> str:
+    """«Matriz: <nombre tal como llegó>, leída el <fecha>, <n> documentos» (NFR-000-12).
+
+    El nombre se escribe tal como llegó; nunca se deduce una versión. El plural es el del texto
+    fijado en NFR-000-12.
+    """
+    return _armar(
+        "cabecera.corte",
+        nombre=ident.nombre_archivo,
+        fecha=fecha(ident.fecha_lectura),
+        n=n_documentos,
+    )
+
+
+def aviso_inactividad(minutos: int) -> str:
+    """E7: «Su sesión se cerrará en <minutos> minutos por falta de actividad…» (flujos.md §2)."""
+    return _armar("sesion.e7.aviso", minutos=minutos)
+
+
+def rotulo_advertencias(n: int) -> str:
+    """«1 advertencia de lectura» o «<n> advertencias de lectura» (desplegable de V2)."""
+    if n == 1:
+        return CATALOGO["avisos.advertencias.una"]
+    return _armar("avisos.advertencias.varias", n=n)
+
+
+def mensaje_rechazo(r: Rechazo, matriz_previa: str | None = None) -> TextoMensaje:
+    """E2, E3 o E10 con título y párrafos por separado (flujos.md §2).
+
+    El título es «No se pudo cargar el archivo» y el cuerpo es el texto de `rechazo()` sin ese
+    título. Con `matriz_previa` (la cabecera corrida de la matriz que sigue abierta) agrega el
+    párrafo «La matriz que tenía cargada sigue disponible con sus resultados: …». Nunca trae el
+    nombre del archivo rechazado.
+    """
+    titulo = CATALOGO["mensaje.rechazo.titulo"]
+    cuerpo = rechazo(r).removeprefix(f"{titulo}. ")
+    parrafos = [cuerpo]
+    if matriz_previa is not None:
+        parrafos.append(_armar("mensaje.sigue_disponible", cabecera=matriz_previa))
+    return TextoMensaje(titulo, tuple(parrafos))
+
+
+def mensaje_error_contrato(f: FalloContrato, sesion_terminada: bool) -> TextoMensaje:
+    """E4 con título y párrafos por separado (flujos.md §2).
+
+    Párrafos: lo esperado y lo encontrado de cada error; el cierre («No se muestra ninguna cifra.
+    Revise …»); y, si `sesion_terminada` (había una matriz cargada), «La herramienta borró todo…».
+    Nunca trae el nombre del archivo ni filas de datos (FR-001-29).
+    """
+    frases = " ".join(_frase_de_error(e) for e in f.errores)
+    parrafos = [frases, CATALOGO["error.cierre"]]
+    if sesion_terminada:
+        parrafos.append(CATALOGO["mensaje.e4.borro_todo"])
+    clave = "mensaje.e4.titulo.previa" if sesion_terminada else "mensaje.e4.titulo"
+    return TextoMensaje(CATALOGO[clave], tuple(parrafos))
+
+
+# --------------------------------------------------------------------------------------------
+# Resultado de la verificación (historia 3, F-001-3)
+# --------------------------------------------------------------------------------------------
+
+_MAXIMO_DE_CELDAS: Final = 10
+"""Cuántas celdas nombra el texto de una tabla que difiere; las demás se cuentan."""
+
+
+@dataclass(frozen=True, slots=True)
+class TextoVerificacion:
+    """El texto de F-001-3: el resultado y el mensaje completo para el equipo."""
+
+    resultado: Literal["coincide", "difiere", "no verificable"]
+    mensaje: str
+
+
+def _unir(piezas: Sequence[str]) -> str:
+    """«A», «A y B» o «A, B y C»."""
+    if len(piezas) <= 1:
+        return "".join(piezas)
+    return f"{', '.join(piezas[:-1])} y {piezas[-1]}"
+
+
+def _celdas_de(diferencias: Sequence[Diferencia]) -> str:
+    """Las celdas como «Fila» con «Columna»; pasadas las diez, el resto solo se cuenta."""
+    piezas = [
+        _armar("verificacion.celda", fila=d.celda[0], columna=d.celda[1]) for d in diferencias
+    ]
+    if len(piezas) <= _MAXIMO_DE_CELDAS:
+        return _unir(piezas)
+    return _armar(
+        "verificacion.mas_celdas",
+        celdas=", ".join(piezas[:_MAXIMO_DE_CELDAS]),
+        cuantas=len(piezas) - _MAXIMO_DE_CELDAS,
+    )
+
+
+def _referencia(ref: RefFila) -> str:
+    if ref.numero is None:
+        return _armar("verificacion.referencia.fila", fila=ref.fila)
+    return _armar("verificacion.referencia.numero", numero=ref.numero)
+
+
+def _sujeto(filas: Sequence[RefFila]) -> str:
+    """«el N.º 6», «el documento de la fila 7» o «los documentos N.º 6 y N.º 9»."""
+    if len(filas) == 1:
+        (ref,) = filas
+        if ref.numero is None:
+            return _armar("verificacion.sujeto.fila", fila=ref.fila)
+        return _armar("verificacion.sujeto.numero", numero=ref.numero)
+    return _armar("verificacion.sujeto.varios", filas=_unir([_referencia(r) for r in filas]))
+
+
+def _frase_de_causa(tabla: ResultadoTabla, causa: CausaDiferencia) -> str | None:
+    """«Causa conocida: …» con las filas de todas las celdas de la tabla que tienen esa causa."""
+    por_fila = {
+        ref.fila: ref for d in tabla.diferencias if d.explicacion is causa for ref in d.filas
+    }
+    if not por_fila:
+        return None
+    filas = [por_fila[fila] for fila in sorted(por_fila)]
+    numero = "una" if len(filas) == 1 else "varias"
+    return _armar(f"verificacion.causa.{causa.value}.{numero}", sujeto=_sujeto(filas))
+
+
+def _frases_de_tabla(tabla: ResultadoTabla) -> list[str]:
+    """«Los conteos difieren…», cada causa conocida y, si queda alguna, las celdas sin causa."""
+    frases = [
+        _armar("verificacion.difiere", tabla=tabla.numero, celdas=_celdas_de(tabla.diferencias))
+    ]
+    for causa in CausaDiferencia:
+        frase = _frase_de_causa(tabla, causa)
+        if frase is not None:
+            frases.append(frase)
+    sin_causa = [d for d in tabla.diferencias if d.explicacion is None]
+    if sin_causa:
+        frases.append(_armar("verificacion.sin_causa", celdas=_celdas_de(sin_causa)))
+    return frases
+
+
+def _sin_numeros_guardados(v: Verificacion) -> bool:
+    """Toda tabla que quedó a medias no trae ningún número ni nombre sin pareja."""
+    incompletas = [a for a in v.advertencias if a.codigo == COMPARACION_INCOMPLETA]
+    return bool(incompletas) and all(
+        a.datos.get("comparadas") == 0 and not a.datos.get("sin_pareja") for a in incompletas
+    )
+
+
+def _clave_de_no_verificable(v: Verificacion) -> str:
+    """Por qué no se pudo contrastar nada: hoja ausente, tablas sin reconocer, sin números..."""
+    if any(a.codigo == HOJA_EGM_AUSENTE for a in v.advertencias):
+        return "verificacion.no_verificable.sin_hoja"
+    if all(t.numero is None for t in v.tablas):
+        return "verificacion.no_verificable.sin_tablas"
+    if _sin_numeros_guardados(v):
+        return "verificacion.no_verificable.sin_valores"
+    return "verificacion.no_verificable.incompleta"
+
+
+def verificacion(v: Verificacion) -> TextoVerificacion:
+    """El texto de F-001-3 para el resultado de la verificación (FR-001-18, FR-001-25).
+
+    - Coincide: «Los conteos coinciden con la hoja EGM del archivo. Tablas verificadas: 1, 2 y 4.»
+    - Difiere: «Los conteos difieren de la hoja EGM en la tabla <n>: <celdas>. Causa conocida: …»,
+      con la causa de cada celda cuando se conoce.
+    - No verificable: «No se pudieron contrastar los conteos con la hoja EGM del archivo, porque …»,
+      sin lista de tablas verificadas.
+
+    Solo nombra las tablas comparables, por el número de su título; nunca otra tabla de la hoja.
+    """
+    difieren = [t for t in v.tablas if t.estado is EstadoTabla.DIFIERE]
+    partes: list[str] = []
+    if difieren:
+        resultado: Literal["coincide", "difiere", "no verificable"] = "difiere"
+        for tabla in difieren:
+            partes.extend(_frases_de_tabla(tabla))
+    elif v.verificadas:
+        resultado = "coincide"
+        partes.append(CATALOGO["verificacion.coincide"])
+    else:
+        return TextoVerificacion("no verificable", CATALOGO[_clave_de_no_verificable(v)])
+    partes.append(
+        _armar("verificacion.tablas_verificadas", tablas=_unir([str(n) for n in v.verificadas]))
+    )
+    if any(t.estado is EstadoTabla.NO_VERIFICABLE for t in v.tablas):
+        partes.append(CATALOGO["verificacion.parcial"])
+    return TextoVerificacion(resultado, " ".join(partes))

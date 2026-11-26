@@ -1,0 +1,35 @@
+{#-
+  Colofón (pie de página), compuesto por bloques. M18, T-001-67. Cubre: NFR-000-11, NFR-000-12, NFR-000-16;
+  ADR-005 (puntos 1 a 5); SC-000-11, SC-000-12, SC-000-16; US-001-4.2.
+
+  Esta plantilla es genérica: dibuja los bloques que entrega M21 y ningún otro. M21 ya dejó fuera los bloques
+  apagados, los que tienen una marca de pendiente y los logos sin archivo, de modo que aquí no se decide nada
+  (un bloque apagado no deja rastro en el HTML). Ningún texto institucional vive en la plantilla: ni el nombre de la
+  universidad ni el del proyecto, el semillero o el equipo; todo llega en el campo «texto» o «rotulo» del bloque.
+
+  Campos del contexto:
+    oob     : bool, opcional (por defecto falso)  -> con verdadero agrega hx-swap-oob="true"
+    colofon : VistaColofon
+      colofon.bloques : tuple[VistaBloqueColofon, ...]   solo los bloques visibles, en el orden de pie-de-pagina.md
+        bloque.clave  : str          «datos», «referencia_diseno», «proyecto», …; no se dibuja
+        bloque.rotulo : str | None   «Datos», «Referencia de diseño», …; se dibuja en negrita seguido de un punto
+        bloque.texto  : str | None   texto del bloque. «Datos»: «Matriz: <nombre tal como llegó>, leída el <fecha>,
+                                     <n> documentos» o «Aún no se ha cargado ninguna matriz.» (sin cifras)
+        bloque.logo   : VistaLogo | None   solo si el bloque lleva logo y el archivo existe
+          logo.ruta         : str    URL local del archivo, bajo /estaticos/logos/
+          logo.alt          : str    texto alternativo
+          logo.placa_clara  : bool   verdadero: se apoya sobre una placa clara (legible en modo oscuro)
+  Con la configuración por defecto, los bloques son solo «Datos» y «Referencia de diseño».
+-#}
+<footer id="colofon" class="colofon" aria-label="Colofón"{% if oob is defined and oob %} hx-swap-oob="true"{% endif %}>
+  <div class="prosa">
+{%- for bloque in colofon.bloques %}
+{%- if bloque.logo %}
+    <div class="colofon-logo{% if bloque.logo.placa_clara %} colofon-logo--placa{% endif %}"><img src="{{ bloque.logo.ruta }}" alt="{{ bloque.logo.alt }}"></div>
+{%- endif %}
+{%- if bloque.texto %}
+    <p>{% if bloque.rotulo %}<b>{{ bloque.rotulo }}.</b> {% endif %}{{ bloque.texto }}</p>
+{%- endif %}
+{%- endfor %}
+  </div>
+</footer>

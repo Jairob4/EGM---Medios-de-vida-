@@ -35,10 +35,7 @@ description: Estándares de código y pruebas Python del proyecto EGM (estructur
 
 ## Lectura del xlsx
 
-- `openpyxl.load_workbook(io.BytesIO(contenido), read_only=True)` para datos, solo en `egm.libro` y
-  sobre los bytes en memoria, nunca sobre una ruta del disco (ADR-004, punto 1; arquitectura M03); una
-  segunda carga sin `data_only` solo si
-  se necesitan fórmulas o validaciones. Nunca llamar a `save()` sobre un libro de `data/raw/`.
+- `openpyxl.load_workbook(io.BytesIO(contenido))` en modo normal, solo en `egm.libro` y sobre los bytes en memoria, nunca sobre una ruta del disco (ADR-004, punto 1; arquitectura M03): una carga con fórmulas (`data_only=False`) y otra con los valores guardados (`data_only=True`). No se usa `read_only=True`, porque en ese modo la hoja no entrega las validaciones de datos (ADR-001, L1; plan 001, R-5; COR-018). Nunca llamar a `save()` sobre un libro de `data/raw/`.
 - Distinguir celda vacía (`None`) de 0. Un valor en caché `None` en la hoja `EGM` es «sin calcular»,
   no 0.
 

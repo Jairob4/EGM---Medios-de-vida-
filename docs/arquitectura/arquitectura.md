@@ -22,7 +22,7 @@ Este documento es interno (para Jairo y los subagentes). No es texto de interfaz
 | **P3. La herramienta se adapta al archivo.** Roles por encabezado, categorías desde las validaciones, ningún nombre de categoría escrito en el código (salvo los tres valores ancla del contrato §4.1). | NFR-000-06, FR-001-01, FR-001-05, SC-001-05 |
 | **P4. Solo memoria, solo sesión.** El archivo y su contenido viven en la memoria del proceso, atados a una sesión de una pestaña; nada se escribe en disco ni en registros. | NFR-000-17, NFR-000-18, NFR-000-01 (ADR-003, ADR-004) |
 | **P5. Determinismo.** Mismas entradas (bytes, nombre, fecha) ⇒ mismas salidas. La fecha de lectura se inyecta; ningún resultado depende del orden de un conjunto. | NFR-000-09, SC-000-09 |
-| **P6. Textos en un solo lugar.** Todo texto dirigido al equipo sale de un catálogo único y revisable. | NFR-000-03, NFR-000-08, FR-003-12, SC-000-03 |
+| **P6. Textos en un solo lugar.** Todo texto dirigido al equipo sale de un catálogo único y revisable. Los textos fijos de interfaz de las plantillas (títulos, ayudas, botones) pueden vivir en M18 si no repiten una clave del catálogo, y se revisan junto con él (T-001-93, T-002-49) [Fuente: decisión de Jairo, 2026-11-26, NC-V-2]. | NFR-000-03, NFR-000-08, FR-003-12, SC-000-03 |
 | **P7. HTML y CSS propios.** El servidor produce HTML semántico con plantillas propias y una hoja de estilo propia («Fichero»); el JavaScript es mínimo y no dibuja datos. | NFR-000-04, NFR-000-05, NFR-000-10, NFR-000-13 (ADR-003) |
 
 ---
@@ -262,15 +262,14 @@ analizador multiparte del servidor vuelca a un archivo temporal en disco los arc
 
 Esta lista es **cerrada**: ningún plan, tarea o código crea un módulo que no esté aquí. Un módulo nuevo exige una
 corrección de la arquitectura (regla 11 de `CLAUDE.md`). Las firmas son la interfaz pública mínima; los planes pueden
-precisar tipos auxiliares internos sin cambiar lo público.
+precisar tipos auxiliares internos sin cambiar lo público. Para los módulos que creó el plan 001, la interfaz pública que congeló el hito N1 (T-001-52) es la de su `__all__`; cada módulo la resume abajo, en «Además exporta», y cambiar o quitar uno de esos nombres exige una corrección (COR-018).
 
 El andamiaje inicial de `src/egm/` tiene las carpetas `analisis/`, `lectura/`, `modelo/` y `validacion/`, solo con
 `.gitkeep`. No forman parte de esta lista: `analisis/` y `validacion/` no corresponden a ningún módulo, y la forma de
 `egm.lectura` y `egm.modelo` (archivo o paquete) la fija el plan 001. El plan 001 concilia el andamiaje con esta
 lista y retira las carpetas que no correspondan a un módulo.
 
-Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `Advertencia`, `Nota`, `ErrorContrato`, `Esquema`, `Documento`,
-`Corpus`, `Identificacion`, `ResultadoLectura`, `Rechazo`, `FalloContrato`.
+Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `EstadoDocumento`, `Enfoque`, `SIN_NIVEL`, `Rol`, `Lista`, `Anclas`, `AnioNoReconocido`, `DatosCrudos`, `Advertencia`, `Nota`, `ErrorContrato`, `Esquema`, `Documento`, `Corpus`, `Identificacion`, `ResultadoVerificacion`, `ResultadoLectura`, `Rechazo`, `FalloContrato` y los códigos de advertencia, nota y error de contrato (M01).
 
 ### 6.1 Núcleo `src/egm/`
 
@@ -303,6 +302,8 @@ Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `Advertencia`, `Nota`, `Er
   @dataclass(frozen=True) class Rechazo: motivo: Literal["tipo", "tamano", "contenido"]
   @dataclass(frozen=True) class FalloContrato: errores: tuple[ErrorContrato, ...]
   ```
+- **Además exporta** (COR-018): `Rol`, `Lista`, `Anclas`, `AnioNoReconocido` y `DatosCrudos` (los usan M04 y M05 y viven aquí para que M01 no dependa de otro módulo), y `ResultadoVerificacion`, un `Protocol` con `verificadas` y `advertencias`, que es el tipo de `ResultadoLectura.verificacion` porque M01 no puede importar M08 (§4.1, regla 2). `procesar` siempre entrega ahí una `egm.verificacion.Verificacion`; quien necesita el resultado completo la trata como tal.
+- **Lista cerrada de códigos** (COR-018): 10 de advertencia de fila (`CODIGOS_ADVERTENCIA_FILA`: `ENFOQUE_SIN_CLASIFICAR`, `VALOR_FUERA_DE_LISTA`, `ESPACIOS_EN_LOS_EXTREMOS`, `DIMENSION_VALOR_INVALIDO`, `ANIO_NO_RECONOCIDO`, `NUMERO_VACIO`, `NUMERO_REPETIDO`, `PRINCIPAL_IGUAL_SECUNDARIA`, `NO_EMPIRICO_CON_INTERVENCION`, `TIPO_DOCUMENTO_FUERA_DE_LISTA`), 8 de estructura (`CODIGOS_ADVERTENCIA_ESTRUCTURA`: `BLOQUE_SIN_DIMENSIONES`, `ROL_DENTRO_DEL_BLOQUE`, `LISTA_1_0_FUERA_DEL_BLOQUE`, `DIMENSION_SIN_LISTA_1_0`, `LISTA_SIN_NO_APLICA`, `VARIOS_EMPIRICOS`, `SIN_ANCLA_EVALUACION_IMPACTO`, `COLUMNA_SIN_LISTA`), 1 de nota (`CODIGOS_NOTA`: `COLUMNAS_NO_USADAS`) y 4 de error de contrato (`CODIGOS_ERROR_CONTRATO`: `HOJA_AUSENTE`, `ENCABEZADO_AUSENTE`, `ANCLA_EMPIRICA_AUSENTE`, `LISTA_OBLIGATORIA_AUSENTE`). Las 5 advertencias de la verificación son de M08. Cada código tiene su texto en M10.
 - **Cubre**: NFR-000-02, FR-001-11 (estructura), NFR-000-09 (identificación).
 - **Planes**: 001 (crea), 002 y 003 (solo consumen).
 
@@ -314,7 +315,7 @@ Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `Advertencia`, `Nota`, `Er
   LIMITE_DESCOMPRIMIDO: Final[int] = 268_435_456 # NFR-000-19; 256 MiB declarados, suma de todas las partes; fijo, no configurable
   def validar_archivo(contenido: bytes) -> Rechazo | None
   ```
-  Tipo: paquete ZIP legible que contiene las partes de un libro de hoja de cálculo `.xlsx`; un archivo dañado o que no se
+  Tipo: paquete ZIP legible que contiene las partes de un libro de hoja de cálculo `.xlsx` (como mínimo `[Content_Types].xml` y `xl/workbook.xml`; COR-018); un archivo dañado o que no se
   puede abrir se rechaza como tipo no admitido (edge case de 001). Un libro cuyo contenido descomprimido declarado supere
   `LIMITE_DESCOMPRIMIDO` se rechaza como archivo que no se puede abrir, con motivo `"contenido"` y el mensaje propio de NFR-000-19, comprobado en el índice del paquete antes de
   descomprimir (NFR-000-19, COR-011).
@@ -338,6 +339,7 @@ Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `Advertencia`, `Nota`, `Er
       def celda(self, fila: int, columna: int) -> Celda         # Celda(valor, formula, valor_guardado)
       def validacion(self, columna: int) -> ListaValidacion | None   # valores en el orden de la lista
   ```
+- **Además exporta** (COR-018): `Celda` (`valor`, `formula`, `valor_guardado`), que se cita como `egm.libro.Celda` para distinguirla de `egm.conteo.Celda`; `ListaValidacion`; `Valor` (lo que puede traer una celda), y `LibroNoAbrible`, la excepción de `abrir` ante un paquete dañado o de otro tipo, que M13 convierte en `Rechazo("tipo")` (NC-ARQ-1). **Modo de lectura**: `abrir` carga el libro dos veces en modo normal, una con fórmulas y otra con los valores guardados, porque en modo de solo lectura la biblioteca no entrega las validaciones (ADR-001, L1; plan 001, R-5).
 - **Cubre**: NFR-000-01, FR-001-01 (acceso por texto), FR-001-05, FR-001-17 (`None` no es 0).
 - **Planes**: 001.
 
@@ -360,6 +362,9 @@ Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `Advertencia`, `Nota`, `Er
       anclas: Anclas                               # v_emp (uno o varios), v_IE | None
       advertencias: tuple[Advertencia, ...]; notas: tuple[Nota, ...]
   ```
+- **Además exporta** (COR-018): `HOJA_MATRIZ` y `columnas_del_bloque(encabezados, columnas)`, la única regla del bloque de dimensiones, que también usa M05.
+- La advertencia de lista sin «No aplica» se evalúa en las listas de intervención principal y de nivel de evidencia; la secundaria es opcional y su lista no trae ese valor [Fuente: decisión de Jairo, 2026-11-26, COR-018 P4].
+- Con el delimitador final antes del inicial se aplican las dos reglas del contrato §3.1: una advertencia del bloque y una por cada columna con lista `1,0` que quedó fuera de él (CB-38).
 - **Cubre**: FR-001-01, FR-001-02, FR-001-03, FR-001-04, FR-001-05, FR-001-12, FR-001-21, FR-001-22, FR-001-23,
   FR-002-01 (orden), FR-003-22 (ancla de evaluación de impacto), NFR-000-06.
 - **Planes**: 001.
@@ -387,6 +392,7 @@ Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `Advertencia`, `Nota`, `Er
       textos: Mapping[Rol, str | None]         # referencia, país y población, hallazgos, vacío, limitaciones, aporte, indicadores, dimensiones evaluadas, enfoque: tal cual
       crudos: DatosCrudos                      # lo necesario para explicar diferencias con la hoja (texto «1», espacios, G=H)
   ```
+- **Precisión** (COR-018): `DatosCrudos.con_espacios` dice qué roles traían espacios en los extremos, no cuál de las dos celdas de intervención; la semántica de la hoja lo toma de la advertencia `ESPACIOS_EN_LOS_EXTREMOS` de esa fila en `Corpus.advertencias`, que guarda el texto de la celda tal cual. Sin esa advertencia, no se descuenta.
 - **Cubre**: FR-001-06, FR-001-10, FR-001-12, FR-001-13, FR-001-24, FR-002-07 (textos tal cual), FR-003-07
   (enfoque), NFR-000-06.
 - **Planes**: 001.
@@ -437,6 +443,9 @@ Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `Advertencia`, `Nota`, `Er
   def semantica_hoja(esquema, corpus, filas: range, variante: VarianteHoja) -> ConteosHoja        # T1, T2, t, t^IE (enteros)
   def coocurrencias(esquema, corpus, filtro=SIN_FILTRO) -> Coocurrencias                          # pares con su Conteo
   ```
+- **Tipos** (COR-018): `Clave = tuple[str, str]` (intervención, dimensión); `Conjuntos(r, e, m, p)`, cada uno un `Conteo`; `Celda(conteo)` en el plan 001 (el plan 002 agrega `por_nivel`); `VarianteHoja` con `ESTANDAR`, `TEXTO_1_COMO_MARCA` y `SIN_QUITAR_ESPACIOS`, acumulativas en el orden de ADR-002, punto 3; `ConteosHoja(t1, t2, t, t_ie, t4)` en enteros, con `t2` y `t_ie` en `None` sin ancla de evaluación de impacto.
+- **Sin ancla de evaluación de impacto**: `evaluacion_impacto` devuelve `None` y `por_intervencion(..., solo_ie=True)` lanza `ValueError`; quien las llame comprueba antes `Esquema.anclas.evaluacion_impacto` (FR-003-22).
+- **`por_nivel`** es $T_4(\ell)$ con $\ell \in \mathcal{L}$ (contrato §5) y no trae la entrada «Sin nivel»; esa entrada sale del desglose por nivel que agrega el plan 002 (T-002-07).
 - **Cubre**: FR-001-07, FR-001-08, FR-001-09, FR-001-11, FR-001-13 (lista de pendientes), FR-001-14 (conteos que se
   comparan), FR-002-01 (orden), FR-002-03 (desglose), FR-002-05 (estudios de la celda), FR-002-13 («n de N»),
   FR-003-06, FR-003-08, FR-003-21, NFR-000-02, NFR-000-06.
@@ -464,6 +473,7 @@ Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `Advertencia`, `Nota`, `Er
       verificadas: tuple[int, ...]               # números de título en «coincide» o «difiere»
       advertencias: tuple[Advertencia, ...]
   ```
+- **Además exporta** (COR-018): `TipoTabla`, `TIPOS`, `FRASES_DE_TITULO`, `HOJA_EGM` y `ENCABEZADO_TOTAL`; `Diferencia(celda, valor_hoja, conteo, explicacion, filas)`, con `explicacion: CausaDiferencia | None`; `CausaDiferencia` con `PRINCIPAL_IGUAL_SECUNDARIA`, `DIMENSION_VALOR_INVALIDO` y `ESPACIOS_EN_LOS_EXTREMOS`, cuyo valor es el código de la advertencia de lectura de esas filas; y los 5 códigos propios de la verificación, fuera de la lista de M01 (`CODIGOS_ADVERTENCIA_VERIFICACION`: `HOJA_EGM_AUSENTE`, `TABLA_NO_RECONOCIDA`, `COMPARACION_INCOMPLETA`, `TABLA_DIFIERE`, `HOJA_ABARCA_MENOS_FILAS`), cada uno con su texto en M10. `Verificacion.tablas` trae siempre las tres tablas comparables, en el orden total, evaluación de impacto y nivel.
 - **Cubre**: FR-001-12, FR-001-14, FR-001-15, FR-001-16, FR-001-17, FR-001-18, FR-001-25, FR-001-26, FR-001-27, FR-003-20 (datos).
 - **Planes**: 001.
 
@@ -505,6 +515,7 @@ Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `Advertencia`, `Nota`, `Er
   def fecha(d: datetime) -> str
   ROTULOS: Final[Mapping[str, str]]
   ```
+- **Además exporta** (COR-018): `CATALOGO` (clave → texto); `fijo(clave)`, `cabecera_corrida(ident, n_documentos)`, `aviso_inactividad(minutos)` y `rotulo_advertencias(n)`; `mensaje_rechazo(r, matriz_previa=None)` y `mensaje_error_contrato(f, sesion_terminada)`, que devuelven `TextoMensaje`; y `TextoVerificacion(resultado, mensaje)`, con `resultado` en «coincide», «difiere» o «no verificable». `conclusion` y `TextoConclusion` llegan con el plan 003.
 - **Cubre**: NFR-000-03, NFR-000-08, FR-001-02 (texto), FR-001-10 (advertencia que cita la regla), FR-001-12,
   FR-001-18 (explicación), FR-001-23 (texto), FR-001-29 (mensajes), FR-002-04, FR-002-14, FR-002-17, FR-003-05,
   FR-003-11, FR-003-12, FR-003-15, FR-003-16, FR-003-18, FR-003-19, FR-003-20.
@@ -556,7 +567,7 @@ Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `Advertencia`, `Nota`, `Er
   seguridad y política de contenido sin recursos externos; **política de registros**: sin registro de accesos, sin
   cuerpos, sin cabeceras, y los errores se registran solo por tipo y módulo, sin su mensaje (puede contener valores de
   celdas). Las URL nunca llevan texto de la matriz: celdas y documentos se nombran por posición.
-- **Interfaz pública**: `crear_app(config: Configuracion) -> ASGIApp`; las rutas se documentan en el plan 001.
+- **Interfaz pública**: `crear_app(config: Configuracion, reloj: Callable[[], datetime] | None = None, ampliaciones: Sequence[Ampliacion] = ()) -> ASGIApp`: `reloj` da la fecha de lectura (las pruebas lo inyectan) y cada `Ampliacion` agrega las rutas de un plan (hito N2); las rutas se documentan en el plan 001 (COR-018).
 - **Cubre**: NFR-000-15, NFR-000-17 (registros), FR-001-28 (ruta de descarte), FR-002-18, FR-002-19 (un solo
   «Actualizar vista» y un solo «Restablecer»).
 - **Planes**: 001 (crea), 002 y 003 (agregan rutas).
@@ -595,13 +606,13 @@ Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `Advertencia`, `Nota`, `Er
 
 #### M17 `app.presentacion`
 - **Responsabilidad**: convertir resultados del núcleo en **modelos de vista** sin lógica de datos propia: cabecera
-  corrida (texto de NFR-000-12), avisos (verificación y advertencias antes de los resultados), cajonera (orden del
+  corrida (texto de NFR-000-12), avisos (verificación, advertencias y estudios empíricos que aún no entran al mapa, antes de los resultados; plan 002, COR-018), cajonera (orden del
   archivo, radio $r = \min(r_{\text{base}}\sqrt{n},\ r_{\max})$, con $r_{\text{base}}$ el radio de un estudio y $r_{\max}$ el 35 % del lado menor del cajón (decisión de Jairo, 24-nov-2026, COR-017), igual para todo el mapa, con cualquier filtro, en el tablero y en la exportación; cada burbuja que llega a $r_{\max}$ se marca como saturada y la vista indica si alguna lo está; número escrito, desglose por nivel con tono y borde, etiquetas accesibles,
   rótulos de cajón vacío con y sin filtros; el radio de cada burbuja se entrega como número para el atributo `r` del
   SVG, junto con el tamaño del SVG (`width`, `height`, `viewBox`) derivado del mismo radio, y el número de dimensiones leídas se entrega para que las plantillas deriven de él el ancho y las columnas de la
   cajonera, nunca fijados en 8 (NFR-000-06; ADR-003, punto 6) [Fuente: decisión de Jairo, 21-nov-2026]), ficha de estudio (textos tal cual; enlace si la referencia contiene un DOI
   o una URL), definiciones, filtros (controles con lo aplicado, resumen legible, «n de N»), tablero (cifras clave, mapa y
-  conclusiones juntos, notas al margen con sus N.º), listas de N.º, colofón.
+  conclusiones juntos, notas al margen con sus N.º), listas de N.º, colofón. El «<n> documentos» de la cabecera corrida y del colofón es $|R|$: la longitud de `Corpus.documentos`, la misma lista de `egm.conteo.conjuntos(corpus).r` (COR-018).
 - **Interfaz pública**: `vista_inicio(...)`, `vista_mapa(sesion, config)`, `vista_tablero(sesion, config)`,
   `vista_cajon(sesion, i, j)`, `vista_ficha(sesion, k)`, `vista_lista(sesion, cifra)`, `vista_definicion(nombre)`;
   cada una devuelve un modelo de vista inmutable que las plantillas dibujan.
@@ -673,7 +684,7 @@ Tipos comunes (en `egm.modelo`): `RefFila`, `Conteo`, `Advertencia`, `Nota`, `Er
 - **Responsabilidad**: leer al arrancar la configuración local de texto (colofón, política de porcentajes, ruta del
   archivo de definiciones, puerto). No contiene el límite de tamaño ni la inactividad, que son fijos en el código.
   Valores por defecto seguros: porcentajes apagados, todos los bloques configurables del colofón apagados (ADR-005).
-- **Interfaz pública**: `cargar_configuracion(ruta: Path | None) -> Configuracion`.
+- **Interfaz pública**: `cargar_configuracion(ruta: Path | None) -> Configuracion`, con `colofon: ConfiguracionColofon` y `puerto: int = 8000` en el plan 001 (los planes 002 y 003 agregan sus campos; COR-018).
 - **Cubre**: NFR-000-07 (interruptor y $n_{min}$ configurables), NFR-000-11 (banderas), FR-002-08 (ruta de las
   definiciones).
 - **Planes**: 001 (crea), 002 (definiciones), 003 (porcentajes).
@@ -753,7 +764,7 @@ filas del mapa, que son categorías del equipo (estado §7); su alcance lo decid
 |---|---|---|
 | V0 Inicio sin matriz | Opción de cargar; ninguna cifra; límite de tamaño indicado | US-001-4.2, NFR-000-19 |
 | V1 Mensajes de carga | Rechazo por tipo, tamaño o contenido descomprimido (con la matriz anterior conservada si la había); error de contrato (esperado y encontrado, sin nombre ni filas); sesión terminada | FR-001-29, NFR-000-17, NFR-000-19 |
-| V2 Avisos de lectura | Resultado de la verificación en lenguaje llano (tablas verificadas por número), advertencias y notas; aparecen antes de los resultados | FR-001-12, FR-001-18, FR-001-25, FR-002-17 |
+| V2 Avisos de lectura | Resultado de la verificación en lenguaje llano (tablas verificadas por número), advertencias, los estudios empíricos que aún no entran al mapa con sus N.º, si los hay, y notas; aparecen antes de los resultados | FR-001-12, FR-001-18, FR-001-25, FR-002-17 |
 | V3 Mapa (cajonera) | Filas y columnas del archivo, burbujas por nivel con número, leyenda = filtro de nivel, rótulos de cajón vacío | FR-002-01 a FR-002-04, FR-002-12 |
 | V4 Cajón abierto (fichas) | Estudios de la celda con N.º, referencia (enlace), año, nivel | FR-002-05, FR-002-06 |
 | V5 Ficha de estudio | Textos tal cual | FR-002-07 |
@@ -773,17 +784,17 @@ Ningún flujo, boceto ni texto de interfaz menciona la tabla 3 de la hoja EGM.
 
 | Riesgo | Efecto | Dónde se resuelve |
 |---|---|---|
-| La biblioteca de lectura no carga las validaciones en modo de solo lectura en flujo y descarta las validaciones guardadas como extensión del formato | Listas perdidas ⇒ error de contrato falso | ADR-001: **descartado para la v4** (21-nov-2026, lectura en modo lectura con SHA-256 sin cambios): 7 validaciones estándar y 0 `x14:dataValidation` en «Matriz bibliográfica», todas leídas por `openpyxl.load_workbook` sin advertencias (D, F, G, H, I y J en 2:36 de tipo lista; L2:S36 con «1,0»); las demás hojas no tienen validaciones. Para versiones futuras, respaldo: leer del XML de la hoja las validaciones `x14` |
+| La biblioteca de lectura no carga las validaciones en modo de solo lectura en flujo y descarta las validaciones guardadas como extensión del formato | Listas perdidas ⇒ error de contrato falso | ADR-001: **descartado para la v4** (21-nov-2026, lectura en modo lectura con SHA-256 sin cambios): 7 validaciones estándar y 0 `x14:dataValidation` en «Matriz bibliográfica», todas leídas por `openpyxl.load_workbook` sin advertencias (D, F, G, H, I y J en 2:36 de tipo lista; L2:S36 con «1,0»); las demás hojas no tienen validaciones. Para versiones futuras, respaldo: leer del XML de la hoja las validaciones `x14`. Confirmado en T-001-13 (plan 001, R-5): en modo de solo lectura no se entregan las validaciones, y M03 lee en modo normal (L1). |
 | El analizador multiparte vuelca archivos de más de 1 MiB a disco temporal | Violaría NFR-000-17 | ADR-003: cuerpo crudo con lectura en flujo |
 | Registros de accesos con rutas o cabeceras | Podrían contener datos de la matriz o el nombre del archivo | M14: registro de accesos apagado; URL por posición; nombre en cabecera no registrada |
 | Recarga de la página o pestaña duplicada | Fin de sesión no deseado o sesión compartida entre dos pestañas | ADR-003, punto 9: 10 s de gracia; la pestaña duplicada se acepta como limitación conocida |
 | Libro con contenido descomprimido desmesurado | Memoria agotada | ADR-004, punto 5: rechazo por encima de 256 MiB declarados (NFR-000-19, COR-011) |
-| Una parte del libro se descomprime a más de lo que declara el índice del paquete | La comprobación de M02 sobre lo declarado no basta para esa parte | Preparación del plan 001 (M02, M03): `[NEEDS CLARIFICATION: NC-ARQ-1. Qué hace la biblioteca de lectura ante una parte que se descomprime a más de lo declarado; se comprueba en la preparación del plan 001. El spec ya lo trata como archivo dañado (COR-011).]` |
+| Una parte del libro se descomprime a más de lo que declara el índice del paquete | La comprobación de M02 sobre lo declarado no basta para esa parte | Preparación del plan 001 (M02, M03): Resuelto en T-001-09 (2026-11-24; plan 001, R-1; P-001-02): la biblioteca no lee de más; el libro no se abre (`BadZipFile` o `ParseError`) y se trata como dañado (`Rechazo("tipo")`). |
 | Plazo del 6-dic-2026 | Tres specs en quince días | ADR-003: stack sin compilación de front-end; planes en orden 001 → 002 → 003 |
 
 ## 10. `[NEEDS CLARIFICATION]` de la fase
 
-Ninguno queda pendiente de la Fase 2. NC-ADR004-1 sigue abierto a propósito como **decisión futura** del equipo. NC-ARQ-1 (§9) no es pendiente de la Fase 2: se resuelve en la preparación del plan 001.
+Ninguno queda pendiente de la Fase 2. NC-ADR004-1 sigue abierto a propósito como **decisión futura** del equipo. NC-ARQ-1 (§9) se resolvió en la preparación del plan 001 (T-001-09).
 
 | ID | Tema | ADR | Estado |
 |---|---|---|---|
@@ -794,4 +805,4 @@ Ninguno queda pendiente de la Fase 2. NC-ADR004-1 sigue abierto a propósito com
 | NC-ADR004-3 | Límite de tamaño descomprimido del libro | ADR-004, punto 5 | Decidido: más de 256 MiB declarados ⇒ archivo que no se puede abrir; aplicado en NFR-000-19 por COR-011 [Fuente: decisión de Jairo, 21-nov-2026] |
 | NC-ADR005-1 | Qué bloques del colofón vienen apagados | ADR-005, punto 2 | Decidido: apagados grupo, código Minciencias, contacto, los dos logos y la línea «Herramienta»; «Datos» y referencia 3ie siempre visibles [Fuente: decisión de Jairo, 21-nov-2026]. Ampliado por NC-INT-1: también apagados proyecto, semillero y equipo [Fuente: decisión de Jairo, 21-nov-2026] |
 | NC-INT-1 a NC-INT-4 | Colofón, empíricos pendientes sin nivel, título de la cabecera, exportación del mapa (planteados en `docs/interfaz/flujos.md`, §9, y registrados allí como decididos) | ADR-005; M06; —; ADR-003, punto 7 | Decididos: ver M21, M06, M19 y M20; el título «Evidencias sobre medios de vida» no lo fija la arquitectura [Fuente: decisión de Jairo, 21-nov-2026] |
-| NC-ARQ-1 | Parte del libro que se descomprime a más de lo declarado | — (M02, M03; COR-011) | Abierto para la preparación del plan 001; el spec ya lo trata como archivo dañado |
+| NC-ARQ-1 | Parte del libro que se descomprime a más de lo declarado | — (M02, M03; COR-011) | Resuelto en T-001-09, 2026-11-24 (plan 001, R-1; P-001-02): el libro no se abre y se trata como dañado, como pedía el spec (COR-011) |

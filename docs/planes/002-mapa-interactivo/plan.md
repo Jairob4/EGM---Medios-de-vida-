@@ -94,7 +94,7 @@ Escenarios de otros specs que este plan ejecuta porque dependen del mapa (arquit
 
 NFR-000 que este plan respeta sin ser su dueño (arquitectura §6.4): NFR-000-02 (cada número con su lista), NFR-000-03
 (textos de usted, sin jerga), NFR-000-06 (la cajonera sigue las dimensiones leídas), NFR-000-07 (ningún porcentaje),
-NFR-000-12 (cabecera corrida y colofón «Datos»), NFR-000-17 (nada en disco ni en registros). Sus pruebas propias son
+NFR-000-12 (cabecera corrida y colofón «Datos»). NFR-000-17 tiene aquí sus escenarios de actividad sobre el mapa (US-001-5.4 a 5.6) y las pruebas de URL por posición y de exportación sin disco (T-002-11, T-002-19, T-002-28, T-002-30 y T-002-39; COR-018). Sus pruebas propias son
 de los planes 001 y 003; aquí se comprueban solo en las vistas del mapa.
 
 Fuera de alcance de este plan:
@@ -236,7 +236,7 @@ aplicado en la sesión. Todas las historias lo usan.
   interfaz pública de la arquitectura. Requisitos: FR-002-11, FR-002-19. Pruebas: P-002-02. Módulos: M06. Archivos: `src/egm/filtros.py`.
 - [ ] T-002-07 [IMP] Ampliar M07 para que `conjuntos`, `mapa` y `evaluacion_impacto` reciban `filtro: Filtro = SIN_FILTRO` (arquitectura §6.1; el plan 001 las deja sin ese parámetro) y para que `mapa` entregue, por celda, el desglose por nivel en el orden de la lista de niveles con «Sin nivel» al final, y `estudios` ($n$) y `total` ($N$) como `Conteo`. Con `SIN_FILTRO`, las tres dan lo mismo que en el plan 001. Requisitos: FR-002-03, FR-002-13, SC-002-01; soporte de FR-003-06 y FR-003-14 (plan 003). Pruebas: P-002-01, P-002-02. Módulos: M07. Archivos: `src/egm/conteo.py`.
 - [ ] T-002-08 [IMP] Ampliar M15 con el filtro aplicado por sesión (`aplicar_filtro`), con `SIN_FILTRO` al crear o
-  reemplazar la sesión. Requisitos: FR-002-15, FR-002-19. Pruebas: P-002-03. Módulos: M15. Archivos: `app/sesiones.py`.
+  reemplazar la sesión. Requisitos: FR-002-15, FR-002-19, FR-001-29 (US-001-4.10, NC-P002-1). Pruebas: P-002-03, P-002-36. Módulos: M15. Archivos: `app/sesiones.py`.
 
 **Punto de control**: base lista; pruebas P-002-01 a P-002-03 en verde. El implementador se detiene y resume.
 
@@ -272,11 +272,14 @@ lectura, navegable con teclado.
 | P-002-69 | unit | FR-002-02, NFR-000-10 | ninguno (función del radio con valores de $n$) | Para $n$ = 1, 5, 7, 8, 10, 1 000 y 100 000, el radio es 10, $10\sqrt5$, $10\sqrt7$, 28, 28, 28 y 28 px. Nunca supera 28 y nunca disminuye al crecer $n$. Solo desde 8 queda marcado como saturado. El tope es el 35 % del menor de `--cajon-ancho` y `--cajon-alto` que declara la hoja de estilo de `app/estaticos/` |
 | P-002-70 | unit | FR-002-02, NFR-000-10, FR-002-16 | FX-18, FX-01 | Con FX-18, las burbujas de 1 000 y de 12 están marcadas como saturadas y las de 1 y 5 no. La leyenda lleva la nota de tamaño máximo del catálogo, y el SVG de `imagen_mapa` usa los mismos radios y la misma nota. Con FX-01, ninguna burbuja está saturada y la nota no aparece |
 | P-002-71 | navegador | FR-002-02, FR-002-03, NFR-000-05 | FX-18 | A 360 px y a 1440 px, ninguna burbuja ni ningún número se sale de su cajón y las burbujas de un mismo cajón no se solapan |
+| P-002-72 | integración | FR-002-17 (texto de pendientes de `flujos.md` F-001-2) | FX-A y un fixture sin empíricos pendientes | Con FX-A, la página del mapa muestra antes de la cajonera «6 estudios empíricos aún no entran al mapa: N.º 10, 11, 13, 15, 16 y 24.» y la frase de la regla de la hoja Instrucciones de F-001-2, en el orden de V2; sin empíricos pendientes, ese texto no aparece |
 
-- [ ] T-002-09 [P] [US-002-1] [IMP] Escribir P-002-04, P-002-07, P-002-09 a P-002-11 y P-002-18 en `tests/integracion/test_mapa.py`.
+`[NEEDS CLARIFICATION: qué fixture sin pendientes; lo elige T-002-02]`
+
+- [ ] T-002-09 [P] [US-002-1] [IMP] Escribir P-002-04, P-002-07, P-002-09 a P-002-11, P-002-18 y P-002-72 en `tests/integracion/test_mapa.py`.
 - [ ] T-002-10 [P] [US-002-1] [IMP] Escribir P-002-05, P-002-06, P-002-08, P-002-12, P-002-13, P-002-15, P-002-16, P-002-69 y P-002-70 en
   `tests/unit/test_vista_mapa.py`, y P-002-14 en `tests/propiedades/test_vista_mapa.py`.
-- [ ] T-002-11 [P] [US-002-1] [IMP] Escribir P-002-17 y P-002-19 en `tests/navegador/test_mapa_teclado.py`, y P-002-71 en `tests/navegador/test_mapa_burbujas.py`.
+- [ ] T-002-11 [P] [US-002-1] [IMP] Escribir P-002-17 y P-002-19 en `tests/navegador/test_mapa_teclado.py`, y P-002-71 en `tests/navegador/test_mapa_burbujas.py`. P-002-19 cubre NFR-000-17 (US-001-5.4; NC-P002-1).
 
 ### Implementación de la historia 1
 
@@ -287,8 +290,8 @@ lectura, navegable con teclado.
 - [ ] T-002-13 [US-002-1] [IMP] Implementar `vista_mapa` en M17: filas y columnas en el orden del esquema; por celda, una burbuja
   por nivel presente con su número, su clase de nivel por posición en la lista (derivada para un nivel nuevo, propia
   para «Sin nivel») y su radio como número con $r = \min(r_{\text{base}}\sqrt{n},\ r_{\max})$, $r_{\max}$ = 35 % del lado menor del cajón (COR-017), con el tamaño del SVG derivado del mismo radio y la marca de saturación; la nota de la leyenda cuando alguna burbuja está saturada, con su texto en M10; número de dimensiones para el ancho; rótulos y
-  etiqueta accesible; avisos de lectura del plan 001 antes de la cajonera. Reemplaza el modelo de vista provisional de resultado de T-001-66 (NC-P001-1), que se retira. Requisitos: FR-002-01 a FR-002-04,
-  FR-002-17, NFR-000-06, NFR-000-10. Pruebas: P-002-04 a P-002-14, P-002-16, P-002-69, P-002-70. Módulos: M17. Archivos: `app/presentacion.py`, `src/egm/textos.py` (solo la nota de la leyenda).
+  etiqueta accesible; avisos de lectura del plan 001 antes de la cajonera, con el texto de los estudios empíricos que aún no entran al mapa (la lista $P$ de `conteo.conjuntos`; nada si está vacía; COR-018). Reemplaza el modelo de vista provisional de resultado de T-001-66 (NC-P001-1), que se retira. Requisitos: FR-002-01 a FR-002-04,
+  FR-002-17, NFR-000-06, NFR-000-10. Pruebas: P-002-04 a P-002-14, P-002-16, P-002-69, P-002-70, P-002-72. Módulos: M17. Archivos: `app/presentacion.py`, `src/egm/textos.py` (la nota de la leyenda y el texto de pendientes).
 - [ ] T-002-14 [US-002-1] [DF] Escribir la plantilla de la página del mapa y el fragmento de la cajonera en M18, desde
   `mapa.html` y `tokens.css`: SVG con el radio y su tamaño como atributos (la hoja de estilo no fija el tamaño de la burbuja), número debajo de la burbuja cuando no cabe al lado, nota de tamaño máximo en la leyenda, patrón `grid` de WAI-ARIA, contorno discontinuo del cajón
   vacío (`--contorno-vacio`), «Sin nivel» con borde doble, nivel nuevo con la trama derivada, columna de intervenciones
@@ -345,7 +348,7 @@ legible y «n de N».
   `tests/unit/test_filtros.py`, y P-002-37 en `tests/propiedades/test_filtros.py`.
 - [ ] T-002-18 [P] [US-002-4] [IMP] Escribir P-002-20 a P-002-22, P-002-26, P-002-27, P-002-34 y P-002-36 en
   `tests/integracion/test_filtros_mapa.py`.
-- [ ] T-002-19 [P] [US-002-4] [IMP] Escribir P-002-25, P-002-29 y P-002-38 en `tests/navegador/test_filtros.py`.
+- [ ] T-002-19 [P] [US-002-4] [IMP] Escribir P-002-25, P-002-29 y P-002-38 en `tests/navegador/test_filtros.py`. P-002-38 cubre NFR-000-17 (US-001-5.5; NC-P002-1).
 
 ### Implementación de la historia 4
 
@@ -402,7 +405,7 @@ el mismo filtro.
 
 - [ ] T-002-26 [P] [US-002-2] [IMP] Escribir P-002-40, P-002-41 y P-002-43 en `tests/unit/test_vista_cajon.py`.
 - [ ] T-002-27 [P] [US-002-2] [IMP] Escribir P-002-39, P-002-42, P-002-44, P-002-45 y P-002-47 en `tests/integracion/test_cajon.py`.
-- [ ] T-002-28 [P] [US-002-2] [IMP] Escribir P-002-46 y P-002-48 en `tests/navegador/test_cajon.py`.
+- [ ] T-002-28 [P] [US-002-2] [IMP] Escribir P-002-46 y P-002-48 en `tests/navegador/test_cajon.py`. P-002-48 cubre NFR-000-17 (US-001-5.6; NC-P002-1).
 
 ### Implementación de la historia 2
 
@@ -411,7 +414,7 @@ el mismo filtro.
   referencia contiene un DOI o una URL; textos tal cual de `Documento.textos`; rótulos de cajón vacío con y sin
   filtros. Requisitos: FR-002-04 a FR-002-07, FR-002-14. Pruebas: P-002-39 a P-002-44. Módulos: M17. Archivos: `app/presentacion.py`.
 - [ ] T-002-30 [US-002-2] [IMP] Agregar en M14 las rutas de abrir cajón y de ficha de estudio, por posición, que devuelven el
-  fragmento del margen o la página de la ficha y conservan el filtro aplicado. Requisitos: FR-002-05, FR-002-15.
+  fragmento del margen o la página de la ficha y conservan el filtro aplicado. Requisitos: FR-002-05, FR-002-15, NFR-000-17 (URL por posición).
   Pruebas: P-002-45, P-002-47. Módulos: M14. Archivos: `app/servidor.py`.
 - [ ] T-002-31 [US-002-2] [DF] Escribir en M18 el fragmento del margen con las fichas (rayado de ficha, línea roja de selección
   en el cajón, único movimiento desde el margen con `prefers-reduced-motion`, margen bajo la cajonera en móvil) y la
@@ -487,7 +490,7 @@ aplicados, el archivo y la fecha de lectura.
 ### Implementación de la historia 5
 
 - [ ] T-002-39 [US-002-5] [IMP] Implementar M20 `imagen_mapa` y `tabla_conteos` desde el mismo `VistaMapa` del mapa visible, en
-  memoria; el libro es nuevo y nunca la matriz cargada. Requisitos: FR-002-16, NFR-000-09, SC-002-05. Pruebas: P-002-53 a P-002-55,
+  memoria; el libro es nuevo y nunca la matriz cargada. Requisitos: FR-002-16, NFR-000-09, SC-002-05, NFR-000-17, NFR-000-01 (en memoria, sin escribir la matriz). Pruebas: P-002-53 a P-002-55,
   P-002-58 a P-002-60. Módulos: M20. Archivos: `app/exportacion.py`.
 - [ ] T-002-40 [US-002-5] [IMP] Agregar en M14 las rutas de descarga del SVG y del `.xlsx`, que toman el filtro aplicado de la
   sesión. Requisitos: FR-002-16. Pruebas: P-002-56. Módulos: M14. Archivos: `app/servidor.py`.
@@ -534,7 +537,7 @@ aplicados, el archivo y la fecha de lectura.
 ## Fase 9: Cierre y aspectos transversales
 
 - [ ] T-002-46 [IMP] Actualizar la columna «Prueba» y el estado `implementado` (regla de estados de `trazabilidad.md`) de `docs/specs/trazabilidad.md` para FR-002-01 a
-  FR-002-19, SC-002-01 a SC-002-05 y las NFR-000 de este plan. La columna «Tarea» ya está llena desde la Fase 3. Requisitos: todos los del plan.
+  FR-002-19, SC-002-01 a SC-002-05 y las NFR-000 de este plan; NFR-000-17 pasa aquí a `implementado` porque sus últimas tareas son de este plan, y FR-001-29 y NFR-000-01 esperan al plan 003 (COR-018). La columna «Tarea» ya está llena desde la Fase 3. Requisitos: todos los del plan.
 - [ ] T-002-47 [IMP] Limpieza sin cambiar comportamiento; `ruff` y `mypy --strict` sin errores; cobertura ≥ 90 % en
   `src/egm/`. Requisitos: —.
 - [ ] T-002-48 [P] [IMP] Agregar la prueba de importaciones de M06 y M12 (ninguna importa `app` ni bibliotecas web,

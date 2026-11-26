@@ -199,11 +199,11 @@ Las URL no llevan texto de la matriz (M14). La ficha de sesión viaja en la cabe
 |---|---|---|---|
 | `GET /` | Página base, sin datos. El guion lee la ficha de la pestaña: con ficha pide `GET /vista/resultado` (E9, «Recuperando su sesión»); sin ficha pide `GET /vista/inicio` | M14, M17, M18, M19 | US-001-4.2, US-001-5.2 |
 | `GET /vista/inicio` | Fragmento V0 (y E8 si la sesión acaba de terminar) | M14, M17, M18 | US-001-4.2, FR-001-28 |
-| `POST /carga` | Cuerpo crudo con el libro; responde con el fragmento de resultado o con el mensaje E2, E3, E4 o E10, y con la ficha nueva en la cabecera de la respuesta | M14, M16, M15 | FR-001-20, FR-001-29, NFR-000-19 |
+| `POST /carga` | Cuerpo crudo con el libro; responde con el fragmento de resultado o con el mensaje E2, E3, E4 o E10, y con la ficha nueva en la cabecera `X-EGM-Sesion` de la respuesta y el lugar del fragmento en `X-EGM-Destino` | M14, M16, M15 | FR-001-20, FR-001-29, NFR-000-19 |
 | `GET /vista/resultado` | Cabecera corrida, V2 y colofón de la sesión (ver NC-P001-1); el plan 002 la convierte en la página del mapa (R-2; plan 002, T-002-16) | M14, M17, M18 | FR-001-18, FR-001-19, NFR-000-12 |
 | `POST /sesion/descartar` | Termina la sesión (E8) | M14, M15 | FR-001-28, NFR-000-17 |
-| `POST /sesion/latido` | Registra actividad | M14, M15 | NFR-000-17 |
-| `POST /sesion/cierre` | Aviso de cierre de pestaña; borra pasados 10 s salvo que la ficha vuelva | M14, M15 | NFR-000-17 (ADR-003 punto 9) |
+| `POST /sesion/latido` | Registra actividad; responde 204, o 410 si la ficha ya no abre ninguna sesión | M14, M15 | NFR-000-17 |
+| `POST /sesion/cierre` | Aviso de cierre de pestaña; borra pasados 10 s salvo que la ficha vuelva; responde 204 | M14, M15 | NFR-000-17 (ADR-003 punto 9) |
 | `GET /estaticos/...` | CSS, fuentes, logos, htmx y guion propio, todo local | M14, M18, M19 | NFR-000-15 (ADR-003 punto 6) |
 
 Los planes 002 y 003 agregan sus rutas (mapa, cajón, ficha, lista, definición, filtros, exportación) sobre `crear_app`.
@@ -594,7 +594,7 @@ parciales, y deja congelada la interfaz que consumen los planes 002 y 003.
   Archivos: `src/egm/procesamiento.py`.
 - [x] T-001-52 Congelar la interfaz pública del núcleo del plan 001 (`__all__`, docstrings en español, `mypy --strict`
   sin errores) y resumir para Jairo lo que queda disponible para 002 y 003 (ver «Dependencias con otros módulos o
-  specs»). Requisitos: NFR-000-14. Pruebas: P-001-10, P-001-70. Módulos: M01, M04, M05, M07, M08, M10, M13. Archivos:
+  specs»); el resumen está en `docs/informes/fase-4-plan-001-resumen.md` (COR-018). Requisitos: NFR-000-14. Pruebas: P-001-10, P-001-70. Módulos: M01, M04, M05, M07, M08, M10, M13. Archivos:
   `src/egm/*`.
 
 **Punto de control — hito N1**: todo el núcleo del plan 001 en verde, cobertura de `src/egm/` ≥ 90 %. El
@@ -736,12 +736,12 @@ Los escenarios de actividad sobre el mapa (US-001-5.4 a 5.6) van en el plan 002.
 - [x] T-001-91 Limpieza y refactorización sin cambiar comportamiento (pruebas en verde). Requisitos: —.
 - [x] T-001-92 [P] Cobertura ≥ 90 % de líneas en `src/egm/`, `ruff` y `mypy --strict` sin errores. Requisitos: —
   (`calidad-python`).
-- [ ] T-001-93 Revisión de Jairo del catálogo de textos M10 de este plan (SC-000-03) y de la legibilidad de las
+- [x] T-001-93 Revisión de Jairo del catálogo de textos M10 de este plan (SC-000-03) y de la legibilidad de las
   advertencias (SC-001-04): de usted, sin jerga, sin fórmulas, sin preguntas, sin mención de la tabla no comparable.
   Requisitos: NFR-000-03, FR-001-12.
-- [ ] T-001-94 Revisión de Jairo de V0, V1, V2, cabecera y colofón contra «Fichero» (SC-000-13) y revisión manual del
+- [x] T-001-94 Revisión de Jairo de V0, V1, V2, cabecera y colofón contra «Fichero» (SC-000-13) y revisión manual del
   colofón en modo claro y oscuro y a 360 px (SC-000-11, sujeto a NC-P001-2). Requisitos: NFR-000-11, NFR-000-13.
-- [ ] T-001-95 Solicitar la verificación al subagente `verificador`. Requisitos: —.
+- [x] T-001-95 Solicitar la verificación al subagente `verificador`. Requisitos: —.
 
 ---
 
@@ -767,7 +767,7 @@ Los escenarios de actividad sobre el mapa (US-001-5.4 a 5.6) van en el plan 002.
 
 ### Dependencias con otros módulos o specs (lo que este plan expone a 002 y 003)
 
-- **Hito N1 (núcleo)** · estado: pendiente.
+- **Hito N1 (núcleo)** · estado: cumplido (`docs/informes/conformidad-plan-001-2026-11-26.md`, §7). La interfaz completa es la de `__all__` de cada módulo, resumida en arquitectura §6.1 (COR-018).
   - M13 `procesar(contenido, nombre_archivo, fecha_lectura) -> ResultadoLectura | Rechazo | FalloContrato`.
   - M01: `RefFila`, `Conteo`, `Documento`, `Corpus`, `Esquema`, `ResultadoLectura`, `Identificacion`, `Advertencia`,
     `Nota`, `EstadoDocumento`, `Enfoque`, `SIN_NIVEL`.
@@ -779,13 +779,13 @@ Los escenarios de actividad sobre el mapa (US-001-5.4 a 5.6) van en el plan 002.
   - M08 `Verificacion` y `ResultadoTabla` para los avisos de 002 (US-002-1.5, 1.6) y la cifra de confianza de 003
     (FR-003-20).
   - M10 `advertencia`, `nota`, `error_contrato`, `rechazo`, `verificacion`, `fecha` y `ROTULOS` (vacío, para 002 y 003).
-- **Hito N2 (web)** · estado: pendiente.
-  - M14 `crear_app(config)` con registro de rutas por módulo; M15 `AlmacenSesiones` con el espacio del filtro aplicado
+- **Hito N2 (web)** · estado: cumplido (mismo informe, §7).
+  - M14 `crear_app(config, reloj=None, ampliaciones=())`, donde cada `Ampliacion` registra las rutas de un plan; M15 `AlmacenSesiones` con el espacio del filtro aplicado
     (002 agrega `aplicar_filtro`); M17 cabecera, avisos y colofón; M18 plantilla base y CSS «Fichero» base; M19 guion
     con la ficha en cada petición (002 agrega teclado en la cajonera y PNG); M21 colofón;
     M22 `Configuracion` (002 agrega la ruta de definiciones; 003, la política de porcentajes).
-- **Fase 8 (sesión)** · estado: pendiente. M15 con reloj inyectable, `INACTIVIDAD`, `GRACIA_CIERRE` y purga; M19 con registro de actividad, latido y aviso de cierre. Los usan P-002-19, P-002-38 y P-002-48; adelantar el plan 002 tras N1 no los incluye.
-- **Fixtures (M23)** · estado: pendiente (fase 1).
+- **Fase 8 (sesión)** · estado: cumplida (P-001-89 a P-001-95 en verde; mismo informe, §2). M15 con reloj inyectable, `INACTIVIDAD`, `GRACIA_CIERRE` y purga; M19 con registro de actividad, latido y aviso de cierre. Los usan P-002-19, P-002-38 y P-002-48; adelantar el plan 002 tras N1 no los incluye.
+- **Fixtures (M23)** · estado: cumplido (P-001-01; fase 1).
   - `MatrizSintetica` y `.a_bytes()`, estrategias de hypothesis, catálogo CB-01 a CB-41 (con CB-05 para FR-002-12,
     CB-06 para FR-003-14 y CB-21 para la conclusión 2), `base_valida`, FX-A (`instancia_ejemplo.xlsx`), `sc000_06_*`, `marcadores`, `sesion_a`,
     `sesion_b`. Los planes 002 y 003 amplían el constructor; no lo reescriben.
@@ -836,7 +836,7 @@ el hito N1 y podría empezar antes de cerrar este plan; hoy la regla es un plan 
 - **R-5. Validaciones y modo de carga**: `calidad-python` pide `read_only=True` para los datos; las validaciones
   podrían no estar disponibles en ese modo de `openpyxl`. → T-001-13 lo comprueba y usa el modo que entregue las
   validaciones (arquitectura §9 ya registró que la carga normal las lee en la v4). Si hay que apartarse de la skill, se
-  anota como observación para una corrección nueva; no cambia ningún requisito.
+  anota como observación para una corrección nueva; no cambia ningún requisito. **Resultado de T-001-13** (Python 3.13.15, openpyxl 3.1.5): en `read_only=True` la hoja no trae las validaciones, así que M03 abre el libro en modo normal, dos veces (`src/egm/libro.py:8-17`), como la lectura L1 de ADR-001. La corrección nueva es COR-018.
 - **R-6. htmx y la política de contenido**: htmx inserta estilos propios por defecto, lo que choca con «sin estilos en
   línea» (ADR-003 punto 6). → T-001-68 desactiva esa opción de htmx; P-001-86 lo comprueba sin errores de política en
   la consola.
@@ -848,20 +848,22 @@ el hito N1 y podría empezar antes de cerrar este plan; hoy la regla es un plan 
 
 **Observaciones O-1 a O-4**: resueltas por COR-013 (22-nov-2026). O-1: el constructor es `tests/constructor.py` en todos los documentos. O-2: ADR-003, punto 2, aclarado (ver su nota de revisión del 2026-11-22). O-3: M07 se crea aquí sin `filtro` y el plan 002 lo agrega a `conjuntos`, `mapa` y `evaluacion_impacto` con su valor por defecto (arquitectura §6.1, M07). O-4: M21 crea aquí el bloque «Referencia de diseño» y SC-000-16 se verifica en el plan 002 (arquitectura §6.4).
 
+**Deudas y observaciones del cierre** (`docs/informes/conformidad-plan-001-2026-11-26.md`; COR-018): D-1 a D-6, D-8, D-9 y D-12 a D-15, OBS-01 y OBS-03 quedan documentadas en arquitectura §6.1; D-7 es R-5; D-10 y D-12 según COR-018 P5 y P4; D-11 pasa a T-002-13 (P-002-72). Sin requisito afectado y sin tarea todavía: docstrings de prueba sin ID de escenario (NC-07), prueba del catálogo para los códigos de M08 (OBS-02), avisos de las corridas (OBS-05), carpeta temporal compartida en P-001-84 y P-001-92 (OBS-06), y los comentarios `[NEEDS CLARIFICATION]` del código que resolvió COR-018. Los resuelve una tarea del `implementador` cuando Jairo lo decida.
+
 ## Definición de terminado
 
-- [ ] Todas las pruebas del plan en verde (P-001-01 a P-001-95); cobertura ≥ 90 % en `src/egm/`.
-- [ ] Lint y tipado sin errores.
-- [ ] Cada requisito del apartado «Requisitos que cubre este plan» tiene tarea y prueba en `trazabilidad.md`.
-- [ ] Cada número calculado es un `Conteo` trazable a su lista de N.º de fila.
-- [ ] Ningún archivo de `data/raw/` ni `docs/fuentes/` modificado (P-001-15 comprueba la huella de la v4).
-- [ ] Informe del `verificador` sin huecos ni excesos abiertos.
-- [ ] Hito N1: `procesar` y la interfaz pública del núcleo del plan 001 congeladas y documentadas.
-- [ ] Hito N2: `crear_app` lista para que 002 y 003 agreguen rutas.
-- [ ] Un fixture por cada caso borde del contrato §9 (P-001-01).
-- [ ] NC-ARQ-1 resuelto (P-001-02) y NC-P001-1 decidido por Jairo.
-- [ ] Ningún texto ni prueba usa las cifras de la lámina 7; ningún texto nombra la tabla no comparable de la hoja EGM.
-- [ ] La versión de Python del `.venv` registrada en el resumen de fase.
+- [x] Todas las pruebas del plan en verde (P-001-01 a P-001-95); cobertura ≥ 90 % en `src/egm/`.
+- [x] Lint y tipado sin errores.
+- [x] Cada requisito del apartado «Requisitos que cubre este plan» tiene tarea y prueba en `trazabilidad.md`.
+- [x] Cada número calculado es un `Conteo` trazable a su lista de N.º de fila.
+- [x] Ningún archivo de `data/raw/` ni `docs/fuentes/` modificado (P-001-15 comprueba la huella de la v4).
+- [x] Informe del `verificador` sin huecos ni excesos abiertos.
+- [x] Hito N1: `procesar` y la interfaz pública del núcleo del plan 001 congeladas y documentadas.
+- [x] Hito N2: `crear_app` lista para que 002 y 003 agreguen rutas.
+- [x] Un fixture por cada caso borde del contrato §9 (P-001-01).
+- [x] NC-ARQ-1 resuelto (P-001-02) y NC-P001-1 decidido por Jairo.
+- [x] Ningún texto ni prueba usa las cifras de la lámina 7; ningún texto nombra la tabla no comparable de la hoja EGM.
+- [x] La versión de Python del `.venv` registrada en el resumen de fase (`docs/informes/fase-4-plan-001-resumen.md`).
 
 ## `[NEEDS CLARIFICATION]` de este plan
 
@@ -870,6 +872,10 @@ el hito N1 y podría empezar antes de cerrar este plan; hoy la regla es un plan 
 | NC-ARQ-1 | Parte del libro que se descomprime a más de lo declarado | T-001-09, P-001-02 | Resuelto en T-001-09, 2026-11-24 (R-1): no lee de más; falla con `BadZipFile` |
 | NC-P001-1 | Vista del resultado de una carga aceptada antes del plan 002 | Jairo, sobre la propuesta de R-2 | Decidido por Jairo, 22-nov-2026 (R-2) |
 | NC-P001-2 | Archivos de los logos para SC-000-11 | Jairo | Decidido por Jairo, 22-nov-2026 (R-3) |
+| NC-P001-3 | Suposiciones de interfaz que los documentos no fijaban, marcadas en el código y las pruebas (informe de cierre, NC-11) | COR-018 | Resueltas: forma de `Diferencia`, `TextoVerificacion`, códigos de verificación y `Verificacion.tablas` (arquitectura M08 y M10; `tests/unit/test_verificacion.py:37-40`); `crear_app(config, reloj, ampliaciones)` y `Configuracion.colofon` (M14 y M22; `tests/ayudas_web.py:4-13`; `tests/integracion/test_carga_web.py:627-628`); cabecera de la ficha en la respuesta y respuestas del latido y del cierre (tabla de rutas; `tests/ayudas_web.py:6-8`; `tests/integracion/test_sesion.py:17-20`, salvo E8); envío de la carga con el botón (`flujos.md:81`; `tests/navegador/test_carga_navegador.py:16-17`) |
+| NC-P001-4 | Nombre del archivo de configuración (`egm.toml`) y de los logos (`minciencias.svg`, `unimagdalena.svg`), propuestos en `app/configuracion.py:24-26` | Jairo, junto con NC-P001-2 | Abierto |
+| NC-P001-5 | Textos `carga.sin_nombre` y `mensaje.problema` (`src/egm/textos.py:340-344`) | T-001-93 | Decidido por Jairo, aprobación de T-001-93 (COR-018 P6) |
+| NC-P001-6 | Rol y marca del aviso E7, E8 de inactividad en la siguiente petición, `faltantes` con CB-34 y CB-35, y arranque de Uvicorn (`tests/navegador/test_sesion_navegador.py:17-18`; `tests/integracion/test_sesion.py:17-20`; `tests/unit/test_verificacion.py:40-41`; `tests/integracion/test_carga_web.py:782-783`) | Las fijan P-001-93, P-001-91, P-001-58, P-001-59 y P-001-84, en verde | Abierto en los documentos; se documenta si Jairo lo pide |
 
 ## Notas
 
